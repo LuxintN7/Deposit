@@ -1,0 +1,71 @@
+﻿@using Deposit.Models
+@using Microsoft.AspNet.Identity
+@model IEnumerable<Deposits>
+
+<div id="menu" class="menu-frame">
+    <ul class="nav nav-tabs margin-top-50">
+        <li role="presentation">
+            @Ajax.ActionLink("Загальна інформація", "GeneralInfo", new AjaxOptions()
+            {
+                HttpMethod = "GET",
+                UpdateTargetId = "menu",
+                InsertionMode = InsertionMode.Replace
+            })
+        </li>
+        <li role="presentation" class="active">
+            @Ajax.ActionLink("Перегляд депозитів", "DepositList", new AjaxOptions()
+            {
+                HttpMethod = "GET",
+                UpdateTargetId = "menu",
+                InsertionMode = InsertionMode.Replace
+            })
+        </li>
+        <li role="presentation">
+            @Ajax.ActionLink("Відкрити новий депозит", "MakeNewDeposit", new AjaxOptions()
+            {
+                HttpMethod = "GET",
+                UpdateTargetId = "menu",
+                InsertionMode = InsertionMode.Replace
+            })
+        </li>
+    </ul>
+
+    <div class="menu-content">
+       @using (var db = new DepositEntities())
+       {
+           var userId = User.Identity.GetUserId();
+
+           var deposits = (from d in db.Deposits
+               join depositOwnership in db.DepositOwnership on d.Id equals depositOwnership.DepositId
+               where depositOwnership.UserId == userId
+               select d).ToList();
+           
+           <table class="table table-bordered">
+               <caption>
+                   <h4>Мої депозити</h4>
+               </caption>
+               <tr>
+                   <th>Дата відкриття</th>
+                   <th>Дата закінчення</th>
+                   <th>Стан</th>
+                   <th>Валюта</th>
+                   <th>Відсоткова ставка</th>
+                   <th>Початкова сума</th>
+                   <th>Нараховано</th>
+               </tr>
+               @foreach (var deposit in deposits)
+               {
+                   <tr>
+                       <td>@deposit.StartDate.Date</td>
+                       <td>@deposit.EndDate.Date</td>
+                       <td>@deposit.DepositStates.Name</td>
+                       <td>@deposit.DepositTerms.Currencies.Name</td>
+                       <td>@deposit.DepositTerms.InterestRate %</td>
+                       <td>@deposit.InitialAmount</td>
+                       <td>@(deposit.Balance - deposit.InitialAmount)</td>
+                   </tr> 
+               }
+           </table>
+       }
+    </div>
+</div>
