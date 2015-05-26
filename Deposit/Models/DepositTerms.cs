@@ -20,6 +20,7 @@ namespace Deposit.Models
         }
     
         public byte Id { get; set; }
+        public byte CurrencyId { get; set; }
         public byte Months { get; set; }
         public decimal InterestRate { get; set; }
         public string Name { get; set; }

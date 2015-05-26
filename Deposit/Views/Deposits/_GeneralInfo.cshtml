@@ -21,9 +21,8 @@
             @using (var db = new DepositEntities())
             {
                 var userId = User.Identity.GetUserId();
-                var cardInfo = (from cardOwnership in db.CardOwnership
-                    join cards in db.Cards on cardOwnership.CardId equals cards.Id
-                    where cardOwnership.UserId == userId
+                var cardInfo = (from cards in db.Cards
+                    where cards.AspNetUsers.Id == userId
                     select cards).ToList();
                 
                 // Card list

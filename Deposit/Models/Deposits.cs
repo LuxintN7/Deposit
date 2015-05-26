@@ -7,8 +7,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.ComponentModel.DataAnnotations;
-
 namespace Deposit.Models
 {
     using System;
@@ -16,16 +14,16 @@ namespace Deposit.Models
     
     public partial class Deposits
     {
-        [Key]
         public int Id { get; set; }
-
+        public string UserOwnerId { get; set; }
+        public byte TermId { get; set; }
         public decimal InitialAmount { get; set; }
         public decimal Balance { get; set; }
         public System.DateTime StartDate { get; set; }
-        public System.DateTime EndDate { get; set; }
+        public byte StateId { get; set; }
         public string Name { get; set; }
     
-        public virtual DepositOwnership DepositOwnership { get; set; }
+        public virtual AspNetUsers AspNetUsers { get; set; }
         public virtual DepositStates DepositStates { get; set; }
         public virtual DepositTerms DepositTerms { get; set; }
     }

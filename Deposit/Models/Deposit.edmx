@@ -31,20 +31,12 @@
           <Property Name="DateTime" Type="smalldatetime" Nullable="false" />
           <Property Name="Desription" Type="varchar" MaxLength="400" />
         </EntityType>
-        <EntityType Name="CardOwnership">
-          <Key>
-            <PropertyRef Name="UserId" />
-            <PropertyRef Name="CardId" />
-          </Key>
-          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="CardId" Type="nchar" MaxLength="16" Nullable="false" />
-          <Property Name="info" Type="nchar" MaxLength="10" />
-        </EntityType>
         <EntityType Name="Cards">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="nchar" MaxLength="16" Nullable="false" />
+          <Property Name="UserOwnerId" Type="nvarchar" MaxLength="128" />
           <Property Name="ExpirationMonth" Type="nchar" MaxLength="2" Nullable="false" />
           <Property Name="ExpirationYear" Type="nchar" MaxLength="2" Nullable="false" />
           <Property Name="SecretCode" Type="nchar" MaxLength="4" Nullable="false" />
@@ -58,25 +50,17 @@
           <Property Name="Id" Type="tinyint" Nullable="false" />
           <Property Name="Name" Type="nchar" MaxLength="3" Nullable="false" />
         </EntityType>
-        <EntityType Name="DepositOwnership">
-          <Key>
-            <PropertyRef Name="DepositId" />
-          </Key>
-          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="DepositId" Type="int" Nullable="false" />
-          <Property Name="info" Type="nchar" MaxLength="10" />
-        </EntityType>
         <EntityType Name="Deposits">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="None" />
+          <Property Name="UserOwnerId" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="TermId" Type="tinyint" Nullable="false" />
           <Property Name="InitialAmount" Type="money" Nullable="false" />
           <Property Name="Balance" Type="money" Nullable="false" />
           <Property Name="StartDate" Type="date" Nullable="false" />
-          <Property Name="EndDate" Type="date" Nullable="false" />
-          <Property Name="State" Type="tinyint" Nullable="false" />
+          <Property Name="StateId" Type="tinyint" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="DepositStates">
@@ -110,31 +94,17 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_CardOwnership_AspNetUsers">
-          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+        <Association Name="FK_Cards_AspNetUsers">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="CardOwnership" Type="Self.CardOwnership" Multiplicity="*" />
+          <End Role="Cards" Type="Self.Cards" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AspNetUsers">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="CardOwnership">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_CardOwnership_Cards">
-          <End Role="Cards" Type="Self.Cards" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="CardOwnership" Type="Self.CardOwnership" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Cards">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="CardOwnership">
-              <PropertyRef Name="CardId" />
+            <Dependent Role="Cards">
+              <PropertyRef Name="UserOwnerId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -152,27 +122,17 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_DepositOwnership_AspNetUsers1">
-          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
-          <End Role="DepositOwnership" Type="Self.DepositOwnership" Multiplicity="*" />
+        <Association Name="FK_Deposits_AspNetUsers">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Deposits" Type="Self.Deposits" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AspNetUsers">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="DepositOwnership">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_DepositOwnership_Deposits">
-          <End Role="Deposits" Type="Self.Deposits" Multiplicity="1" />
-          <End Role="DepositOwnership" Type="Self.DepositOwnership" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="Deposits">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="DepositOwnership">
-              <PropertyRef Name="DepositId" />
+            <Dependent Role="Deposits">
+              <PropertyRef Name="UserOwnerId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -186,7 +146,7 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Deposits">
-              <PropertyRef Name="State" />
+              <PropertyRef Name="StateId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -221,10 +181,8 @@
         <EntityContainer Name="DepositModelStoreContainer">
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CardHistory" EntityType="Self.CardHistory" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="CardOwnership" EntityType="Self.CardOwnership" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Cards" EntityType="Self.Cards" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Currencies" EntityType="Self.Currencies" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="DepositOwnership" EntityType="Self.DepositOwnership" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Deposits" EntityType="Self.Deposits" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DepositStates" EntityType="Self.DepositStates" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DepositTerms" EntityType="Self.DepositTerms" Schema="dbo" store:Type="Tables" />
@@ -232,25 +190,17 @@
             <End Role="Cards" EntitySet="Cards" />
             <End Role="CardHistory" EntitySet="CardHistory" />
           </AssociationSet>
-          <AssociationSet Name="FK_CardOwnership_AspNetUsers" Association="Self.FK_CardOwnership_AspNetUsers">
+          <AssociationSet Name="FK_Cards_AspNetUsers" Association="Self.FK_Cards_AspNetUsers">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-            <End Role="CardOwnership" EntitySet="CardOwnership" />
-          </AssociationSet>
-          <AssociationSet Name="FK_CardOwnership_Cards" Association="Self.FK_CardOwnership_Cards">
             <End Role="Cards" EntitySet="Cards" />
-            <End Role="CardOwnership" EntitySet="CardOwnership" />
           </AssociationSet>
           <AssociationSet Name="FK_Cards_Currencies" Association="Self.FK_Cards_Currencies">
             <End Role="Currencies" EntitySet="Currencies" />
             <End Role="Cards" EntitySet="Cards" />
           </AssociationSet>
-          <AssociationSet Name="FK_DepositOwnership_AspNetUsers1" Association="Self.FK_DepositOwnership_AspNetUsers1">
+          <AssociationSet Name="FK_Deposits_AspNetUsers" Association="Self.FK_Deposits_AspNetUsers">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-            <End Role="DepositOwnership" EntitySet="DepositOwnership" />
-          </AssociationSet>
-          <AssociationSet Name="FK_DepositOwnership_Deposits" Association="Self.FK_DepositOwnership_Deposits">
             <End Role="Deposits" EntitySet="Deposits" />
-            <End Role="DepositOwnership" EntitySet="DepositOwnership" />
           </AssociationSet>
           <AssociationSet Name="FK_Deposits_DepositStates" Association="Self.FK_Deposits_DepositStates">
             <End Role="DepositStates" EntitySet="DepositStates" />
@@ -285,32 +235,33 @@
           <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
           <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
           <Property Name="UserName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="CardOwnership" Relationship="Self.FK_CardOwnership_AspNetUsers" FromRole="AspNetUsers" ToRole="CardOwnership" />
-          <NavigationProperty Name="DepositOwnership" Relationship="Self.FK_DepositOwnership_AspNetUsers1" FromRole="AspNetUsers" ToRole="DepositOwnership" />
+          <NavigationProperty Name="Cards" Relationship="Self.FK_Cards_AspNetUsers" FromRole="AspNetUsers" ToRole="Cards" />
+          <NavigationProperty Name="Deposits" Relationship="Self.FK_Deposits_AspNetUsers" FromRole="AspNetUsers" ToRole="Deposits" />
         </EntityType>
-        <EntityType Name="CardOwnership">
+        <EntityType Name="CardHistory">
           <Key>
-            <PropertyRef Name="UserId" />
-            <PropertyRef Name="CardId" />
+            <PropertyRef Name="Id" />
           </Key>
-          <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="CardId" Type="String" MaxLength="16" FixedLength="true" Unicode="true" Nullable="false" />
-          <Property Name="info" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-          <NavigationProperty Name="AspNetUsers" Relationship="Self.FK_CardOwnership_AspNetUsers" FromRole="CardOwnership" ToRole="AspNetUsers" />
-          <NavigationProperty Name="Cards" Relationship="Self.FK_CardOwnership_Cards" FromRole="CardOwnership" ToRole="Cards" />
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="IdCard" Type="String" MaxLength="16" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="DateTime" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Desription" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Cards" Relationship="Self.FK_CardHistory_Cards" FromRole="CardHistory" ToRole="Cards" />
         </EntityType>
         <EntityType Name="Cards">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="String" MaxLength="16" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="UserOwnerId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="ExpirationMonth" Type="String" MaxLength="2" FixedLength="true" Unicode="true" Nullable="false" />
           <Property Name="ExpirationYear" Type="String" MaxLength="2" FixedLength="true" Unicode="true" Nullable="false" />
           <Property Name="SecretCode" Type="String" MaxLength="4" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="CurrencyId" Type="Byte" Nullable="false" />
           <Property Name="Balance" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-          <NavigationProperty Name="CardOwnership" Relationship="Self.FK_CardOwnership_Cards" FromRole="Cards" ToRole="CardOwnership" />
+          <NavigationProperty Name="AspNetUsers" Relationship="Self.FK_Cards_AspNetUsers" FromRole="Cards" ToRole="AspNetUsers" />
+          <NavigationProperty Name="CardHistory" Relationship="Self.FK_CardHistory_Cards" FromRole="Cards" ToRole="CardHistory" />
           <NavigationProperty Name="Currencies" Relationship="Self.FK_Cards_Currencies" FromRole="Cards" ToRole="Currencies" />
-          <NavigationProperty Name="CardHistory" Relationship="DepositModel.FK_CardHistory_Cards" FromRole="Cards" ToRole="CardHistory" />
         </EntityType>
         <EntityType Name="Currencies">
           <Key>
@@ -321,27 +272,19 @@
           <NavigationProperty Name="Cards" Relationship="Self.FK_Cards_Currencies" FromRole="Currencies" ToRole="Cards" />
           <NavigationProperty Name="DepositTerms" Relationship="Self.FK_DepositTerms_Currencies" FromRole="Currencies" ToRole="DepositTerms" />
         </EntityType>
-        <EntityType Name="DepositOwnership">
-          <Key>
-            <PropertyRef Name="DepositId" />
-          </Key>
-          <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="DepositId" Type="Int32" Nullable="false" />
-          <Property Name="info" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-          <NavigationProperty Name="AspNetUsers" Relationship="Self.FK_DepositOwnership_AspNetUsers1" FromRole="DepositOwnership" ToRole="AspNetUsers" />
-          <NavigationProperty Name="Deposits" Relationship="Self.FK_DepositOwnership_Deposits" FromRole="DepositOwnership" ToRole="Deposits" />
-        </EntityType>
         <EntityType Name="Deposits">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="None" />
+          <Property Name="UserOwnerId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="TermId" Type="Byte" Nullable="false" />
           <Property Name="InitialAmount" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
           <Property Name="Balance" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
           <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="StateId" Type="Byte" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="DepositOwnership" Relationship="Self.FK_DepositOwnership_Deposits" FromRole="Deposits" ToRole="DepositOwnership" />
+          <NavigationProperty Name="AspNetUsers" Relationship="Self.FK_Deposits_AspNetUsers" FromRole="Deposits" ToRole="AspNetUsers" />
           <NavigationProperty Name="DepositStates" Relationship="Self.FK_Deposits_DepositStates" FromRole="Deposits" ToRole="DepositStates" />
           <NavigationProperty Name="DepositTerms" Relationship="Self.FK_Deposits_DepositTerms" FromRole="Deposits" ToRole="DepositTerms" />
         </EntityType>
@@ -358,51 +301,52 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Byte" Nullable="false" />
+          <Property Name="CurrencyId" Type="Byte" Nullable="false" />
           <Property Name="Months" Type="Byte" Nullable="false" />
           <Property Name="InterestRate" Type="Decimal" Precision="5" Scale="2" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Currencies" Relationship="Self.FK_DepositTerms_Currencies" FromRole="DepositTerms" ToRole="Currencies" />
           <NavigationProperty Name="Deposits" Relationship="Self.FK_Deposits_DepositTerms" FromRole="DepositTerms" ToRole="Deposits" />
         </EntityType>
-        <Association Name="FK_CardOwnership_AspNetUsers">
-          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+        <Association Name="FK_Cards_AspNetUsers">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="CardOwnership" Type="Self.CardOwnership" Multiplicity="*" />
+          <End Role="Cards" Type="Self.Cards" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AspNetUsers">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="CardOwnership">
-              <PropertyRef Name="UserId" />
+            <Dependent Role="Cards">
+              <PropertyRef Name="UserOwnerId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_DepositOwnership_AspNetUsers1">
+        <Association Name="FK_Deposits_AspNetUsers">
           <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="DepositOwnership" Type="Self.DepositOwnership" Multiplicity="*" />
+          <End Role="Deposits" Type="Self.Deposits" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AspNetUsers">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="DepositOwnership">
-              <PropertyRef Name="UserId" />
+            <Dependent Role="Deposits">
+              <PropertyRef Name="UserOwnerId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_CardOwnership_Cards">
+        <Association Name="FK_CardHistory_Cards">
           <End Role="Cards" Type="Self.Cards" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="CardOwnership" Type="Self.CardOwnership" Multiplicity="*" />
+          <End Role="CardHistory" Type="Self.CardHistory" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Cards">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="CardOwnership">
-              <PropertyRef Name="CardId" />
+            <Dependent Role="CardHistory">
+              <PropertyRef Name="IdCard" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -411,24 +355,26 @@
             <OnDelete Action="Cascade" />
           </End>
           <End Role="Cards" Type="Self.Cards" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currencies">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Cards">
+              <PropertyRef Name="CurrencyId" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
         <Association Name="FK_DepositTerms_Currencies">
           <End Role="Currencies" Type="Self.Currencies" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
           <End Role="DepositTerms" Type="Self.DepositTerms" Multiplicity="*" />
-        </Association>
-        <Association Name="FK_DepositOwnership_Deposits">
-          <End Role="Deposits" Type="Self.Deposits" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="DepositOwnership" Type="Self.DepositOwnership" Multiplicity="1" />
           <ReferentialConstraint>
-            <Principal Role="Deposits">
+            <Principal Role="Currencies">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="DepositOwnership">
-              <PropertyRef Name="DepositId" />
+            <Dependent Role="DepositTerms">
+              <PropertyRef Name="CurrencyId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -437,33 +383,48 @@
             <OnDelete Action="Cascade" />
           </End>
           <End Role="Deposits" Type="Self.Deposits" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DepositStates">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Deposits">
+              <PropertyRef Name="StateId" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
         <Association Name="FK_Deposits_DepositTerms">
           <End Role="DepositTerms" Type="Self.DepositTerms" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
           <End Role="Deposits" Type="Self.Deposits" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DepositTerms">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Deposits">
+              <PropertyRef Name="TermId" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
         <EntityContainer Name="DepositEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" />
-          <EntitySet Name="CardOwnership" EntityType="Self.CardOwnership" />
+          <EntitySet Name="CardHistory" EntityType="Self.CardHistory" />
           <EntitySet Name="Cards" EntityType="Self.Cards" />
           <EntitySet Name="Currencies" EntityType="Self.Currencies" />
-          <EntitySet Name="DepositOwnership" EntityType="Self.DepositOwnership" />
           <EntitySet Name="Deposits" EntityType="Self.Deposits" />
           <EntitySet Name="DepositStates" EntityType="Self.DepositStates" />
           <EntitySet Name="DepositTerms" EntityType="Self.DepositTerms" />
-          <AssociationSet Name="FK_CardOwnership_AspNetUsers" Association="Self.FK_CardOwnership_AspNetUsers">
+          <AssociationSet Name="FK_Cards_AspNetUsers" Association="Self.FK_Cards_AspNetUsers">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-            <End Role="CardOwnership" EntitySet="CardOwnership" />
-          </AssociationSet>
-          <AssociationSet Name="FK_DepositOwnership_AspNetUsers1" Association="Self.FK_DepositOwnership_AspNetUsers1">
-            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-            <End Role="DepositOwnership" EntitySet="DepositOwnership" />
-          </AssociationSet>
-          <AssociationSet Name="FK_CardOwnership_Cards" Association="Self.FK_CardOwnership_Cards">
             <End Role="Cards" EntitySet="Cards" />
-            <End Role="CardOwnership" EntitySet="CardOwnership" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Deposits_AspNetUsers" Association="Self.FK_Deposits_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="Deposits" EntitySet="Deposits" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CardHistory_Cards" Association="Self.FK_CardHistory_Cards">
+            <End Role="Cards" EntitySet="Cards" />
+            <End Role="CardHistory" EntitySet="CardHistory" />
           </AssociationSet>
           <AssociationSet Name="FK_Cards_Currencies" Association="Self.FK_Cards_Currencies">
             <End Role="Currencies" EntitySet="Currencies" />
@@ -473,10 +434,6 @@
             <End Role="Currencies" EntitySet="Currencies" />
             <End Role="DepositTerms" EntitySet="DepositTerms" />
           </AssociationSet>
-          <AssociationSet Name="FK_DepositOwnership_Deposits" Association="Self.FK_DepositOwnership_Deposits">
-            <End Role="Deposits" EntitySet="Deposits" />
-            <End Role="DepositOwnership" EntitySet="DepositOwnership" />
-          </AssociationSet>
           <AssociationSet Name="FK_Deposits_DepositStates" Association="Self.FK_Deposits_DepositStates">
             <End Role="DepositStates" EntitySet="DepositStates" />
             <End Role="Deposits" EntitySet="Deposits" />
@@ -485,27 +442,7 @@
             <End Role="DepositTerms" EntitySet="DepositTerms" />
             <End Role="Deposits" EntitySet="Deposits" />
           </AssociationSet>
-          <EntitySet Name="CardHistory" EntityType="DepositModel.CardHistory" />
-          <AssociationSet Name="FK_CardHistory_Cards" Association="DepositModel.FK_CardHistory_Cards">
-            <End Role="Cards" EntitySet="Cards" />
-            <End Role="CardHistory" EntitySet="CardHistory" />
-          </AssociationSet>
         </EntityContainer>
-        <EntityType Name="CardHistory">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="DateTime" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="Desription" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Cards" Relationship="DepositModel.FK_CardHistory_Cards" FromRole="CardHistory" ToRole="Cards" />
-        </EntityType>
-        <Association Name="FK_CardHistory_Cards">
-          <End Type="DepositModel.Cards" Role="Cards" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="DepositModel.CardHistory" Role="CardHistory" Multiplicity="*" />
-        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -530,12 +467,13 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="CardOwnership">
-            <EntityTypeMapping TypeName="DepositModel.CardOwnership">
-              <MappingFragment StoreEntitySet="CardOwnership">
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="CardId" ColumnName="CardId" />
-                <ScalarProperty Name="info" ColumnName="info" />
+          <EntitySetMapping Name="CardHistory">
+            <EntityTypeMapping TypeName="DepositModel.CardHistory">
+              <MappingFragment StoreEntitySet="CardHistory">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdCard" ColumnName="IdCard" />
+                <ScalarProperty Name="DateTime" ColumnName="DateTime" />
+                <ScalarProperty Name="Desription" ColumnName="Desription" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -543,9 +481,11 @@
             <EntityTypeMapping TypeName="DepositModel.Cards">
               <MappingFragment StoreEntitySet="Cards">
                 <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserOwnerId" ColumnName="UserOwnerId" />
                 <ScalarProperty Name="ExpirationMonth" ColumnName="ExpirationMonth" />
                 <ScalarProperty Name="ExpirationYear" ColumnName="ExpirationYear" />
                 <ScalarProperty Name="SecretCode" ColumnName="SecretCode" />
+                <ScalarProperty Name="CurrencyId" ColumnName="CurrencyId" />
                 <ScalarProperty Name="Balance" ColumnName="Balance" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -558,23 +498,16 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="DepositOwnership">
-            <EntityTypeMapping TypeName="DepositModel.DepositOwnership">
-              <MappingFragment StoreEntitySet="DepositOwnership">
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="DepositId" ColumnName="DepositId" />
-                <ScalarProperty Name="info" ColumnName="info" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Deposits">
             <EntityTypeMapping TypeName="DepositModel.Deposits">
               <MappingFragment StoreEntitySet="Deposits">
                 <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserOwnerId" ColumnName="UserOwnerId" />
+                <ScalarProperty Name="TermId" ColumnName="TermId" />
                 <ScalarProperty Name="InitialAmount" ColumnName="InitialAmount" />
                 <ScalarProperty Name="Balance" ColumnName="Balance" />
                 <ScalarProperty Name="StartDate" ColumnName="StartDate" />
-                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StateId" ColumnName="StateId" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -591,61 +524,13 @@
             <EntityTypeMapping TypeName="DepositModel.DepositTerms">
               <MappingFragment StoreEntitySet="DepositTerms">
                 <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="CurrencyId" ColumnName="CurrencyId" />
                 <ScalarProperty Name="Months" ColumnName="Months" />
                 <ScalarProperty Name="InterestRate" ColumnName="InterestRate" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <AssociationSetMapping Name="FK_Cards_Currencies" TypeName="DepositModel.FK_Cards_Currencies" StoreEntitySet="Cards">
-            <EndProperty Name="Currencies">
-              <ScalarProperty Name="Id" ColumnName="CurrencyId" />
-            </EndProperty>
-            <EndProperty Name="Cards">
-              <ScalarProperty Name="Id" ColumnName="Id" />
-            </EndProperty>
-          </AssociationSetMapping>
-          <AssociationSetMapping Name="FK_DepositTerms_Currencies" TypeName="DepositModel.FK_DepositTerms_Currencies" StoreEntitySet="DepositTerms">
-            <EndProperty Name="Currencies">
-              <ScalarProperty Name="Id" ColumnName="CurrencyId" />
-            </EndProperty>
-            <EndProperty Name="DepositTerms">
-              <ScalarProperty Name="Id" ColumnName="Id" />
-            </EndProperty>
-          </AssociationSetMapping>
-          <AssociationSetMapping Name="FK_Deposits_DepositStates" TypeName="DepositModel.FK_Deposits_DepositStates" StoreEntitySet="Deposits">
-            <EndProperty Name="DepositStates">
-              <ScalarProperty Name="Id" ColumnName="State" />
-            </EndProperty>
-            <EndProperty Name="Deposits">
-              <ScalarProperty Name="Id" ColumnName="Id" />
-            </EndProperty>
-          </AssociationSetMapping>
-          <AssociationSetMapping Name="FK_Deposits_DepositTerms" TypeName="DepositModel.FK_Deposits_DepositTerms" StoreEntitySet="Deposits">
-            <EndProperty Name="DepositTerms">
-              <ScalarProperty Name="Id" ColumnName="TermId" />
-            </EndProperty>
-            <EndProperty Name="Deposits">
-              <ScalarProperty Name="Id" ColumnName="Id" />
-            </EndProperty>
-          </AssociationSetMapping>
-          <EntitySetMapping Name="CardHistory">
-            <EntityTypeMapping TypeName="DepositModel.CardHistory">
-              <MappingFragment StoreEntitySet="CardHistory">
-                <ScalarProperty Name="Desription" ColumnName="Desription" />
-                <ScalarProperty Name="DateTime" ColumnName="DateTime" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <AssociationSetMapping Name="FK_CardHistory_Cards" TypeName="DepositModel.FK_CardHistory_Cards" StoreEntitySet="CardHistory">
-            <EndProperty Name="CardHistory">
-              <ScalarProperty Name="Id" ColumnName="Id" />
-            </EndProperty>
-            <EndProperty Name="Cards">
-              <ScalarProperty Name="Id" ColumnName="IdCard" />
-            </EndProperty>
-          </AssociationSetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -661,7 +546,7 @@
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="false" />
-        <DesignerProperty Name="IncludeForeignKeysInModel" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
         <DesignerProperty Name="UseLegacyProvider" Value="false" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
       </DesignerInfoPropertySet>

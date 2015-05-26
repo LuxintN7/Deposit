@@ -16,18 +16,19 @@ namespace Deposit.Models
     {
         public Cards()
         {
-            this.CardOwnership = new HashSet<CardOwnership>();
             this.CardHistory = new HashSet<CardHistory>();
         }
     
         public string Id { get; set; }
+        public string UserOwnerId { get; set; }
         public string ExpirationMonth { get; set; }
         public string ExpirationYear { get; set; }
         public string SecretCode { get; set; }
+        public byte CurrencyId { get; set; }
         public decimal Balance { get; set; }
     
-        public virtual ICollection<CardOwnership> CardOwnership { get; set; }
-        public virtual Currencies Currencies { get; set; }
+        public virtual AspNetUsers AspNetUsers { get; set; }
         public virtual ICollection<CardHistory> CardHistory { get; set; }
+        public virtual Currencies Currencies { get; set; }
     }
 }

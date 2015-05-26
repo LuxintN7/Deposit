@@ -16,8 +16,8 @@ namespace Deposit.Models
     {
         public AspNetUsers()
         {
-            this.CardOwnership = new HashSet<CardOwnership>();
-            this.DepositOwnership = new HashSet<DepositOwnership>();
+            this.Cards = new HashSet<Cards>();
+            this.Deposits = new HashSet<Deposits>();
         }
     
         public string Id { get; set; }
@@ -33,7 +33,7 @@ namespace Deposit.Models
         public int AccessFailedCount { get; set; }
         public string UserName { get; set; }
     
-        public virtual ICollection<CardOwnership> CardOwnership { get; set; }
-        public virtual ICollection<DepositOwnership> DepositOwnership { get; set; }
+        public virtual ICollection<Cards> Cards { get; set; }
+        public virtual ICollection<Deposits> Deposits { get; set; }
     }
 }

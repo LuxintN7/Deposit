@@ -4,25 +4,21 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="de66ee9a00a04e1e9226c274a7ac2c0d" Name="Diagram1">
-        <EntityTypeShape EntityType="DepositModel.AspNetUsers" Width="1.5" PointX="7.5" PointY="0.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="DepositModel.CardOwnership" Width="1.5" PointX="5.25" PointY="1.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="DepositModel.Cards" Width="1.5" PointX="3" PointY="1.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="DepositModel.Currencies" Width="1.5" PointX="1.875" PointY="4.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="DepositModel.DepositOwnership" Width="1.5" PointX="9.75" PointY="5.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="DepositModel.Deposits" Width="1.5" PointX="6.5" PointY="5.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="DepositModel.DepositStates" Width="1.5" PointX="5.5" PointY="9" IsExpanded="true" />
-        <EntityTypeShape EntityType="DepositModel.DepositTerms" Width="1.5" PointX="2.625" PointY="6.875" IsExpanded="true" />
-        <AssociationConnector Association="DepositModel.FK_CardOwnership_AspNetUsers" ManuallyRouted="false" />
-        <AssociationConnector Association="DepositModel.FK_DepositOwnership_AspNetUsers1" ManuallyRouted="false" />
-        <AssociationConnector Association="DepositModel.FK_CardOwnership_Cards" ManuallyRouted="false" />
+      <Diagram DiagramId="54902dc23602454fa8e0397f80e164ad" Name="Diagram1">
+        <EntityTypeShape EntityType="DepositModel.AspNetUsers" Width="1.5" PointX="7.75" PointY="6.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="DepositModel.CardHistory" Width="1.5" PointX="5.25" PointY="5.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DepositModel.Cards" Width="1.5" PointX="3" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DepositModel.Currencies" Width="1.5" PointX="0.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DepositModel.Deposits" Width="1.5" PointX="3.25" PointY="8.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DepositModel.DepositStates" Width="1.5" PointX="5.625" PointY="10" IsExpanded="true" />
+        <EntityTypeShape EntityType="DepositModel.DepositTerms" Width="1.5" PointX="1.25" PointY="8.625" IsExpanded="true" />
+        <AssociationConnector Association="DepositModel.FK_Cards_AspNetUsers" ManuallyRouted="false" />
+        <AssociationConnector Association="DepositModel.FK_Deposits_AspNetUsers" ManuallyRouted="false" />
+        <AssociationConnector Association="DepositModel.FK_CardHistory_Cards" ManuallyRouted="false" />
         <AssociationConnector Association="DepositModel.FK_Cards_Currencies" ManuallyRouted="false" />
         <AssociationConnector Association="DepositModel.FK_DepositTerms_Currencies" ManuallyRouted="false" />
-        <AssociationConnector Association="DepositModel.FK_DepositOwnership_Deposits" ManuallyRouted="false" />
         <AssociationConnector Association="DepositModel.FK_Deposits_DepositStates" ManuallyRouted="false" />
         <AssociationConnector Association="DepositModel.FK_Deposits_DepositTerms" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="DepositModel.CardHistory" Width="1.5" PointX="0.5" PointY="5.625" />
-        <AssociationConnector Association="DepositModel.FK_CardHistory_Cards" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

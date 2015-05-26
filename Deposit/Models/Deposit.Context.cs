@@ -26,13 +26,11 @@ namespace Deposit.Models
         }
     
         public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
-        public virtual DbSet<CardOwnership> CardOwnership { get; set; }
+        public virtual DbSet<CardHistory> CardHistory { get; set; }
         public virtual DbSet<Cards> Cards { get; set; }
         public virtual DbSet<Currencies> Currencies { get; set; }
-        public virtual DbSet<DepositOwnership> DepositOwnership { get; set; }
         public virtual DbSet<Deposits> Deposits { get; set; }
         public virtual DbSet<DepositStates> DepositStates { get; set; }
         public virtual DbSet<DepositTerms> DepositTerms { get; set; }
-        public virtual DbSet<CardHistory> CardHistory { get; set; }
     }
 }

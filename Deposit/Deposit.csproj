@@ -182,9 +182,6 @@
     <Compile Include="Models\CardHistory.cs">
       <DependentUpon>Deposit.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\CardOwnership.cs">
-      <DependentUpon>Deposit.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\Cards.cs">
       <DependentUpon>Deposit.tt</DependentUpon>
     </Compile>
@@ -205,9 +202,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Deposit.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Models\DepositOwnership.cs">
-      <DependentUpon>Deposit.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Deposits.cs">
       <DependentUpon>Deposit.tt</DependentUpon>
@@ -323,6 +317,7 @@
     <Content Include="Views\Deposits\NewDeposit.cshtml" />
     <Content Include="Views\Deposits\_DepositSuccessfullyMade.cshtml" />
     <Content Include="Views\Deposits\_NotEnoughMoney.cshtml" />
+    <Content Include="Views\Deposits\_NoSuchCard.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

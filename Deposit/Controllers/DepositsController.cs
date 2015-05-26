@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Design;
 using System.Data.Common;
+using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -62,9 +64,10 @@ namespace Deposit.Controllers
                               && cards.SecretCode == model.SecretCode
                         select cards;
 
-                    if (card.ToArray().Length != 1) return View(-1);
+                    if (card.ToList().Count != 1) return PartialView("_NoSuchCard");
 
-                    db.CardOwnership.Add(new CardOwnership() { UserId = User.Identity.GetUserId(), CardId = model.Id});
+                    card.First().UserOwnerId = User.Identity.GetUserId();
+                    
                     db.SaveChanges();
 
                     return RedirectToAction("GeneralInfo");
@@ -99,60 +102,25 @@ namespace Deposit.Controllers
             {
                 using (var db = new DepositEntities())
                 {
-                    var depositTerms = (from dt in db.DepositTerms
-                        where dt.Id == termsId
-                        select dt).ToList().First();
-
-                    var card = db.Cards.Where(c => c.Id == model.SelectedCardId).ToList().First();
+                    var card = db.Cards.First(c => c.Id == model.SelectedCardId);
 
 
                     if (Convert.ToDecimal(model.Sum) <= card.Balance)
                     {
-                        int depositCount = db.Deposits.Count();
+                        var newDeposit = new Deposits()
+                        {
+                            Id = db.Deposits.Count(),
+                            UserOwnerId = User.Identity.GetUserId(),
+                            InitialAmount = Convert.ToDecimal(model.Sum),
+                            StartDate = DateTime.Now,
+                            Balance = Convert.ToDecimal(model.Sum),
 
-                        //db.Deposits.Add(new Deposits()
-                        //{
-                        //    DepositOwnership =
-                        //        new DepositOwnership()
-                        //        {
-                        //            UserId = User.Identity.GetUserId(),
-                        //            //DepositId = depositCount
-                        //        },
-                        //    Id = depositCount,
-                        //    InitialAmount = Convert.ToDecimal(model.Sum),
-                        //    StartDate = DateTime.Now,
-                        //    EndDate = DateTime.Now.AddMonths(depositTerms.Months),
-                        //    Balance = Convert.ToDecimal(model.Sum),
-                        //    DepositTerms = depositTerms,
+                            DepositTerms = db.DepositTerms.First(dt => dt.Id == termsId),
+                            DepositStates = db.DepositStates.First(ds => ds.Id == 0)
+                        };
 
-                        //    DepositStates = db.DepositStates.Where(d => d.Id == 0).ToList().First()
-                        //});
-
-                        DepositStates depStates = db.DepositStates.Where(d => d.Id == 0).ToList().First();
-                        
-
-
-                        Deposits deposit = new Deposits();
-                        deposit.Id = depositCount;
-                        deposit.InitialAmount = Convert.ToDecimal(model.Sum);
-                        deposit.StartDate = DateTime.UtcNow;
-                        deposit.EndDate = DateTime.Now.AddMonths(depositTerms.Months);
-                        deposit.Balance = Convert.ToDecimal(model.Sum);
-
-                        deposit.DepositTerms = depositTerms;
-                        deposit.DepositStates = depStates;
-                        //deposit.DepositOwnership = db.DepositOwnership.FirstOrDefault(d => d.DepositId.Equals(depositCount));
-
-                        //depOwn.Deposits = deposit;
-
-                        DepositOwnership depOwn = new DepositOwnership();
-                        depOwn.UserId = User.Identity.GetUserId();
-                        depOwn.Deposits = db.Deposits.FirstOrDefault(d => d.Id.Equals(depositCount));
-
-                        db.Deposits.Add(deposit);
-
+                        db.Deposits.Add(newDeposit);
                         db.SaveChanges();
-                        //db.Dispose();
                     }
                     else
                     {
@@ -184,8 +152,7 @@ namespace Deposit.Controllers
                 byte currencyId = db.DepositTerms.Where(dt => dt.Id == id).ToList().First().Currencies.Id;
 
                 cards = (from c in db.Cards
-                    join co in db.CardOwnership on c.Id equals co.CardId
-                    where co.UserId == userId && c.Currencies.Id == currencyId
+                    where c.AspNetUsers.Id == userId && c.Currencies.Id == currencyId
                     select c).ToList();
             }
             return cards;

@@ -15,6 +15,7 @@ namespace Deposit.Models
     public partial class CardHistory
     {
         public int Id { get; set; }
+        public string IdCard { get; set; }
         public System.DateTime DateTime { get; set; }
         public string Desription { get; set; }
     

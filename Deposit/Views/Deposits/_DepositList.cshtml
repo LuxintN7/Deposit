@@ -36,8 +36,7 @@
            var userId = User.Identity.GetUserId();
 
            var deposits = (from d in db.Deposits
-               join depositOwnership in db.DepositOwnership on d.Id equals depositOwnership.DepositId
-               where depositOwnership.UserId == userId
+              where d.AspNetUsers.Id == userId
                select d).ToList();
            
            <table class="table table-bordered">
@@ -57,7 +56,7 @@
                {
                    <tr>
                        <td>@deposit.StartDate.Date</td>
-                       <td>@deposit.EndDate.Date</td>
+                       <td>@deposit.StartDate.Date.AddMonths(deposit.DepositTerms.Months)</td>
                        <td>@deposit.DepositStates.Name</td>
                        <td>@deposit.DepositTerms.Currencies.Name</td>
                        <td>@deposit.DepositTerms.InterestRate %</td>
