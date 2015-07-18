@@ -4,7 +4,41 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="DepositModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="DepositModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AspNetRoles">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="256" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetUserClaims">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="ClaimType" Type="nvarchar(max)" />
+          <Property Name="ClaimValue" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="AspNetUserLogins">
+          <Key>
+            <PropertyRef Name="LoginProvider" />
+            <PropertyRef Name="ProviderKey" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="LoginProvider" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="ProviderKey" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetUserRoles">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="RoleId" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
         <EntityType Name="AspNetUsers">
           <Key>
             <PropertyRef Name="Id" />
@@ -26,10 +60,10 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="IdCard" Type="nchar" MaxLength="16" Nullable="false" />
           <Property Name="DateTime" Type="smalldatetime" Nullable="false" />
-          <Property Name="Desription" Type="varchar" MaxLength="400" />
+          <Property Name="Desription" Type="nvarchar" MaxLength="400" />
         </EntityType>
         <EntityType Name="Cards">
           <Key>
@@ -49,18 +83,23 @@
           </Key>
           <Property Name="Id" Type="tinyint" Nullable="false" />
           <Property Name="Name" Type="nchar" MaxLength="3" Nullable="false" />
+          <Property Name="Abbreviation" Type="nchar" MaxLength="3" Nullable="false" />
         </EntityType>
         <EntityType Name="Deposits">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="None" />
+          <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="UserOwnerId" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="TermId" Type="tinyint" Nullable="false" />
           <Property Name="InitialAmount" Type="money" Nullable="false" />
           <Property Name="Balance" Type="money" Nullable="false" />
           <Property Name="StartDate" Type="date" Nullable="false" />
+          <Property Name="EndDate" Type="date" Nullable="false" />
+          <Property Name="LastInterestPaymentDate" Type="date" />
           <Property Name="StateId" Type="tinyint" Nullable="false" />
+          <Property Name="WayOfAccumulationId" Type="tinyint" Nullable="false" />
+          <Property Name="CardForAccumulationId" Type="nchar" MaxLength="16" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="DepositStates">
@@ -79,6 +118,13 @@
           <Property Name="Months" Type="tinyint" Nullable="false" />
           <Property Name="InterestRate" Type="decimal" Precision="5" Scale="2" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="DepositWaysOfAccumulation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="tinyint" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <Association Name="FK_CardHistory_Cards">
           <End Role="Cards" Type="Self.Cards" Multiplicity="1">
@@ -122,6 +168,62 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserClaims" Type="Self.AspNetUserClaims" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserClaims">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserLogins" Type="Self.AspNetUserLogins" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserLogins">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
+          <End Role="AspNetRoles" Type="Self.AspNetRoles" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserRoles" Type="Self.AspNetUserRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetRoles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserRoles">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserRoles" Type="Self.AspNetUserRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserRoles">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Deposits_AspNetUsers">
           <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -133,6 +235,18 @@
             </Principal>
             <Dependent Role="Deposits">
               <PropertyRef Name="UserOwnerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Deposits_Cards">
+          <End Role="Cards" Type="Self.Cards" Multiplicity="1" />
+          <End Role="Deposits" Type="Self.Deposits" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cards">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Deposits">
+              <PropertyRef Name="CardForAccumulationId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -164,6 +278,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Deposits_DepositWaysOfAccumulation">
+          <End Role="DepositWaysOfAccumulation" Type="Self.DepositWaysOfAccumulation" Multiplicity="1" />
+          <End Role="Deposits" Type="Self.Deposits" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DepositWaysOfAccumulation">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Deposits">
+              <PropertyRef Name="WayOfAccumulationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_DepositTerms_Currencies">
           <End Role="Currencies" Type="Self.Currencies" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -179,6 +305,10 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="DepositModelStoreContainer">
+          <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaims" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogins" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CardHistory" EntityType="Self.CardHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Cards" EntityType="Self.Cards" Schema="dbo" store:Type="Tables" />
@@ -186,6 +316,7 @@
           <EntitySet Name="Deposits" EntityType="Self.Deposits" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DepositStates" EntityType="Self.DepositStates" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DepositTerms" EntityType="Self.DepositTerms" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DepositWaysOfAccumulation" EntityType="Self.DepositWaysOfAccumulation" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_CardHistory_Cards" Association="Self.FK_CardHistory_Cards">
             <End Role="Cards" EntitySet="Cards" />
             <End Role="CardHistory" EntitySet="CardHistory" />
@@ -198,8 +329,28 @@
             <End Role="Currencies" EntitySet="Currencies" />
             <End Role="Cards" EntitySet="Cards" />
           </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserLogins" EntitySet="AspNetUserLogins" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
+            <End Role="AspNetRoles" EntitySet="AspNetRoles" />
+            <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+          </AssociationSet>
           <AssociationSet Name="FK_Deposits_AspNetUsers" Association="Self.FK_Deposits_AspNetUsers">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="Deposits" EntitySet="Deposits" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Deposits_Cards" Association="Self.FK_Deposits_Cards">
+            <End Role="Cards" EntitySet="Cards" />
             <End Role="Deposits" EntitySet="Deposits" />
           </AssociationSet>
           <AssociationSet Name="FK_Deposits_DepositStates" Association="Self.FK_Deposits_DepositStates">
@@ -210,15 +361,49 @@
             <End Role="DepositTerms" EntitySet="DepositTerms" />
             <End Role="Deposits" EntitySet="Deposits" />
           </AssociationSet>
+          <AssociationSet Name="FK_Deposits_DepositWaysOfAccumulation" Association="Self.FK_Deposits_DepositWaysOfAccumulation">
+            <End Role="DepositWaysOfAccumulation" EntitySet="DepositWaysOfAccumulation" />
+            <End Role="Deposits" EntitySet="Deposits" />
+          </AssociationSet>
           <AssociationSet Name="FK_DepositTerms_Currencies" Association="Self.FK_DepositTerms_Currencies">
             <End Role="Currencies" EntitySet="Currencies" />
             <End Role="DepositTerms" EntitySet="DepositTerms" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DepositModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="AspNetRoles">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="AspNetUsers" Relationship="Self.AspNetUserRoles" FromRole="AspNetRoles" ToRole="AspNetUsers" />
+        </EntityType>
+        <EntityType Name="AspNetUserClaims">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ClaimType" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ClaimValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUsers" Relationship="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUserClaims" ToRole="AspNetUsers" />
+        </EntityType>
+        <EntityType Name="AspNetUserLogins">
+          <Key>
+            <PropertyRef Name="LoginProvider" />
+            <PropertyRef Name="ProviderKey" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="LoginProvider" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ProviderKey" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="AspNetUsers" Relationship="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUserLogins" ToRole="AspNetUsers" />
+        </EntityType>
         <EntityType Name="AspNetUsers">
           <Key>
             <PropertyRef Name="Id" />
@@ -235,17 +420,20 @@
           <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
           <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
           <Property Name="UserName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="AspNetUserClaims" Relationship="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUsers" ToRole="AspNetUserClaims" />
+          <NavigationProperty Name="AspNetUserLogins" Relationship="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUsers" ToRole="AspNetUserLogins" />
           <NavigationProperty Name="Cards" Relationship="Self.FK_Cards_AspNetUsers" FromRole="AspNetUsers" ToRole="Cards" />
           <NavigationProperty Name="Deposits" Relationship="Self.FK_Deposits_AspNetUsers" FromRole="AspNetUsers" ToRole="Deposits" />
+          <NavigationProperty Name="AspNetRoles" Relationship="Self.AspNetUserRoles" FromRole="AspNetUsers" ToRole="AspNetRoles" />
         </EntityType>
         <EntityType Name="CardHistory">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="IdCard" Type="String" MaxLength="16" FixedLength="true" Unicode="true" Nullable="false" />
           <Property Name="DateTime" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="Desription" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
+          <Property Name="Desription" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Cards" Relationship="Self.FK_CardHistory_Cards" FromRole="CardHistory" ToRole="Cards" />
         </EntityType>
         <EntityType Name="Cards">
@@ -262,6 +450,7 @@
           <NavigationProperty Name="AspNetUsers" Relationship="Self.FK_Cards_AspNetUsers" FromRole="Cards" ToRole="AspNetUsers" />
           <NavigationProperty Name="CardHistory" Relationship="Self.FK_CardHistory_Cards" FromRole="Cards" ToRole="CardHistory" />
           <NavigationProperty Name="Currencies" Relationship="Self.FK_Cards_Currencies" FromRole="Cards" ToRole="Currencies" />
+          <NavigationProperty Name="Deposits" Relationship="Self.FK_Deposits_Cards" FromRole="Cards" ToRole="Deposits" />
         </EntityType>
         <EntityType Name="Currencies">
           <Key>
@@ -269,6 +458,7 @@
           </Key>
           <Property Name="Id" Type="Byte" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="3" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Abbreviation" Type="String" MaxLength="3" FixedLength="true" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Cards" Relationship="Self.FK_Cards_Currencies" FromRole="Currencies" ToRole="Cards" />
           <NavigationProperty Name="DepositTerms" Relationship="Self.FK_DepositTerms_Currencies" FromRole="Currencies" ToRole="DepositTerms" />
         </EntityType>
@@ -276,17 +466,23 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="None" />
+          <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="UserOwnerId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="TermId" Type="Byte" Nullable="false" />
           <Property Name="InitialAmount" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
           <Property Name="Balance" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
           <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="LastInterestPaymentDate" Type="DateTime" Precision="0" />
           <Property Name="StateId" Type="Byte" Nullable="false" />
+          <Property Name="WayOfAccumulationId" Type="Byte" Nullable="false" />
+          <Property Name="CardForAccumulationId" Type="String" MaxLength="16" FixedLength="true" Unicode="true" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="AspNetUsers" Relationship="Self.FK_Deposits_AspNetUsers" FromRole="Deposits" ToRole="AspNetUsers" />
+          <NavigationProperty Name="Cards" Relationship="Self.FK_Deposits_Cards" FromRole="Deposits" ToRole="Cards" />
           <NavigationProperty Name="DepositStates" Relationship="Self.FK_Deposits_DepositStates" FromRole="Deposits" ToRole="DepositStates" />
           <NavigationProperty Name="DepositTerms" Relationship="Self.FK_Deposits_DepositTerms" FromRole="Deposits" ToRole="DepositTerms" />
+          <NavigationProperty Name="DepositWaysOfAccumulation" Relationship="Self.FK_Deposits_DepositWaysOfAccumulation" FromRole="Deposits" ToRole="DepositWaysOfAccumulation" />
         </EntityType>
         <EntityType Name="DepositStates">
           <Key>
@@ -308,6 +504,42 @@
           <NavigationProperty Name="Currencies" Relationship="Self.FK_DepositTerms_Currencies" FromRole="DepositTerms" ToRole="Currencies" />
           <NavigationProperty Name="Deposits" Relationship="Self.FK_Deposits_DepositTerms" FromRole="DepositTerms" ToRole="Deposits" />
         </EntityType>
+        <EntityType Name="DepositWaysOfAccumulation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Byte" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Deposits" Relationship="Self.FK_Deposits_DepositWaysOfAccumulation" FromRole="DepositWaysOfAccumulation" ToRole="Deposits" />
+        </EntityType>
+        <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserClaims" Type="Self.AspNetUserClaims" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserClaims">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserLogins" Type="Self.AspNetUserLogins" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserLogins">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Cards_AspNetUsers">
           <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
@@ -364,6 +596,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Deposits_Cards">
+          <End Role="Cards" Type="Self.Cards" Multiplicity="1" />
+          <End Role="Deposits" Type="Self.Deposits" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cards">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Deposits">
+              <PropertyRef Name="CardForAccumulationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_DepositTerms_Currencies">
           <End Role="Currencies" Type="Self.Currencies" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -406,7 +650,26 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Deposits_DepositWaysOfAccumulation">
+          <End Role="DepositWaysOfAccumulation" Type="Self.DepositWaysOfAccumulation" Multiplicity="1" />
+          <End Role="Deposits" Type="Self.Deposits" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DepositWaysOfAccumulation">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Deposits">
+              <PropertyRef Name="WayOfAccumulationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="AspNetUserRoles">
+          <End Role="AspNetRoles" Type="Self.AspNetRoles" Multiplicity="*" />
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="*" />
+        </Association>
         <EntityContainer Name="DepositEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" />
+          <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaims" />
+          <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogins" />
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" />
           <EntitySet Name="CardHistory" EntityType="Self.CardHistory" />
           <EntitySet Name="Cards" EntityType="Self.Cards" />
@@ -414,6 +677,15 @@
           <EntitySet Name="Deposits" EntityType="Self.Deposits" />
           <EntitySet Name="DepositStates" EntityType="Self.DepositStates" />
           <EntitySet Name="DepositTerms" EntityType="Self.DepositTerms" />
+          <EntitySet Name="DepositWaysOfAccumulation" EntityType="Self.DepositWaysOfAccumulation" />
+          <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserLogins" EntitySet="AspNetUserLogins" />
+          </AssociationSet>
           <AssociationSet Name="FK_Cards_AspNetUsers" Association="Self.FK_Cards_AspNetUsers">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="Cards" EntitySet="Cards" />
@@ -430,6 +702,10 @@
             <End Role="Currencies" EntitySet="Currencies" />
             <End Role="Cards" EntitySet="Cards" />
           </AssociationSet>
+          <AssociationSet Name="FK_Deposits_Cards" Association="Self.FK_Deposits_Cards">
+            <End Role="Cards" EntitySet="Cards" />
+            <End Role="Deposits" EntitySet="Deposits" />
+          </AssociationSet>
           <AssociationSet Name="FK_DepositTerms_Currencies" Association="Self.FK_DepositTerms_Currencies">
             <End Role="Currencies" EntitySet="Currencies" />
             <End Role="DepositTerms" EntitySet="DepositTerms" />
@@ -442,6 +718,14 @@
             <End Role="DepositTerms" EntitySet="DepositTerms" />
             <End Role="Deposits" EntitySet="Deposits" />
           </AssociationSet>
+          <AssociationSet Name="FK_Deposits_DepositWaysOfAccumulation" Association="Self.FK_Deposits_DepositWaysOfAccumulation">
+            <End Role="DepositWaysOfAccumulation" EntitySet="DepositWaysOfAccumulation" />
+            <End Role="Deposits" EntitySet="Deposits" />
+          </AssociationSet>
+          <AssociationSet Name="AspNetUserRoles" Association="Self.AspNetUserRoles">
+            <End Role="AspNetRoles" EntitySet="AspNetRoles" />
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+          </AssociationSet>
         </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
@@ -449,6 +733,33 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="DepositModelStoreContainer" CdmEntityContainer="DepositEntities">
+          <EntitySetMapping Name="AspNetRoles">
+            <EntityTypeMapping TypeName="DepositModel.AspNetRoles">
+              <MappingFragment StoreEntitySet="AspNetRoles">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUserClaims">
+            <EntityTypeMapping TypeName="DepositModel.AspNetUserClaims">
+              <MappingFragment StoreEntitySet="AspNetUserClaims">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="ClaimType" ColumnName="ClaimType" />
+                <ScalarProperty Name="ClaimValue" ColumnName="ClaimValue" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUserLogins">
+            <EntityTypeMapping TypeName="DepositModel.AspNetUserLogins">
+              <MappingFragment StoreEntitySet="AspNetUserLogins">
+                <ScalarProperty Name="LoginProvider" ColumnName="LoginProvider" />
+                <ScalarProperty Name="ProviderKey" ColumnName="ProviderKey" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="AspNetUsers">
             <EntityTypeMapping TypeName="DepositModel.AspNetUsers">
               <MappingFragment StoreEntitySet="AspNetUsers">
@@ -495,6 +806,7 @@
               <MappingFragment StoreEntitySet="Currencies">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Abbreviation" ColumnName="Abbreviation" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -507,7 +819,11 @@
                 <ScalarProperty Name="InitialAmount" ColumnName="InitialAmount" />
                 <ScalarProperty Name="Balance" ColumnName="Balance" />
                 <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="LastInterestPaymentDate" ColumnName="LastInterestPaymentDate" />
                 <ScalarProperty Name="StateId" ColumnName="StateId" />
+                <ScalarProperty Name="WayOfAccumulationId" ColumnName="WayOfAccumulationId" />
+                <ScalarProperty Name="CardForAccumulationId" ColumnName="CardForAccumulationId" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -531,6 +847,22 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="DepositWaysOfAccumulation">
+            <EntityTypeMapping TypeName="DepositModel.DepositWaysOfAccumulation">
+              <MappingFragment StoreEntitySet="DepositWaysOfAccumulation">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="AspNetUserRoles" TypeName="DepositModel.AspNetUserRoles" StoreEntitySet="AspNetUserRoles">
+            <EndProperty Name="AspNetRoles">
+              <ScalarProperty Name="Id" ColumnName="RoleId" />
+            </EndProperty>
+            <EndProperty Name="AspNetUsers">
+              <ScalarProperty Name="Id" ColumnName="UserId" />
+            </EndProperty>
+          </AssociationSetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

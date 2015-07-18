@@ -1,0 +1,83 @@
+﻿@using DepositDatabase.Model
+@using Microsoft.AspNet.Identity
+<div class="row">
+        @using (var db = new DepositEntities())
+        {
+            var userId = User.Identity.GetUserId();
+            var cardInfo = (from cards in db.Cards
+                            where cards.AspNetUsers.Id == userId
+                            select cards).ToList();
+
+            // Card list
+            <div class="col-md-4">
+                <h4 class="text-center">My payment cards</h4>
+
+                <div id="cardList" class="panel-group panel">
+                    @for (int i = 0; i < cardInfo.Count; i++)
+                    {
+                        <div class="panel panel-default">
+                            <a href="#card@(i)" class="list-group-item bg-light-grey text-center" data-toggle="collapse"
+                               data-parent="#cardList,#historyTables" data-target="#card@(i),#historyTable@(i)">@cardInfo[i].Id</a>
+
+                            <div class="panel-collapse collapse" id="card@(i)">
+                                <table class="table-condensed align-center">
+                                    <tr>
+                                        <th class="text-center width-25-perc">Валюта</th>
+                                        <th class="text-center width-75-perc">Баланс</th>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center">@cardInfo[i].Currencies.Name</td>
+                                        <td class="text-right">@cardInfo[i].Balance</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <br />
+                @using (Ajax.BeginForm("AddCard", new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "info-content", InsertionMode = InsertionMode.Replace }))
+                {
+                    <button type="submit" class="btn btn-primary">Add a card</button>
+                }
+            </div>
+
+                //Card history table
+                <div class="col-md-8">
+                    <h4 class="text-center">Latest actions</h4>
+
+                    <div id="historyTables">
+                        @for (int i = 0; i < cardInfo.Count; i++)
+                        {
+                            var cardId = cardInfo[i].Id;
+                            var cardHistory = (from ch in db.CardHistory
+                                               join cards in db.Cards on ch.Cards.Id equals cards.Id
+                                               where ch.Cards.Id == cardId
+                                               orderby ch.DateTime descending
+                                               select ch).Take(5).ToList();
+
+                            <div class="panel border-none margin-0">
+
+                                <div class="collapse" id="historyTable@(i)">
+                                    <table class="table-condensed table-bordered history-table">
+                                        <tr>
+                                            <th class="text-center width-25-perc">Дата</th>
+                                            <th class="text-center width-75-perc">Опис</th>
+                                        </tr>
+                                        @foreach (var ch in cardHistory)
+                                        {
+                                            <tr>
+                                                <td>@ch.DateTime</td>
+                                                <td>@ch.Desription</td>
+                                            </tr>
+                                        }
+                                    </table>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                </div>
+        }
+    </div>
+

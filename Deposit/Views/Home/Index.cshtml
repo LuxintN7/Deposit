@@ -1,5 +1,7 @@
-﻿@{
-    ViewBag.Title = "Головна сторінка";
+﻿@using System.Configuration
+@using Microsoft.VisualStudio.Web.PageInspector.Runtime
+@{
+    ViewBag.Title = "Home page";
 }
 
 <div id="slider" class="carousel" data-ride="carousel">
@@ -35,7 +37,7 @@
 
 <div class="vertical-margin-50">
     <h3 class="text-center">
-        @GlobalVariables.BankName завжди турбується про своїх клієнтів!
+        @ConfigurationManager.AppSettings["BankName"] always cares for it's Customers!
     </h3>
 </div>
 
@@ -46,26 +48,26 @@
 </div>
 
 <div class="row vertical-margin-50">
-    <h1 class="text-center">Наші принципи:</h1>
+    <h1 class="text-center">Our principles:</h1>
     <div class="col-md-4">
-        <h2>Надійність</h2>
+        <h2>Reliability</h2>
         <p>
-            Використання сучасних систем захисту забезпечує безпечність і надійність вкладів.
+            The use of modern security systems ensure the safety and reliability of deposits.
         </p>
-        <p><a class="btn btn-default" href="@Url.Action("Reliability", "Principles")">Дізнатись більше &raquo;</a></p>
+        <p><a class="btn btn-default" href="@Url.Action("Reliability", "Principles")">Learn more &raquo;</a></p>
     </div>
     <div class="col-md-4">
-        <h2>Зручність</h2>
+        <h2>Convenience</h2>
         <p>
-            Електронна система керування вкладами дозволяє оформлювати і переглядати депозити будь-де і будь-коли.
+            The electronic banking system allows you to open and manage your deposits anywhere and anytime.
         </p>
-        <p><a class="btn btn-default" href="@Url.Action("Convenience", "Principles")">Дізнатись більше &raquo;</a></p>
+        <p><a class="btn btn-default" href="@Url.Action("Convenience", "Principles")">Learn more &raquo;</a></p>
     </div>
     <div class="col-md-4">
-        <h2>Прибутковість</h2>
+        <h2>Profitability</h2>
         <p>
-            Депозити в @GlobalVariables.BankName: високі відсоткові ставки для забезпечення навигідніших умов!
+            Deposits in @ConfigurationManager.AppSettings["BankName"]: high interest rates to ensure the most profitable conditions!
         </p>
-        <p><a class="btn btn-default" href="@Url.Action("Profitability", "Principles")">Дізнатись більше &raquo;</a></p>
+        <p><a class="btn btn-default" href="@Url.Action("Profitability", "Principles")">Learn more &raquo;</a></p>
     </div>
 </div>

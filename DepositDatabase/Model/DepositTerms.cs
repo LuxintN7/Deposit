@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Deposit.Models
+namespace DepositDatabase.Model
 {
     using System;
     using System.Collections.Generic;

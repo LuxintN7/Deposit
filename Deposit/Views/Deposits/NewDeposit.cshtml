@@ -1,5 +1,6 @@
-﻿@using Deposit.Models
+﻿@using DepositDatabase.Model
 @model Deposit.Models.NewDepositViewModel
+
 @{
     ViewBag.Title = "_NewDeposit";
 }
@@ -18,46 +19,42 @@
             select dt).ToList();
 
         DepositTerms depositTerms = depositTermsList[0];
-
-
+        
         <div class="row">
     
             <div class="col-md-4">
                 <table class="table-bordered table-condensed">
                     <caption>
-                        <h4>Умови вкладу</h4>
+                        <h4>Terms</h4>
                     </caption>
                     <tr>
                         <td>
-                            <b>Валюта вкладу</b>
+                            <b>Currency</b>
                         </td>
                         <td>@depositTerms.Currencies.Name</td>
                     </tr>
                     <tr>
                         <td>
-                            <b>Термін вкладу</b>
+                            <b>Period</b>
                         </td>
                         <td>
-                            @depositTerms.Months @(depositTerms.Months == 1 ? "місяць"
-                                                       : depositTerms.Months <= 4 ? "місяці"
-                                                           : "місяців")
+                            @depositTerms.Months @(depositTerms.Months == 1 ? "month" : "months")
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <b>Відсоткова ставка</b>
+                            <b>Interest rate</b>
                         </td>
                         <td>@depositTerms.InterestRate %</td>
                     </tr>
                 </table>
             </div>
-    
 
             <div class="col-md-8">
                 <div class="form-horizontal">
-                    <h4>Оформлення вкладу</h4>
-                    <hr />
-                    
+                    <h4>Making a deposit</h4>
+                    <hr/>
+
                     @Html.ValidationSummary(true, "", new {@class = "text-danger"})
                     <div class="form-group">
                         @Html.LabelFor(model => model.Sum, htmlAttributes: new {@class = "control-label col-md-3"})
@@ -67,7 +64,7 @@
                         </div>
                     </div>
 
-                    
+
                     @Html.ValidationSummary(true, "", new {@class = "text-danger"})
                     <div class="form-group">
                         @Html.LabelFor(model => model.SelectedCardId, htmlAttributes: new {@class = "control-label col-md-3"})
@@ -77,36 +74,32 @@
                         </div>
                     </div>
 
-                    
                     @Html.ValidationSummary(true, "", new {@class = "text-danger"})
                     <div class="form-group">
                         @Html.LabelFor(model => model.WaysOfAccumulation, htmlAttributes: new {@class = "control-label col-md-3"})
                         <div class="col-md-9">
-                            @for (int i = 0; i < Model.WaysOfAccumulation.Count; i++)
+                            @foreach (DepositWaysOfAccumulation waysOfAccumulation in Model.WaysOfAccumulation)
                             {
-                                var wayId = Model.WaysOfAccumulation[i].Id;
+                                var wayId = waysOfAccumulation.Id;
 
-                                @Html.RadioButtonFor(model => model.SelectedWayOfAccumulationId, Model.WaysOfAccumulation[i].Id, new {id = "way" + wayId})
-                                @Html.Label(Model.WaysOfAccumulation[i].Name)
-                                <br />
+                                @Html.RadioButtonFor(model => model.SelectedWayOfAccumulationId, waysOfAccumulation.Id, new {id = "way" + wayId})
+                                @Html.Label(waysOfAccumulation.Name)
+                                <br/>
                             }
                             @Html.ValidationMessageFor(model => model.SelectedCardId, "", new {@class = "text-danger"})
                         </div>
+                    </div>
+                </div>
+
+                @Html.Hidden("termsId", depositTermsId)
+                <div class="form-group">
+                    <div class="col-md-offset-3 col-md-9">
+                        <input type="submit" value="Confirm" class="btn btn-success"/>
                     </div>
                 </div>
             </div>
 
         </div>
     }
-
-    @Html.Hidden("termsId", depositTermsId)
-    <div class="form-group">
-        <div class="col-md-offset-3 col-md-9">
-            <input type="submit" value="Оформити" class="btn btn-success" />
-        </div>
-    </div>
 }
 
-@Scripts.Render("~/bundles/jquery")
-@Scripts.Render("~/bundles/bootstrap")
-@Scripts.Render("~/bundles/jqueryval")

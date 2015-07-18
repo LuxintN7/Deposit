@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Deposit.Models
+namespace DepositDatabase.Model
 {
     using System;
     using System.Data.Entity;
@@ -25,6 +25,9 @@ namespace Deposit.Models
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<AspNetRoles> AspNetRoles { get; set; }
+        public virtual DbSet<AspNetUserClaims> AspNetUserClaims { get; set; }
+        public virtual DbSet<AspNetUserLogins> AspNetUserLogins { get; set; }
         public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
         public virtual DbSet<CardHistory> CardHistory { get; set; }
         public virtual DbSet<Cards> Cards { get; set; }
@@ -32,5 +35,6 @@ namespace Deposit.Models
         public virtual DbSet<Deposits> Deposits { get; set; }
         public virtual DbSet<DepositStates> DepositStates { get; set; }
         public virtual DbSet<DepositTerms> DepositTerms { get; set; }
+        public virtual DbSet<DepositWaysOfAccumulation> DepositWaysOfAccumulation { get; set; }
     }
 }

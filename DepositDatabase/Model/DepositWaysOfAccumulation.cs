@@ -7,23 +7,21 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Deposit.Models
+namespace DepositDatabase.Model
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class Currencies
+    public partial class DepositWaysOfAccumulation
     {
-        public Currencies()
+        public DepositWaysOfAccumulation()
         {
-            this.Cards = new HashSet<Cards>();
-            this.DepositTerms = new HashSet<DepositTerms>();
+            this.Deposits = new HashSet<Deposits>();
         }
     
         public byte Id { get; set; }
         public string Name { get; set; }
     
-        public virtual ICollection<Cards> Cards { get; set; }
-        public virtual ICollection<DepositTerms> DepositTerms { get; set; }
+        public virtual ICollection<Deposits> Deposits { get; set; }
     }
 }

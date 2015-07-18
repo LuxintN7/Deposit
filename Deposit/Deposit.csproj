@@ -39,12 +39,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.AspNet.SignalR.Core">
-      <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.2.2.0\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.AspNet.SignalR.SystemWeb">
-      <HintPath>..\packages\Microsoft.AspNet.SignalR.SystemWeb.2.2.0\lib\net45\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -174,44 +168,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="GlobalVariables.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\AspNetUsers.cs">
-      <DependentUpon>Deposit.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\CardHistory.cs">
-      <DependentUpon>Deposit.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Cards.cs">
-      <DependentUpon>Deposit.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Currencies.cs">
-      <DependentUpon>Deposit.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Deposit.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Deposit.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Deposit.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Deposit.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Deposit.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Deposit.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Deposits.cs">
-      <DependentUpon>Deposit.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\DepositStates.cs">
-      <DependentUpon>Deposit.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\DepositTerms.cs">
-      <DependentUpon>Deposit.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\NewDepositViewModel.cs" />
@@ -219,10 +176,6 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\Deposit.mdf" />
-    <Content Include="App_Data\Deposit_log.ldf">
-      <DependentUpon>Deposit.mdf</DependentUpon>
-    </Content>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="favicon.ico" />
@@ -234,23 +187,6 @@
     <Content Include="images\convenience.jpg" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <EntityDeploy Include="Models\Deposit.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Deposit.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\Deposit.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Deposit.edmx</DependentUpon>
-      <LastGenOutput>Deposit.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Models\Deposit.edmx.diagram">
-      <DependentUpon>Deposit.edmx</DependentUpon>
-    </Content>
-    <Content Include="Models\Deposit.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Deposit.edmx</DependentUpon>
-      <LastGenOutput>Deposit.cs</LastGenOutput>
-    </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -296,12 +232,10 @@
     <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
     <Content Include="Views\Account\SendCode.cshtml" />
     <Content Include="Views\Account\VerifyCode.cshtml" />
-    <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
     <Content Include="Views\Manage\ChangePassword.cshtml" />
     <Content Include="Views\Manage\Index.cshtml" />
     <Content Include="Views\Manage\ManageLogins.cshtml" />
     <Content Include="Views\Manage\SetPassword.cshtml" />
-    <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
@@ -311,13 +245,15 @@
     <Content Include="Views\Deposits\Index.cshtml" />
     <Content Include="Views\Deposits\_GeneralInfo.cshtml" />
     <Content Include="Views\Deposits\_DepositList.cshtml" />
-    <Content Include="Views\Deposits\_MakeNewDeposit.cshtml" />
+    <Content Include="Views\Deposits\_OpenNewDeposit.cshtml" />
     <Content Include="Views\def\Index.cshtml" />
     <Content Include="Views\Deposits\AddCard.cshtml" />
     <Content Include="Views\Deposits\NewDeposit.cshtml" />
-    <Content Include="Views\Deposits\_DepositSuccessfullyMade.cshtml" />
+    <Content Include="Views\Deposits\_DepositOpenedSuccessfully.cshtml" />
     <Content Include="Views\Deposits\_NotEnoughMoney.cshtml" />
     <Content Include="Views\Deposits\_NoSuchCard.cshtml" />
+    <Content Include="Views\Deposits\_GeneralInfoContent.cshtml" />
+    <Content Include="Views\Deposits\_DepositClosedSuccessfully.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
@@ -327,10 +263,13 @@
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
-    <None Include="Project_Readme.html" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Views\New\" />
+    <ProjectReference Include="..\DepositDatabase\DepositDatabase.csproj">
+      <Project>{abeccf88-6e8e-489b-bfd4-51d644a14082}</Project>
+      <Name>DepositDatabase</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

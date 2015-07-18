@@ -1,4 +1,4 @@
-﻿@model Deposit.Models.Cards
+﻿@model DepositDatabase.Model.Cards
 @{
     ViewBag.Title = "_AddCard";
 }
@@ -8,7 +8,7 @@
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>Додати картку</h4>
+        <h4>Add a card</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
@@ -52,6 +52,6 @@
 }
 
 <div>
-    @Html.ActionLink("Назад до списку карток", "Index")
+    @Html.ActionLink("Back to card list", "Index")
 </div>
 

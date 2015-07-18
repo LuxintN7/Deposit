@@ -7,7 +7,7 @@ body {
     padding-top: 50px;
     padding-bottom: 20px;
 
-    margin-bottom: 120px;
+    margin-bottom: 40px;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -63,7 +63,7 @@ textarea {
     position:absolute;
     bottom: 0;
     width: 100%;
-    height: 120px;
+    height: 40px;
 }
 
 .grey-border li{

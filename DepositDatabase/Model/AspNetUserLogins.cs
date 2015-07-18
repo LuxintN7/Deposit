@@ -7,24 +7,17 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Deposit.Models
+namespace DepositDatabase.Model
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class Deposits
+    public partial class AspNetUserLogins
     {
-        public int Id { get; set; }
-        public string UserOwnerId { get; set; }
-        public byte TermId { get; set; }
-        public decimal InitialAmount { get; set; }
-        public decimal Balance { get; set; }
-        public System.DateTime StartDate { get; set; }
-        public byte StateId { get; set; }
-        public string Name { get; set; }
+        public string LoginProvider { get; set; }
+        public string ProviderKey { get; set; }
+        public string UserId { get; set; }
     
         public virtual AspNetUsers AspNetUsers { get; set; }
-        public virtual DepositStates DepositStates { get; set; }
-        public virtual DepositTerms DepositTerms { get; set; }
     }
 }

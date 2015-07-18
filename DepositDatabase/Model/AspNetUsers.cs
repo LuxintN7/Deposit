@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Deposit.Models
+namespace DepositDatabase.Model
 {
     using System;
     using System.Collections.Generic;
@@ -16,8 +16,11 @@ namespace Deposit.Models
     {
         public AspNetUsers()
         {
+            this.AspNetUserClaims = new HashSet<AspNetUserClaims>();
+            this.AspNetUserLogins = new HashSet<AspNetUserLogins>();
             this.Cards = new HashSet<Cards>();
             this.Deposits = new HashSet<Deposits>();
+            this.AspNetRoles = new HashSet<AspNetRoles>();
         }
     
         public string Id { get; set; }
@@ -33,7 +36,10 @@ namespace Deposit.Models
         public int AccessFailedCount { get; set; }
         public string UserName { get; set; }
     
+        public virtual ICollection<AspNetUserClaims> AspNetUserClaims { get; set; }
+        public virtual ICollection<AspNetUserLogins> AspNetUserLogins { get; set; }
         public virtual ICollection<Cards> Cards { get; set; }
         public virtual ICollection<Deposits> Deposits { get; set; }
+        public virtual ICollection<AspNetRoles> AspNetRoles { get; set; }
     }
 }

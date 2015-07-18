@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Deposit.Models
+namespace DepositDatabase.Model
 {
     using System;
     using System.Collections.Generic;
@@ -17,6 +17,7 @@ namespace Deposit.Models
         public Cards()
         {
             this.CardHistory = new HashSet<CardHistory>();
+            this.Deposits = new HashSet<Deposits>();
         }
     
         public string Id { get; set; }
@@ -30,5 +31,6 @@ namespace Deposit.Models
         public virtual AspNetUsers AspNetUsers { get; set; }
         public virtual ICollection<CardHistory> CardHistory { get; set; }
         public virtual Currencies Currencies { get; set; }
+        public virtual ICollection<Deposits> Deposits { get; set; }
     }
 }

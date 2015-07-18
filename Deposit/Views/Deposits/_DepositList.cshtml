@@ -1,67 +1,69 @@
-﻿@using Deposit.Models
+﻿@using DepositDatabase.Model
 @using Microsoft.AspNet.Identity
-@model IEnumerable<Deposits>
+@model Deposits
 
 <div id="menu" class="menu-frame">
     <ul class="nav nav-tabs margin-top-50">
         <li role="presentation">
-            @Ajax.ActionLink("Загальна інформація", "GeneralInfo", new AjaxOptions()
-            {
-                HttpMethod = "GET",
-                UpdateTargetId = "menu",
-                InsertionMode = InsertionMode.Replace
+            @Ajax.ActionLink("General information", "GeneralInfo", new AjaxOptions(){
+                HttpMethod = "GET", UpdateTargetId = "menu", InsertionMode = InsertionMode.Replace
             })
         </li>
         <li role="presentation" class="active">
-            @Ajax.ActionLink("Перегляд депозитів", "DepositList", new AjaxOptions()
+            @Ajax.ActionLink("Deposit list", "DepositList", new AjaxOptions()
             {
-                HttpMethod = "GET",
-                UpdateTargetId = "menu",
-                InsertionMode = InsertionMode.Replace
+                HttpMethod = "GET", UpdateTargetId = "menu", InsertionMode = InsertionMode.Replace
             })
         </li>
         <li role="presentation">
-            @Ajax.ActionLink("Відкрити новий депозит", "MakeNewDeposit", new AjaxOptions()
+            @Ajax.ActionLink("Open new deposit", "OpenNewDeposit", new AjaxOptions()
             {
-                HttpMethod = "GET",
-                UpdateTargetId = "menu",
-                InsertionMode = InsertionMode.Replace
+                HttpMethod = "GET", UpdateTargetId = "menu", InsertionMode = InsertionMode.Replace
             })
         </li>
     </ul>
 
-    <div class="menu-content">
+    <div id="deposit-list-content" class="menu-content">
        @using (var db = new DepositEntities())
        {
            var userId = User.Identity.GetUserId();
 
            var deposits = (from d in db.Deposits
-              where d.AspNetUsers.Id == userId
-               select d).ToList();
+                           where d.AspNetUsers.Id == userId && (d.DepositStates.Name != "Closed")
+              select d).ToList();
            
            <table class="table table-bordered">
                <caption>
-                   <h4>Мої депозити</h4>
+                   <h4>My deposits</h4>
                </caption>
                <tr>
-                   <th>Дата відкриття</th>
-                   <th>Дата закінчення</th>
-                   <th>Стан</th>
-                   <th>Валюта</th>
-                   <th>Відсоткова ставка</th>
-                   <th>Початкова сума</th>
-                   <th>Нараховано</th>
+                   <th>Start date</th>
+                   <th>End date</th>
+                   @*<th>State</th>*@
+                   <th>Currency</th>
+                   <th>Interest rate</th>
+                   <th>Initial amount</th>
+                   <th>Paid interest</th>
+                   <th></th>
                </tr>
                @foreach (var deposit in deposits)
                {
                    <tr>
                        <td>@deposit.StartDate.Date</td>
-                       <td>@deposit.StartDate.Date.AddMonths(deposit.DepositTerms.Months)</td>
-                       <td>@deposit.DepositStates.Name</td>
+                       <td>@deposit.EndDate.Date</td>
+                       @*<td>@deposit.DepositStates.Name</td>*@
                        <td>@deposit.DepositTerms.Currencies.Name</td>
                        <td>@deposit.DepositTerms.InterestRate %</td>
                        <td>@deposit.InitialAmount</td>
                        <td>@(deposit.Balance - deposit.InitialAmount)</td>
+                       <td>
+                            @using (Ajax.BeginForm("CloseDeposit", new { depositId = deposit.Id, cardId = deposit.Cards.Id}, 
+                                new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "deposit-list-content", InsertionMode = InsertionMode.Replace }))
+                            {
+                                @*@Html.Hidden("depositId", deposit.Id)*@
+                                <input type="submit" value="Close deposit" class=" btn btn-primary btn-xs" />
+                            }  
+                       </td>
                    </tr> 
                }
            </table>

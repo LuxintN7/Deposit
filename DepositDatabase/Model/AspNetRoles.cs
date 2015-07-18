@@ -7,18 +7,21 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Deposit.Models
+namespace DepositDatabase.Model
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class CardHistory
+    public partial class AspNetRoles
     {
-        public int Id { get; set; }
-        public string IdCard { get; set; }
-        public System.DateTime DateTime { get; set; }
-        public string Desription { get; set; }
+        public AspNetRoles()
+        {
+            this.AspNetUsers = new HashSet<AspNetUsers>();
+        }
     
-        public virtual Cards Cards { get; set; }
+        public string Id { get; set; }
+        public string Name { get; set; }
+    
+        public virtual ICollection<AspNetUsers> AspNetUsers { get; set; }
     }
 }

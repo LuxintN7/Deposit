@@ -1,27 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Dynamic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
+using DepositDatabase.Model;
 
 namespace Deposit.Models
 {
     public class NewDepositViewModel
     {
-        public NewDepositViewModel()
-        {
-            _cards = new List<Cards>();
-            _waysOfAccumulation = new List<WayOfAccumulation>();
-        }
-
-        public NewDepositViewModel(List<Cards> cards, List<WayOfAccumulation> waysOfAccumulation)
-        {
-            _cards = cards;
-            _waysOfAccumulation = waysOfAccumulation;
-        }
+        private readonly List<Cards> _cards;
         
         [Display(Name = "Картка")]
         public string SelectedCardId { get; set; }
@@ -33,24 +19,29 @@ namespace Deposit.Models
         [Display(Name = "Сума вкладу")]
         public string Sum { get; set; }
         
-        private readonly List<Cards> _cards;
         public IEnumerable<SelectListItem> Cards
         {
             get { return new SelectList(_cards, "Id", "Id"); }
         }
         
-        private readonly List<WayOfAccumulation> _waysOfAccumulation;
+        private readonly List<DepositWaysOfAccumulation> _waysOfAccumulation;
         [Display(Name = "Спосіб накопичення")]
-        public List<WayOfAccumulation> WaysOfAccumulation
+        public List<DepositWaysOfAccumulation> WaysOfAccumulation
         {
             get { return _waysOfAccumulation; }
         }
-    } 
 
-    public class WayOfAccumulation
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-    }
+        public NewDepositViewModel()
+        {
+            _cards = new List<Cards>();
+            _waysOfAccumulation = new List<DepositWaysOfAccumulation>();
+        }
+
+        public NewDepositViewModel(List<Cards> cards, List<DepositWaysOfAccumulation> waysOfAccumulation)
+        {
+            _cards = cards;
+            _waysOfAccumulation = waysOfAccumulation;
+        }
+    } 
 }
 

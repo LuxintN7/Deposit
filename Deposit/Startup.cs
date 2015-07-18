@@ -1,7 +1,8 @@
-﻿using Microsoft.Owin;
+﻿using Deposit;
+using Microsoft.Owin;
 using Owin;
 
-[assembly: OwinStartupAttribute(typeof(Deposit.Startup))]
+[assembly: OwinStartup(typeof(Startup))]
 namespace Deposit
 {
     public partial class Startup
@@ -9,7 +10,6 @@ namespace Deposit
         public void Configuration(IAppBuilder app)
         {
             ConfigureAuth(app);
-            //app.MapSignalR();
         }
     }
 }

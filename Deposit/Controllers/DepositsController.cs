@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel.Design;
-using System.Data.Common;
-using System.Data.Entity;
-using System.Data.Entity.Migrations;
+using System.Diagnostics;
 using System.Linq;
-using System.Web;
+using System.Threading;
 using System.Web.Mvc;
-using System.Web.Services.Description;
 using Deposit.Models;
+using DepositDatabase.Model;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace Deposit.Controllers
 {
@@ -30,6 +25,13 @@ namespace Deposit.Controllers
             return PartialView("_GeneralInfo");
         }
 
+
+        [Authorize]
+        public ActionResult GeneralInfoContent()
+        {
+            return PartialView("_GeneralInfoContent");
+        }
+
         [Authorize]
         public ActionResult DepositList()
         {
@@ -37,14 +39,13 @@ namespace Deposit.Controllers
         }
 
         [Authorize]
-        public ActionResult MakeNewDeposit()
+        public ActionResult OpenNewDeposit()
         {
-            return PartialView("_MakeNewDeposit");
+            return PartialView("_OpenNewDeposit");
         }
 
+
         #region GeneralInfo actions
-       
-        
         public ActionResult AddCard()
         {
             return PartialView("AddCard");
@@ -55,6 +56,8 @@ namespace Deposit.Controllers
         {
             if (ModelState.IsValid)
             {
+                ViewData["modelIsValid"] = true;
+
                 using(var db = new DepositEntities())
                 {
                     var card = from cards in db.Cards
@@ -70,16 +73,16 @@ namespace Deposit.Controllers
                     
                     db.SaveChanges();
 
-                    return RedirectToAction("GeneralInfo");
+                    return RedirectToAction("GeneralInfoContent");
                 }
             }
+
+            ViewData["modelIsValid"] = false;
             return PartialView("AddCard");
         }
         #endregion
 
-        #region MakeNewDeposit actions
-
-        
+        #region OpenNewDeposit actions
         public ActionResult NewDeposit()
         {
             var id = Convert.ToByte(Request["termsId"]);
@@ -97,29 +100,44 @@ namespace Deposit.Controllers
         {
             var termsId = Convert.ToByte(Request["termsId"]);
             ViewData["termsId"] = termsId;
-            
+
             if (ModelState.IsValid)
             {
                 using (var db = new DepositEntities())
                 {
                     var card = db.Cards.First(c => c.Id == model.SelectedCardId);
 
-
                     if (Convert.ToDecimal(model.Sum) <= card.Balance)
                     {
+                        var depositTerms = db.DepositTerms.First(dt => dt.Id == termsId);
+
                         var newDeposit = new Deposits()
                         {
                             Id = db.Deposits.Count(),
                             UserOwnerId = User.Identity.GetUserId(),
                             InitialAmount = Convert.ToDecimal(model.Sum),
                             StartDate = DateTime.Now,
+                            EndDate = DateTime.Now.AddMonths(depositTerms.Months),
                             Balance = Convert.ToDecimal(model.Sum),
-
-                            DepositTerms = db.DepositTerms.First(dt => dt.Id == termsId),
+                            DepositWaysOfAccumulation = db.DepositWaysOfAccumulation.First(w => w.Id == model.SelectedWayOfAccumulationId),
+                            Cards = card,
+                            DepositTerms = depositTerms,
                             DepositStates = db.DepositStates.First(ds => ds.Id == 0)
                         };
 
+                        card.Balance -= newDeposit.InitialAmount;
+
                         db.Deposits.Add(newDeposit);
+                        
+                        var newCardHistoryRecord = new CardHistory()
+                        {
+                            Id = db.CardHistory.Count(),
+                            DateTime = DateTime.Now,
+                            Desription = String.Format("Відкрито депозит №{0} на суму {1} {2}.", newDeposit.Id, newDeposit.Balance,newDeposit.DepositTerms.Currencies.Abbreviation),
+                            Cards = card
+                        };
+
+                        db.CardHistory.Add(newCardHistoryRecord); 
                         db.SaveChanges();
                     }
                     else
@@ -128,7 +146,7 @@ namespace Deposit.Controllers
                     }
                 }
 
-                return PartialView("_DepositSuccessfullyMade");
+                return PartialView("_DepositOpenedSuccessfully");
             }
 
             var waysOfAccumulation = CreateWaysOfAccumulation();
@@ -137,11 +155,34 @@ namespace Deposit.Controllers
 
             return PartialView("NewDeposit", model);
         }
-
         #endregion
+
+        public ActionResult CloseDeposit(int depositId, string cardId)
+        {
+            using (var db = new DepositEntities())
+            {
+                var card = db.Cards.First(c => c.Id.Equals(cardId));
+                var deposit = db.Deposits.First(d => d.Id == depositId);
+
+                card.Balance += deposit.Balance;
+                deposit.DepositStates = db.DepositStates.First(s => s.Name.Equals("Закритий"));
+
+                db.CardHistory.Add(new CardHistory()
+                {
+                    Id = db.CardHistory.Count(),
+                    Cards = card,
+                    DateTime = DateTime.Now,
+                    Desription = String.Format("Закрито депозит №{0}. Поповнення картки на суму {1} {2}.", 
+                    deposit.Id, deposit.Balance, deposit.DepositTerms.Currencies.Abbreviation)
+                });
+
+                db.SaveChanges();
+            }
+
+            return PartialView("_DepositClosedSuccessfully");
+        }
         
-        // Refactored methods
-        #region refactored methods
+        #region Refactored methods
         private List<Cards> CreateUserCards(byte id)
         {
             List<Cards> cards;
@@ -155,17 +196,20 @@ namespace Deposit.Controllers
                     where c.AspNetUsers.Id == userId && c.Currencies.Id == currencyId
                     select c).ToList();
             }
+
             return cards;
         }
 
-        private static List<WayOfAccumulation> CreateWaysOfAccumulation()
+        private static List<DepositWaysOfAccumulation> CreateWaysOfAccumulation()
         {
-            var waysOfAccumulation = new List<WayOfAccumulation>()
+            List<DepositWaysOfAccumulation> waysOfAccumulations = null;
+
+            using (var db = new DepositEntities())
             {
-                new WayOfAccumulation() {Id = 0, Name = "Капіталізація"},
-                new WayOfAccumulation() {Id = 1, Name = "Перераховувати на картку"}
-            };
-            return waysOfAccumulation;
+                waysOfAccumulations = db.DepositWaysOfAccumulation.ToList();
+            }
+
+            return waysOfAccumulations;
         }
         #endregion
     }
