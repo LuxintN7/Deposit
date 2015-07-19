@@ -81,7 +81,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="tinyint" Nullable="false" />
+          <Property Name="Id" Type="tinyint" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="nchar" MaxLength="3" Nullable="false" />
           <Property Name="Abbreviation" Type="nchar" MaxLength="3" Nullable="false" />
         </EntityType>
@@ -89,7 +89,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="UserOwnerId" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="TermId" Type="tinyint" Nullable="false" />
           <Property Name="InitialAmount" Type="money" Nullable="false" />
@@ -106,14 +106,14 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="tinyint" Nullable="false" />
+          <Property Name="Id" Type="tinyint" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="DepositTerms">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="tinyint" Nullable="false" />
+          <Property Name="Id" Type="tinyint" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="CurrencyId" Type="tinyint" Nullable="false" />
           <Property Name="Months" Type="tinyint" Nullable="false" />
           <Property Name="InterestRate" Type="decimal" Precision="5" Scale="2" Nullable="false" />
@@ -123,7 +123,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="tinyint" Nullable="false" />
+          <Property Name="Id" Type="tinyint" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <Association Name="FK_CardHistory_Cards">
@@ -456,7 +456,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Byte" Nullable="false" />
+          <Property Name="Id" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="3" FixedLength="true" Unicode="true" Nullable="false" />
           <Property Name="Abbreviation" Type="String" MaxLength="3" FixedLength="true" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Cards" Relationship="Self.FK_Cards_Currencies" FromRole="Currencies" ToRole="Cards" />
@@ -466,7 +466,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="UserOwnerId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="TermId" Type="Byte" Nullable="false" />
           <Property Name="InitialAmount" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
@@ -488,7 +488,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Byte" Nullable="false" />
+          <Property Name="Id" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Deposits" Relationship="Self.FK_Deposits_DepositStates" FromRole="DepositStates" ToRole="Deposits" />
         </EntityType>
@@ -496,7 +496,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Byte" Nullable="false" />
+          <Property Name="Id" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="CurrencyId" Type="Byte" Nullable="false" />
           <Property Name="Months" Type="Byte" Nullable="false" />
           <Property Name="InterestRate" Type="Decimal" Precision="5" Scale="2" Nullable="false" />
@@ -508,7 +508,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Byte" Nullable="false" />
+          <Property Name="Id" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Deposits" Relationship="Self.FK_Deposits_DepositWaysOfAccumulation" FromRole="DepositWaysOfAccumulation" ToRole="Deposits" />
         </EntityType>

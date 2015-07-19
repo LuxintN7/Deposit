@@ -65,7 +65,7 @@
                             @using (Ajax.BeginForm("NewDeposit", new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "new-deposit-content", InsertionMode = InsertionMode.Replace }))
                             {
                                 @Html.Hidden("termsId", depositTerm.Id)
-                                <input type="submit" value="Make new deposit" class=" btn btn-primary btn-xs" />
+                                <input type="submit" value="Open new deposit" class=" btn btn-primary btn-xs" />
                             }
                         </td>
                     </tr>

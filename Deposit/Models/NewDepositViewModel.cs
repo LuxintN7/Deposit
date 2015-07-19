@@ -9,14 +9,14 @@ namespace Deposit.Models
     {
         private readonly List<Cards> _cards;
         
-        [Display(Name = "Картка")]
+        [Display(Name = "Card number")]
         public string SelectedCardId { get; set; }
 
         public int SelectedWayOfAccumulationId { get; set; }
 
         [Required]
-        [RegularExpression("[0-9]+", ErrorMessage = "Поле повинне містити лише цифри.")]
-        [Display(Name = "Сума вкладу")]
+        [RegularExpression("[0-9]+", ErrorMessage = "The field must contain only digits.")]
+        [Display(Name = "Deposit amount")]
         public string Sum { get; set; }
         
         public IEnumerable<SelectListItem> Cards
@@ -25,7 +25,7 @@ namespace Deposit.Models
         }
         
         private readonly List<DepositWaysOfAccumulation> _waysOfAccumulation;
-        [Display(Name = "Спосіб накопичення")]
+        [Display(Name = "Way of accumulation")]
         public List<DepositWaysOfAccumulation> WaysOfAccumulation
         {
             get { return _waysOfAccumulation; }

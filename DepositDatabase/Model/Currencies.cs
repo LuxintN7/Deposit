@@ -7,6 +7,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace DepositDatabase.Model
 {
     using System;
@@ -19,8 +22,11 @@ namespace DepositDatabase.Model
             this.Cards = new HashSet<Cards>();
             this.DepositTerms = new HashSet<DepositTerms>();
         }
-    
+
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public byte Id { get; set; }
+
         public string Name { get; set; }
         public string Abbreviation { get; set; }
     

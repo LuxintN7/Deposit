@@ -7,6 +7,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace DepositDatabase.Model
 {
     using System;
@@ -14,7 +17,10 @@ namespace DepositDatabase.Model
     
     public partial class Deposits
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
+
         public string UserOwnerId { get; set; }
         public byte TermId { get; set; }
         public decimal InitialAmount { get; set; }

@@ -84,11 +84,11 @@ namespace Deposit.Controllers
         #region OpenNewDeposit actions
         public ActionResult NewDeposit()
         {
-            var id = Convert.ToByte(Request["termsId"]);
-            ViewData["termsId"] = id;
+            var termsId = Convert.ToByte(Request["termsId"]);
+            ViewData["termsId"] = termsId;
 
             var waysOfAccumulation = CreateWaysOfAccumulation();
-            var cards = CreateUserCards(id);
+            var cards = CreateUserCardList(termsId);
             var model = new NewDepositViewModel(cards, waysOfAccumulation);
 
             return PartialView("NewDeposit", model);
@@ -112,7 +112,6 @@ namespace Deposit.Controllers
 
                         var newDeposit = new Deposits()
                         {
-                            Id = db.Deposits.Count(),
                             UserOwnerId = User.Identity.GetUserId(),
                             InitialAmount = Convert.ToDecimal(model.Sum),
                             StartDate = DateTime.Now,
@@ -149,7 +148,7 @@ namespace Deposit.Controllers
             }
 
             var waysOfAccumulation = CreateWaysOfAccumulation();
-            var cards = CreateUserCards(termsId);
+            var cards = CreateUserCardList(termsId);
             model = new NewDepositViewModel(cards, waysOfAccumulation);
 
             return PartialView("NewDeposit", model);
@@ -164,15 +163,14 @@ namespace Deposit.Controllers
                 var deposit = db.Deposits.First(d => d.Id == depositId);
 
                 card.Balance += deposit.Balance;
-                deposit.DepositStates = db.DepositStates.First(s => s.Name.Equals("Закритий"));
+                deposit.DepositStates = db.DepositStates.First(s => s.Name.Equals("Closed"));
 
                 db.CardHistory.Add(new CardHistory()
                 {
-                    Id = db.CardHistory.Count(),
                     Cards = card,
                     DateTime = DateTime.Now,
                     Desription = String.Format("Closing deposit #{0}. Income: {1} ({2}).", 
-                    deposit.Id, deposit.Balance, deposit.DepositTerms.Currencies.Abbreviation)
+                        deposit.Id,deposit.Balance, deposit.DepositTerms.Currencies.Abbreviation)
                 });
 
                 db.SaveChanges();
@@ -182,14 +180,14 @@ namespace Deposit.Controllers
         }
         
         #region Refactored methods
-        private List<Cards> CreateUserCards(byte id)
+        private List<Cards> CreateUserCardList(byte termsId)
         {
             List<Cards> cards;
 
             using (var db = new DepositEntities())
             {
                 string userId = User.Identity.GetUserId();
-                byte currencyId = db.DepositTerms.Where(dt => dt.Id == id).ToList().First().Currencies.Id;
+                byte currencyId = db.DepositTerms.Where(dt => dt.Id == termsId).ToList().First().Currencies.Id;
 
                 cards = (from c in db.Cards
                     where c.AspNetUsers.Id == userId && c.Currencies.Id == currencyId

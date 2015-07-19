@@ -8,6 +8,7 @@
 //------------------------------------------------------------------------------
 
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DepositDatabase.Model
 {
@@ -20,13 +21,16 @@ namespace DepositDatabase.Model
         {
             this.Deposits = new HashSet<Deposits>();
         }
-    
+
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public byte Id { get; set; }
+
         public byte CurrencyId { get; set; }
         public byte Months { get; set; }
         public decimal InterestRate { get; set; }
         public string Name { get; set; }
-
+    
         public virtual Currencies Currencies { get; set; }
         public virtual ICollection<Deposits> Deposits { get; set; }
     }
