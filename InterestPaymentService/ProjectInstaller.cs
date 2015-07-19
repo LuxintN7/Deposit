@@ -14,15 +14,7 @@ namespace InterestPaymentService
 
         private void InterestPaymentServiceInstaller_AfterInstall(object sender, InstallEventArgs e)
         {
-            //try
-            //{
-                new ServiceController(InterestPaymentServiceInstaller.ServiceName).Start();
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show(ex.Message + "    " + ex.InnerException.Message + "    " + ex.Data);
-            //}
-            
+            new ServiceController(InterestPaymentServiceInstaller.ServiceName).Start();      
         }
     }
    
