@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Configuration;
-using System.IO;
 using System.Linq;
 using System.ServiceProcess;
 using System.Timers;
@@ -10,12 +9,13 @@ namespace InterestPaymentService
 {
     public partial class InterestPaymentService : ServiceBase
     {
-        private readonly string log = AppDomain.CurrentDomain.BaseDirectory + "log.txt";
+        
         private const int MaxPendingDays = 3;
 
         private DateTime scheduledDateTime;
         private DateTime currentDateTime;
-        
+
+        private Logger logger;
         private Timer timer;
 
         private  double intervalMinutes;
@@ -30,6 +30,7 @@ namespace InterestPaymentService
         public InterestPaymentService()
         {
             InitializeComponent();
+            logger = new Logger(AppDomain.CurrentDomain.BaseDirectory + "log.txt");
         }
 
         public void OnDebug()
@@ -46,13 +47,13 @@ namespace InterestPaymentService
             timer.Elapsed += TimerOnElapsed;
             timer.Start();
 
-            File.AppendAllText(log, "\r\n" + DateTime.Now + " Interest Payment Service starts.");
+            logger.WriteLine("Interest Payment Service starts.");
         }
         
         protected override void OnStop()
         {
             timer.Stop();
-            File.AppendAllText(log, "\r\n" + DateTime.Now + " Interest Payment Service stops.");
+            logger.WriteLine("Interest Payment Service stops.");
         }
 
         private void TimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
@@ -70,7 +71,7 @@ namespace InterestPaymentService
 
         private void RunInterestPayment()
         {
-            File.AppendAllText(log, "\r\n" + DateTime.Now + " !");
+            logger.WriteLine("Interest payment starts.");
 
             try
             {
@@ -113,12 +114,12 @@ namespace InterestPaymentService
                     db.SaveChanges();
                 } 
                 
-                File.AppendAllText(log, "\r\n" + DateTime.Now + "   Completed!");
+                logger.WriteLine("Interest payment is completed.");
             }
             catch (Exception e)
             {
-                File.AppendAllText(log, "\n\n" + e.Message + (e.InnerException.Message ?? "") + (e.InnerException.Message ?? ""));
-                this.Stop();
+                logger.WriteLine("EXCEPTION: " + e.Message + " " + (e.InnerException.Message ?? ""));
+                Stop();
                 throw;
             }
         } 
