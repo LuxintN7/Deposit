@@ -12,7 +12,6 @@ namespace Deposit.Controllers
 {
     public class DepositsController : Controller
     {
-        // GET: Deposits
         [Authorize] 
         public ActionResult Index()
         {
@@ -133,7 +132,7 @@ namespace Deposit.Controllers
                         {
                             Id = db.CardHistory.Count(),
                             DateTime = DateTime.Now,
-                            Desription = String.Format("Відкрито депозит №{0} на суму {1} {2}.", newDeposit.Id, newDeposit.Balance,newDeposit.DepositTerms.Currencies.Abbreviation),
+                            Desription = String.Format("Opening deposit #{0} of {1} ({2}).", newDeposit.Id, newDeposit.Balance,newDeposit.DepositTerms.Currencies.Abbreviation),
                             Cards = card
                         };
 
@@ -172,7 +171,7 @@ namespace Deposit.Controllers
                     Id = db.CardHistory.Count(),
                     Cards = card,
                     DateTime = DateTime.Now,
-                    Desription = String.Format("Закрито депозит №{0}. Поповнення картки на суму {1} {2}.", 
+                    Desription = String.Format("Closing deposit #{0}. Income: {1} ({2}).", 
                     deposit.Id, deposit.Balance, deposit.DepositTerms.Currencies.Abbreviation)
                 });
 

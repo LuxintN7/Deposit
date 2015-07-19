@@ -18,26 +18,29 @@ namespace InterestPaymentService
         
         private Timer timer;
 
-        private  double intervalMinutes = 0.8;
-        private int TimerInterval { get { return (int)(intervalMinutes * 60 * 1000); } }
-        //private int TimerInterval = (int)(intervalMinutes * 60 * 1000); 
+        private  double intervalMinutes;
+        private int TimerInterval 
+        { 
+            get
+            { 
+                return (int)(intervalMinutes * 60 * 1000); 
+            } 
+        }
 
         public InterestPaymentService()
         {
             InitializeComponent();
         }
 
-        //public void OnDebug()
-        //{
-        //    OnStart(null);
-        //}
+        public void OnDebug()
+        {
+            OnStart(null);
+        }
 
         protected override void OnStart(string[] args)
         {
-            //scheduledDateTime = DateTime.Parse(ConfigurationManager.AppSettings["ScheduledDateTime"]);
-            //intervalMinutes = Double.Parse(ConfigurationManager.AppSettings["IntervalMinutes"]);
-
-            //scheduledDateTime = new DateTime(2015,7,16,0,36,0);
+            scheduledDateTime = DateTime.Parse(ConfigurationManager.AppSettings["ScheduledDateTime"]);
+            intervalMinutes = Double.Parse(ConfigurationManager.AppSettings["IntervalMinutes"]);
             
             timer = new Timer(TimerInterval);
             timer.Elapsed += TimerOnElapsed;
@@ -67,7 +70,7 @@ namespace InterestPaymentService
 
         private void RunInterestPayment()
         {
-            File.AppendAllText(log, "\r\n" + DateTime.Now + "   Run!");
+            File.AppendAllText(log, "\r\n" + DateTime.Now + " !");
 
             try
             {
@@ -140,7 +143,7 @@ namespace InterestPaymentService
             {
                 deposit.Balance += interestSum;
             }
-            else if (deposit.DepositWaysOfAccumulation.Name == "Transfer to the card")
+            else
             {
                 deposit.Cards.Balance += interestSum;
                 db.CardHistory.Add(new CardHistory()

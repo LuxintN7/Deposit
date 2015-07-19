@@ -4,12 +4,6 @@ namespace Deposit.Controllers
 {
     public class PrinciplesController : Controller
     {
-        // GET: Principles
-        public ActionResult Index()
-        {
-            return View();
-        }
-
         // GET: Principles/Reliability
         public ActionResult Reliability()
         {
