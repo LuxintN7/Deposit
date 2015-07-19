@@ -37,12 +37,12 @@
                    <h4>My deposits</h4>
                </caption>
                <tr>
-                   <th>Start date</th>
-                   <th>End date</th>
-                   @*<th>State</th>*@
-                   <th>Currency</th>
-                   <th>Interest rate</th>
-                   <th>Initial amount</th>
+                   <th>@Html.DisplayNameFor(model => model.StartDate.Date)</th>
+                   <th>@Html.DisplayNameFor(model => model.EndDate.Date)</th>
+                   <th>@Html.DisplayNameFor(model => model.DepositStates)</th>
+                   <th>@Html.DisplayNameFor(model => model.DepositTerms.Currencies)</th>
+                   <th>@Html.DisplayNameFor(model => model.DepositTerms.InterestRate)</th>
+                   <th>@Html.DisplayNameFor(model => model.Balance)</th>
                    <th>Paid interest</th>
                    <th></th>
                </tr>
@@ -51,16 +51,15 @@
                    <tr>
                        <td>@deposit.StartDate.Date</td>
                        <td>@deposit.EndDate.Date</td>
-                       @*<td>@deposit.DepositStates.Name</td>*@
+                       <td>@deposit.DepositStates.Name</td>
                        <td>@deposit.DepositTerms.Currencies.Name</td>
                        <td>@deposit.DepositTerms.InterestRate %</td>
-                       <td>@deposit.InitialAmount</td>
+                       <td>@deposit.Balance</td>
                        <td>@(deposit.Balance - deposit.InitialAmount)</td>
                        <td>
                             @using (Ajax.BeginForm("CloseDeposit", new { depositId = deposit.Id, cardId = deposit.Cards.Id}, 
                                 new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "deposit-list-content", InsertionMode = InsertionMode.Replace }))
                             {
-                                @*@Html.Hidden("depositId", deposit.Id)*@
                                 <input type="submit" value="Close deposit" class=" btn btn-primary btn-xs" />
                             }  
                        </td>

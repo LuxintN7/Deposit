@@ -7,6 +7,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System.ComponentModel.DataAnnotations;
+
 namespace DepositDatabase.Model
 {
     using System;
@@ -24,7 +26,7 @@ namespace DepositDatabase.Model
         public byte Months { get; set; }
         public decimal InterestRate { get; set; }
         public string Name { get; set; }
-    
+
         public virtual Currencies Currencies { get; set; }
         public virtual ICollection<Deposits> Deposits { get; set; }
     }
