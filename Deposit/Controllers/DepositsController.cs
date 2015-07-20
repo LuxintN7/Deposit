@@ -44,7 +44,7 @@ namespace Deposit.Controllers
         }
 
 
-        #region GeneralInfo actions
+#region GeneralInfo actions
         public ActionResult AddCard()
         {
             return PartialView("AddCard");
@@ -59,19 +59,19 @@ namespace Deposit.Controllers
 
                 using(var db = new DepositEntities())
                 {
-                    var card = from cards in db.Cards
+                    var card = (from cards in db.Cards
                         where cards.Id == model.Id
                               && cards.ExpirationMonth == model.ExpirationMonth
                               && cards.ExpirationYear == model.ExpirationYear
                               && cards.SecretCode == model.SecretCode
-                        select cards;
+                        select cards).First();
 
-                    if (card.ToList().Count != 1)
+                    if (card == null)
                     {
                         return PartialView("_Message", new MessageViewModel("A card with such requisites does not exist.", false));
                     }
 
-                    card.First().UserOwnerId = User.Identity.GetUserId();
+                    card.UserOwnerId = User.Identity.GetUserId();
                     
                     db.SaveChanges();
 
@@ -82,9 +82,9 @@ namespace Deposit.Controllers
             ViewData["modelIsValid"] = false;
             return PartialView("AddCard");
         }
-        #endregion
+#endregion
 
-        #region OpenNewDeposit actions
+#region OpenNewDeposit actions
         public ActionResult NewDeposit()
         {
             var termsId = Convert.ToByte(Request["termsId"]);
@@ -109,17 +109,17 @@ namespace Deposit.Controllers
                 {
                     var card = db.Cards.First(c => c.Id == model.SelectedCardId);
 
-                    if (Convert.ToDecimal(model.Sum) <= card.Balance)
+                    if (Convert.ToDecimal(model.Amount) <= card.Balance)
                     {
                         var depositTerms = db.DepositTerms.First(dt => dt.Id == termsId);
 
                         var newDeposit = new Deposits()
                         {
                             UserOwnerId = User.Identity.GetUserId(),
-                            InitialAmount = Convert.ToDecimal(model.Sum),
+                            InitialAmount = Convert.ToDecimal(model.Amount),
                             StartDate = DateTime.Now,
                             EndDate = DateTime.Now.AddMonths(depositTerms.Months),
-                            Balance = Convert.ToDecimal(model.Sum),
+                            Balance = Convert.ToDecimal(model.Amount),
                             DepositWaysOfAccumulation = db.DepositWaysOfAccumulation.First(w => w.Id == model.SelectedWayOfAccumulationId),
                             Cards = card,
                             DepositTerms = depositTerms,
@@ -134,7 +134,8 @@ namespace Deposit.Controllers
                         {
                             Id = db.CardHistory.Count(),
                             DateTime = DateTime.Now,
-                            Desription = String.Format("Opening deposit #{0} of {1} ({2}).", newDeposit.Id, newDeposit.Balance,newDeposit.DepositTerms.Currencies.Abbreviation),
+                            Desription = String.Format("Opening deposit #{0} of {1} ({2}).", 
+                                newDeposit.Id, newDeposit.Balance,newDeposit.DepositTerms.Currencies.Abbreviation),
                             Cards = card
                         };
 
@@ -156,7 +157,7 @@ namespace Deposit.Controllers
 
             return PartialView("NewDeposit", model);
         }
-        #endregion
+#endregion
 
         public ActionResult CloseDeposit(int depositId, string cardId)
         {
@@ -181,8 +182,8 @@ namespace Deposit.Controllers
 
             return PartialView("_Message", new MessageViewModel("Deposit has been closed successfully.", true));
         }
-        
-        #region Refactored methods
+
+#region Helpers
         private List<Cards> CreateUserCardList(byte termsId)
         {
             List<Cards> cards;
@@ -211,6 +212,6 @@ namespace Deposit.Controllers
 
             return waysOfAccumulations;
         }
-        #endregion
+#endregion
     }
 }

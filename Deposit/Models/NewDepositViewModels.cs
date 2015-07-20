@@ -17,7 +17,7 @@ namespace Deposit.Models
         [Required]
         [RegularExpression("[0-9]+", ErrorMessage = "The field must contain only digits.")]
         [Display(Name = "Deposit amount")]
-        public string Sum { get; set; }
+        public string Amount { get; set; }
         
         public IEnumerable<SelectListItem> Cards
         {

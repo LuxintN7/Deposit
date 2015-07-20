@@ -59,7 +59,7 @@
                             @Html.DisplayFor(modelItem => depositTerm.Months)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => depositTerm.InterestRate)
+                            @Html.DisplayFor(modelItem => depositTerm.InterestRate) %
                         </td>
                         <td>
                             @using (Ajax.BeginForm("NewDeposit", new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "new-deposit-content", InsertionMode = InsertionMode.Replace }))

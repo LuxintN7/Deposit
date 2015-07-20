@@ -26,8 +26,11 @@ namespace DepositDatabase.Model
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public byte Id { get; set; }
-
+        
+        [Display(Name = "Currency")]
         public string Name { get; set; }
+
+        [Display(Name = "Currency")]
         public string Abbreviation { get; set; }
     
         public virtual ICollection<Cards> Cards { get; set; }
