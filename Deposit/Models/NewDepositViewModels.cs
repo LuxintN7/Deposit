@@ -42,6 +42,18 @@ namespace Deposit.Models
             this.cards = cards;
             this.waysOfAccumulation = waysOfAccumulation;
         }
-    } 
+    }
+
+    public class MessageViewModel
+    {
+        public MessageViewModel(string message, bool isSuccessfull)
+        {
+            Message = message;
+            IsSuccessfull = isSuccessfull;
+        }
+
+        public bool IsSuccessfull { get; set; }
+        public string Message { get; set; }
+    }
 }
 

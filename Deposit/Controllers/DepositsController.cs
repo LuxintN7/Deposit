@@ -66,7 +66,10 @@ namespace Deposit.Controllers
                               && cards.SecretCode == model.SecretCode
                         select cards;
 
-                    if (card.ToList().Count != 1) return PartialView("_NoSuchCard");
+                    if (card.ToList().Count != 1)
+                    {
+                        return PartialView("_Message", new MessageViewModel("A card with such requisites does not exist.", false));
+                    }
 
                     card.First().UserOwnerId = User.Identity.GetUserId();
                     
@@ -140,11 +143,11 @@ namespace Deposit.Controllers
                     }
                     else
                     {
-                        return PartialView("_NotEnoughMoney");
+                        return PartialView("_Message", new MessageViewModel("Not enough money.", false));
                     }
                 }
 
-                return PartialView("_DepositOpenedSuccessfully");
+                return PartialView("_Message", new MessageViewModel("Deposit has been opened successfully.", true));
             }
 
             var waysOfAccumulation = CreateWaysOfAccumulation();
@@ -176,7 +179,7 @@ namespace Deposit.Controllers
                 db.SaveChanges();
             }
 
-            return PartialView("_DepositClosedSuccessfully");
+            return PartialView("_Message", new MessageViewModel("Deposit has been closed successfully.", true));
         }
         
         #region Refactored methods

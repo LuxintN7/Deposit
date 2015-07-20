@@ -171,7 +171,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\NewDepositViewModel.cs" />
+    <Compile Include="Models\NewDepositViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -248,11 +248,8 @@
     <Content Include="Views\Deposits\_OpenNewDeposit.cshtml" />
     <Content Include="Views\Deposits\AddCard.cshtml" />
     <Content Include="Views\Deposits\NewDeposit.cshtml" />
-    <Content Include="Views\Deposits\_DepositOpenedSuccessfully.cshtml" />
-    <Content Include="Views\Deposits\_NotEnoughMoney.cshtml" />
-    <Content Include="Views\Deposits\_NoSuchCard.cshtml" />
     <Content Include="Views\Deposits\_GeneralInfoContent.cshtml" />
-    <Content Include="Views\Deposits\_DepositClosedSuccessfully.cshtml" />
+    <Content Include="Views\Deposits\_Message.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
