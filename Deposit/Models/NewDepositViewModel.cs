@@ -7,7 +7,7 @@ namespace Deposit.Models
 {
     public class NewDepositViewModel
     {
-        private readonly List<Cards> _cards;
+        private readonly List<Cards> cards;
         
         [Display(Name = "Card number")]
         public string SelectedCardId { get; set; }
@@ -21,26 +21,26 @@ namespace Deposit.Models
         
         public IEnumerable<SelectListItem> Cards
         {
-            get { return new SelectList(_cards, "Id", "Id"); }
+            get { return new SelectList(cards, "Id", "Id"); }
         }
         
-        private readonly List<DepositWaysOfAccumulation> _waysOfAccumulation;
+        private readonly List<DepositWaysOfAccumulation> waysOfAccumulation;
         [Display(Name = "Way of accumulation")]
         public List<DepositWaysOfAccumulation> WaysOfAccumulation
         {
-            get { return _waysOfAccumulation; }
+            get { return waysOfAccumulation; }
         }
 
         public NewDepositViewModel()
         {
-            _cards = new List<Cards>();
-            _waysOfAccumulation = new List<DepositWaysOfAccumulation>();
+            cards = new List<Cards>();
+            waysOfAccumulation = new List<DepositWaysOfAccumulation>();
         }
 
         public NewDepositViewModel(List<Cards> cards, List<DepositWaysOfAccumulation> waysOfAccumulation)
         {
-            _cards = cards;
-            _waysOfAccumulation = waysOfAccumulation;
+            this.cards = cards;
+            this.waysOfAccumulation = waysOfAccumulation;
         }
     } 
 }

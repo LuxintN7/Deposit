@@ -246,7 +246,6 @@
     <Content Include="Views\Deposits\_GeneralInfo.cshtml" />
     <Content Include="Views\Deposits\_DepositList.cshtml" />
     <Content Include="Views\Deposits\_OpenNewDeposit.cshtml" />
-    <Content Include="Views\def\Index.cshtml" />
     <Content Include="Views\Deposits\AddCard.cshtml" />
     <Content Include="Views\Deposits\NewDeposit.cshtml" />
     <Content Include="Views\Deposits\_DepositOpenedSuccessfully.cshtml" />
