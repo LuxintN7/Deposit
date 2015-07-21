@@ -9,8 +9,7 @@ namespace InterestPaymentService
 {
     public partial class InterestPaymentService : ServiceBase
     {
-        
-        private const int MaxPendingDays = 3;
+        private const int MaxPendingDays = 2;
 
         private DateTime scheduledDateTime;
         private DateTime currentDateTime;
@@ -49,7 +48,7 @@ namespace InterestPaymentService
 
             logger.WriteLine("Interest Payment Service starts.");
         }
-        
+
         protected override void OnStop()
         {
             timer.Stop();
@@ -60,18 +59,17 @@ namespace InterestPaymentService
         {
             currentDateTime = DateTime.Now;
 
-            //if (currentDateTime >= scheduledDateTime
-            //    && currentDateTime < scheduledDateTime.AddMinutes(intervalMinutes))
-            //{
+            if (currentDateTime >= scheduledDateTime
+                && currentDateTime < scheduledDateTime.AddMinutes(intervalMinutes))
+            {
                 RunInterestPayment();
-            //}
-
-            //scheduledDateTime = scheduledDateTime.AddDays(1);
+                SaveScheduledDateTime(scheduledDateTime.AddDays(1));
+            }
         }
 
         private void RunInterestPayment()
         {
-            logger.WriteLine("Interest payment starts.");
+            logger.WriteLine("Interest payment begins.");
 
             try
             {
@@ -91,7 +89,7 @@ namespace InterestPaymentService
                             {
                                 // If a customer does not withdraw a deposit during the pending period 
                                 // the deposit will be automatically extended for one more (the same) term
-                                if (deposit.LastInterestPaymentDate.Value - today >= TimeSpan.FromDays(MaxPendingDays))
+                                if (deposit.EndDate - today >= TimeSpan.FromDays(MaxPendingDays))
                                 {
                                     deposit.DepositStates = db.DepositStates.First(ds => ds.Name == "Extended");
                                     deposit.EndDate = today.AddMonths(deposit.DepositTerms.Months);
@@ -157,6 +155,12 @@ namespace InterestPaymentService
             }
         }
 
-
+        private void SaveScheduledDateTime(DateTime nextScheduledDateTime)
+        {
+            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            config.AppSettings.Settings["ScheduledDateTime"].Value = nextScheduledDateTime.ToString("yyyy-MM-dd HH:mm");
+            config.Save(ConfigurationSaveMode.Modified);
+            ConfigurationManager.RefreshSection("appSettings");
+        }
     }
 }
