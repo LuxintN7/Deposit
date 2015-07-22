@@ -39,7 +39,7 @@
                 </ul>
                 @if (User.Identity.IsAuthenticated)
                 {
-                    <button class="btn btn-warning navbar-btn" type="button" onclick="location.href='@Url.Action("Index", "Deposits")'">Deposit management</button>       
+                    <button class="btn btn-warning navbar-btn" type="button" onclick="location.href = '@Url.Action("Index", "Deposit")'">Deposit management</button>       
                 }
                 @Html.Partial("_LoginPartial")
             </div>

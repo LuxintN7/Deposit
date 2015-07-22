@@ -3,6 +3,7 @@ using System.Configuration;
 using System.Linq;
 using System.ServiceProcess;
 using System.Timers;
+using DepositDatabase;
 using DepositDatabase.Model;
 
 namespace InterestPaymentService
@@ -142,13 +143,10 @@ namespace InterestPaymentService
             else
             {
                 deposit.Cards.Balance += interestSum;
-                db.CardHistory.Add(new CardHistory()
-                    {
-                        DateTime = DateTime.Now,
-                        Cards = deposit.Cards,
-                        Desription = String.Format("Interest payment in the amount of {0} ({1}).", 
-                                                   interestSum, deposit.DepositTerms.Currencies.Name)
-                    });
+
+                string cardHistoryDescription = String.Format("Interest payment in the amount of {0} ({1}).",
+                    interestSum, deposit.DepositTerms.Currencies.Name);
+                CardHistoryData.AddCardHistoryRecordToDbContext(db, deposit.Cards, cardHistoryDescription);
             }
         }
 

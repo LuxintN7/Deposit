@@ -1,23 +1,24 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
+using DepositDatabase;
 using DepositDatabase.Model;
 
 namespace Deposit.Models
 {
-    public class NewDepositViewModel
+    public class NewDepositViewModel : INewDeposit
     {
         private readonly List<Cards> cards;
         
         [Display(Name = "Card number")]
-        public string SelectedCardId { get; set; }
+        public string CardId { get; set; }
 
-        public int SelectedWayOfAccumulationId { get; set; }
+        public int WayOfAccumulationId { get; set; }
 
         [Required]
-        [RegularExpression("[0-9]+", ErrorMessage = "The field must contain only digits.")]
+        [RegularExpression("^[0-9]+([,][0-9]+)?$", ErrorMessage = "The field must contain only digits.")]
         [Display(Name = "Deposit amount")]
-        public string Amount { get; set; }
+        public decimal Amount { get; set; }
         
         public IEnumerable<SelectListItem> Cards
         {

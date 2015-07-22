@@ -2,7 +2,7 @@
 @model Deposit.Models.NewDepositViewModel
 
 @{
-    ViewBag.Title = "_NewDeposit";
+    ViewBag.Title = "New deposit";
 }
 
 
@@ -65,10 +65,10 @@
 
                     @Html.ValidationSummary(true, "", new {@class = "text-danger"})
                     <div class="form-group">
-                        @Html.LabelFor(model => model.SelectedCardId, htmlAttributes: new {@class = "control-label col-md-3"})
+                        @Html.LabelFor(model => model.CardId, htmlAttributes: new {@class = "control-label col-md-3"})
                         <div class="col-md-9">
-                            @Html.DropDownListFor(model => model.SelectedCardId, Model.Cards, new {@class = "form-control"})
-                            @Html.ValidationMessageFor(model => model.SelectedCardId, "", new {@class = "text-danger"})
+                            @Html.DropDownListFor(model => model.CardId, Model.Cards, new {@class = "form-control"})
+                            @Html.ValidationMessageFor(model => model.CardId, "", new {@class = "text-danger"})
                         </div>
                     </div>
 
@@ -80,11 +80,11 @@
                             {
                                 var wayId = waysOfAccumulation.Id;
 
-                                @Html.RadioButtonFor(model => model.SelectedWayOfAccumulationId, waysOfAccumulation.Id, new {id = "way" + wayId})
+                                @Html.RadioButtonFor(model => model.WayOfAccumulationId, waysOfAccumulation.Id, new {id = "way" + wayId})
                                 @Html.Label(waysOfAccumulation.Name)
                                 <br/>
                             }
-                            @Html.ValidationMessageFor(model => model.SelectedCardId, "", new {@class = "text-danger"})
+                            @Html.ValidationMessageFor(model => model.CardId, "", new {@class = "text-danger"})
                         </div>
                     </div>
                 </div>

@@ -242,14 +242,14 @@
     <Content Include="Views\Principles\Reliability.cshtml" />
     <Content Include="Views\Principles\Convenience.cshtml" />
     <Content Include="Views\Principles\Profitability.cshtml" />
-    <Content Include="Views\Deposits\Index.cshtml" />
-    <Content Include="Views\Deposits\_GeneralInfo.cshtml" />
-    <Content Include="Views\Deposits\_DepositList.cshtml" />
-    <Content Include="Views\Deposits\_OpenNewDeposit.cshtml" />
-    <Content Include="Views\Deposits\AddCard.cshtml" />
-    <Content Include="Views\Deposits\NewDeposit.cshtml" />
-    <Content Include="Views\Deposits\_GeneralInfoContent.cshtml" />
-    <Content Include="Views\Deposits\_Message.cshtml" />
+    <Content Include="Views\Deposit\Index.cshtml" />
+    <Content Include="Views\Deposit\_GeneralInfo.cshtml" />
+    <Content Include="Views\Deposit\_DepositList.cshtml" />
+    <Content Include="Views\Deposit\_OpenNewDeposit.cshtml" />
+    <Content Include="Views\Deposit\AddCard.cshtml" />
+    <Content Include="Views\Deposit\NewDeposit.cshtml" />
+    <Content Include="Views\Deposit\_GeneralInfoContent.cshtml" />
+    <Content Include="Views\Deposit\_Message.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
