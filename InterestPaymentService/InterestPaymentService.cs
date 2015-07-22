@@ -9,7 +9,7 @@ namespace InterestPaymentService
 {
     public partial class InterestPaymentService : ServiceBase
     {
-        private const int MaxPendingDays = 2;
+        private const int MaxPendingDays = 3;
 
         private DateTime scheduledDateTime;
         private DateTime currentDateTime;
@@ -17,12 +17,12 @@ namespace InterestPaymentService
         private Logger logger;
         private Timer timer;
 
-        private  double intervalMinutes;
+        private int intervalMinutes;
         private int TimerInterval 
         { 
             get
             { 
-                return (int)(intervalMinutes * 60 * 1000); 
+                return intervalMinutes * 60 * 1000; 
             } 
         }
 
@@ -40,7 +40,7 @@ namespace InterestPaymentService
         protected override void OnStart(string[] args)
         {
             scheduledDateTime = DateTime.Parse(ConfigurationManager.AppSettings["ScheduledDateTime"]);
-            intervalMinutes = Double.Parse(ConfigurationManager.AppSettings["IntervalMinutes"]);
+            intervalMinutes = Int32.Parse(ConfigurationManager.AppSettings["IntervalMinutes"]);
             
             timer = new Timer(TimerInterval);
             timer.Elapsed += TimerOnElapsed;
@@ -83,28 +83,25 @@ namespace InterestPaymentService
 
                     foreach (var deposit in deposits)
                     {
-                        if (MonthHasPassed(deposit.StartDate, deposit.LastInterestPaymentDate))
+                        if (deposit.DepositStates.Name.Equals("Pending"))
                         {
-                            if (deposit.DepositStates.Name == "Pending")
+                            // If a customer does not withdraw a deposit during the pending period 
+                            // the deposit will be automatically extended for one more (the same) term
+                            if (today - deposit.EndDate >= TimeSpan.FromDays(MaxPendingDays))
                             {
-                                // If a customer does not withdraw a deposit during the pending period 
-                                // the deposit will be automatically extended for one more (the same) term
-                                if (deposit.EndDate - today >= TimeSpan.FromDays(MaxPendingDays))
-                                {
-                                    deposit.DepositStates = db.DepositStates.First(ds => ds.Name == "Extended");
-                                    deposit.EndDate = today.AddMonths(deposit.DepositTerms.Months);
-                                    deposit.LastInterestPaymentDate = today;
-                                }
-                            }
-                            else
-                            {
-                                AddInterest(db, deposit);
+                                deposit.DepositStates = db.DepositStates.First(ds => ds.Name == "Extended");
+                                deposit.EndDate = today.AddMonths(deposit.DepositTerms.Months);
                                 deposit.LastInterestPaymentDate = today;
+                            }
+                        }
+                        else if (MonthHasPassed(deposit.StartDate, deposit.LastInterestPaymentDate))
+                        {
+                            AddInterest(db, deposit);
+                            deposit.LastInterestPaymentDate = today;
 
-                                if (today.Date == deposit.EndDate.Date)
-                                {
-                                    deposit.DepositStates = db.DepositStates.First(ds => ds.Name == "Pending");
-                                }
+                            if (today.Date == deposit.EndDate.Date)
+                            {
+                                deposit.DepositStates = db.DepositStates.First(ds => ds.Name == "Pending");
                             }
                         }
                     }
