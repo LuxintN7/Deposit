@@ -13,7 +13,7 @@ namespace Deposit.Models
         [Display(Name = "Card number")]
         public string CardId { get; set; }
 
-        public int WayOfAccumulationId { get; set; }
+        public byte WayOfAccumulationId { get; set; }
 
         [Required]
         [RegularExpression("^[0-9]+([,][0-9]+)?$", ErrorMessage = "The field must contain only digits.")]

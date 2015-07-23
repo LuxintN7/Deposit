@@ -93,7 +93,7 @@ namespace Deposit.Controllers
            
             var userId = User.Identity.GetUserId();
             var cards = CardsData.CreateUserCardsByCurrencyList(userId, termsId); 
-            var waysOfAccumulation = DepositWaysOfAccumulationData.CreateWaysOfAccumulationList();
+            var waysOfAccumulation = DepositWaysOfAccumulationData.CreateWayList();
             var model = new NewDepositViewModel(cards, waysOfAccumulation);
 
             return PartialView("NewDeposit", model);
@@ -106,22 +106,22 @@ namespace Deposit.Controllers
             ViewData["termsId"] = termsId;
             var userId = User.Identity.GetUserId();
 
-            using (var db = new DepositEntities())
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
+                using (var db = new DepositEntities())
                 {
-                    var card = db.Cards.First(c => c.Id == model.CardId);
+                    var card = CardsData.GetCardById(model.CardId, db);
 
                     if (CardHasEnoughFunds(card.Balance, model.Amount))
                     {
-                        var newDeposit = DepositsData.CreateDeposit(db, model, userId, termsId, card.Id);
-                        DepositsData.AddNewDepositToDbContext(db, newDeposit);
+                        var newDeposit = DepositsData.CreateDeposit(model, userId, termsId, card.Id, db);
+                        DepositsData.AddNewDepositToDbContext(newDeposit, db);
 
                         card.Balance -= newDeposit.InitialAmount;
 
                         string cardHistoryDescription = String.Format("Opening deposit #{0} of {1} ({2}).",
                             newDeposit.Id, newDeposit.Balance, newDeposit.DepositTerms.Currencies.Abbreviation);
-                        CardHistoryData.AddCardHistoryRecordToDbContext(db, card, cardHistoryDescription);
+                        CardHistoryData.AddRecordToDbContext(card, cardHistoryDescription, db);
 
                         db.SaveChanges();
                     }
@@ -132,13 +132,13 @@ namespace Deposit.Controllers
 
                     return PartialView("_Message", new MessageViewModel("Deposit has been opened successfully.", true));
                 }
-                
-                var cards = CardsData.CreateUserCardsByCurrencyList(userId, termsId);
-                var waysOfAccumulation = DepositWaysOfAccumulationData.CreateWaysOfAccumulationList();
-                model = new NewDepositViewModel(cards, waysOfAccumulation);
-
-                return PartialView("NewDeposit", model);
             }
+
+            var cards = CardsData.CreateUserCardsByCurrencyList(userId, termsId);
+            var waysOfAccumulation = DepositWaysOfAccumulationData.CreateWayList();
+            model = new NewDepositViewModel(cards, waysOfAccumulation);
+
+            return PartialView("NewDeposit", model);
         }
 
         private bool CardHasEnoughFunds(Decimal cardBalance, decimal depositAmount)
@@ -151,15 +151,15 @@ namespace Deposit.Controllers
         {
             using (var db = new DepositEntities())
             {
-                var card = db.Cards.First(c => c.Id.Equals(cardId));
-                var deposit = db.Deposits.First(d => d.Id == depositId);
+                var card = CardsData.GetCardById(cardId, db);
+                var deposit = DepositsData.GetDepositById(depositId, db);
 
                 card.Balance += deposit.Balance;
-                deposit.DepositStates = db.DepositStates.First(s => s.Name.Equals("Closed"));
-
+                deposit.DepositStates = DepositStatesData.GetStateByName("Closed", db);
+                
                 var cardHistoryDescription = String.Format("Closing deposit #{0}. Income: {1} ({2}).",
                     deposit.Id, deposit.Balance, deposit.DepositTerms.Currencies.Abbreviation);
-                CardHistoryData.AddCardHistoryRecordToDbContext(db, card, cardHistoryDescription);
+                CardHistoryData.AddRecordToDbContext(card, cardHistoryDescription, db);
 
                 db.SaveChanges();
             }

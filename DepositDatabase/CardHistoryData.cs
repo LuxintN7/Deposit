@@ -1,30 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DepositDatabase.Model;
 
 namespace DepositDatabase
 {
     public static class CardHistoryData
     {
-        public static void AddCardHistoryRecordToDbContext(DepositEntities dbContext, Cards card, string description)
+        public static void AddRecordToDbContext(Cards card, string description, DepositEntities dbContext)
         {
-            var newCardHistoryRecord = CreateCardHistoryRecord(card, description);
-            dbContext.CardHistory.Add(newCardHistoryRecord);
+            var newRecord = CreateRecord(card, description);
+            dbContext.CardHistory.Add(newRecord);
         }
 
-        public static CardHistory CreateCardHistoryRecord(Cards card, string description)
+        public static CardHistory CreateRecord(Cards card, string description)
         {
-            var newCardHistoryRecord = new CardHistory()
+            var newRecord = new CardHistory()
             {
                 DateTime = DateTime.Now,
                 Desription = description,
                 Cards = card
             };
 
-            return newCardHistoryRecord;
+            return newRecord;
         }
     }
 }

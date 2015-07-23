@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DepositDatabase.Model;
 
 namespace DepositDatabase
@@ -10,26 +7,39 @@ namespace DepositDatabase
     public interface INewDeposit
     {
         string CardId { get; set; }
-        int WayOfAccumulationId { get; set; }
+        byte WayOfAccumulationId { get; set; }
         decimal Amount { get; set; }
     }
 
     public static class DepositsData
     {
-        public static void AddNewDepositToDbContext(DepositEntities dbContext, Deposits newDeposit)
+        public static Deposits GetDepositById(int id)
+        {
+            using (var dbContext = new DepositEntities())
+            {
+                return GetDepositById(id, dbContext);
+            }
+        }
+
+        public static Deposits GetDepositById(int id, DepositEntities dbContext)
+        {
+             return dbContext.Deposits.First(d => d.Id == id);
+        }
+
+        public static void AddNewDepositToDbContext(Deposits newDeposit, DepositEntities dbContext)
         {
             dbContext.Deposits.Add(newDeposit);
         }
 
-        public static void AddNewDepositToDbContext(DepositEntities dbContext, INewDeposit depositModel, string userId, byte termsId, string cardId)
+        public static void AddNewDepositToDbContext(INewDeposit depositModel, string userId, byte termsId, string cardId, DepositEntities dbContext)
         {
-            var newDeposit = CreateDeposit(dbContext, depositModel, userId, termsId, cardId);
+            var newDeposit = CreateDeposit(depositModel, userId, termsId, cardId, dbContext);
             dbContext.Deposits.Add(newDeposit);
         }
 
-        public static Deposits CreateDeposit(DepositEntities dbContext, INewDeposit depositModel, string userId, byte termsId, string cardId)
+        public static Deposits CreateDeposit(INewDeposit depositModel, string userId, byte termsId, string cardId, DepositEntities dbContext)
         {
-            var depositTerms = dbContext.DepositTerms.First(dt => dt.Id == termsId);
+            var depositTerms = DepositTermsData.GetTermsById(termsId, dbContext);
 
             var newDeposit = new Deposits()
             {
@@ -38,10 +48,10 @@ namespace DepositDatabase
                 StartDate = DateTime.Now,
                 EndDate = DateTime.Now.AddMonths(depositTerms.Months),
                 Balance = Convert.ToDecimal(depositModel.Amount),
-                DepositWaysOfAccumulation = dbContext.DepositWaysOfAccumulation.First(w => w.Id == depositModel.WayOfAccumulationId),
-                Cards = dbContext.Cards.First(c => c.Id == cardId),
+                DepositWaysOfAccumulation = DepositWaysOfAccumulationData.GetWayById(depositModel.WayOfAccumulationId, dbContext),
+                Cards = CardsData.GetCardById(cardId, dbContext),
                 DepositTerms = depositTerms,
-                DepositStates = dbContext.DepositStates.First(ds => ds.Name == "Opened")
+                DepositStates = DepositStatesData.GetStateByName("Opened", dbContext)
             };
 
             return newDeposit;

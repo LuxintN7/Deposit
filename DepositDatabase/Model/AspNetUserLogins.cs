@@ -9,9 +9,6 @@
 
 namespace DepositDatabase.Model
 {
-    using System;
-    using System.Collections.Generic;
-    
     public partial class AspNetUserLogins
     {
         public string LoginProvider { get; set; }

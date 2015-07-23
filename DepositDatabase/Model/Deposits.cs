@@ -7,14 +7,12 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DepositDatabase.Model
 {
-    using System;
-    using System.Collections.Generic;
-    
     public partial class Deposits
     {
         [Key]
@@ -31,14 +29,14 @@ namespace DepositDatabase.Model
         public decimal Balance { get; set; }
 
         [Display(Name = "Start date")]
-        public System.DateTime StartDate { get; set; }
+        public DateTime StartDate { get; set; }
 
         [Display(Name = "End date")]
-        public System.DateTime EndDate { get; set; }
+        public DateTime EndDate { get; set; }
 
 
         [Display(Name = "Last interest payment date")]
-        public Nullable<System.DateTime> LastInterestPaymentDate { get; set; }
+        public Nullable<DateTime> LastInterestPaymentDate { get; set; }
 
         public byte StateId { get; set; }
         public byte WayOfAccumulationId { get; set; }

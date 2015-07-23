@@ -90,7 +90,7 @@ namespace InterestPaymentService
                             // the deposit will be automatically extended for one more (the same) term
                             if (today - deposit.EndDate >= TimeSpan.FromDays(MaxPendingDays))
                             {
-                                deposit.DepositStates = db.DepositStates.First(ds => ds.Name == "Extended");
+                                deposit.DepositStates = DepositStatesData.GetStateByName("Extended", db);
                                 deposit.EndDate = today.AddMonths(deposit.DepositTerms.Months);
                                 deposit.LastInterestPaymentDate = today;
                             }
@@ -102,7 +102,7 @@ namespace InterestPaymentService
 
                             if (today.Date == deposit.EndDate.Date)
                             {
-                                deposit.DepositStates = db.DepositStates.First(ds => ds.Name == "Pending");
+                                deposit.DepositStates = DepositStatesData.GetStateByName("Pending", db);
                             }
                         }
                     }
@@ -136,7 +136,7 @@ namespace InterestPaymentService
 
             decimal interestSum = deposit.Balance * interestRate * daysCount / (100 * daysInYear);
 
-            if (deposit.DepositWaysOfAccumulation.Name == "Capitalization")
+            if (deposit.DepositWaysOfAccumulation.Name.Equals("Capitalization"))
             {
                 deposit.Balance += interestSum;
             }
@@ -146,7 +146,7 @@ namespace InterestPaymentService
 
                 string cardHistoryDescription = String.Format("Interest payment in the amount of {0} ({1}).",
                     interestSum, deposit.DepositTerms.Currencies.Name);
-                CardHistoryData.AddCardHistoryRecordToDbContext(db, deposit.Cards, cardHistoryDescription);
+                CardHistoryData.AddRecordToDbContext(deposit.Cards, cardHistoryDescription, db);
             }
         }
 

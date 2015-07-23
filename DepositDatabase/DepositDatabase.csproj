@@ -71,6 +71,8 @@
     <Compile Include="CardsData.cs" />
     <Compile Include="DepositsData.cs" />
     <Compile Include="CardHistoryData.cs" />
+    <Compile Include="DepositStatesData.cs" />
+    <Compile Include="DepositTermsData.cs" />
     <Compile Include="DepositWaysOfAccumulationData.cs" />
     <Compile Include="Model\AspNetRoles.cs">
       <DependentUpon>Deposit.tt</DependentUpon>
@@ -166,15 +168,6 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Deposit.mdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Deposit_log.ldf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <DependentUpon>Deposit.mdf</DependentUpon>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

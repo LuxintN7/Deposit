@@ -7,14 +7,12 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DepositDatabase.Model
 {
-    using System;
-    using System.Collections.Generic;
-    
     public partial class DepositWaysOfAccumulation
     {
         public DepositWaysOfAccumulation()

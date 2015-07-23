@@ -7,11 +7,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System.Collections.Generic;
+
 namespace DepositDatabase.Model
 {
-    using System;
-    using System.Collections.Generic;
-    
     public partial class AspNetRoles
     {
         public AspNetRoles()
