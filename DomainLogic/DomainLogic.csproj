@@ -31,6 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -39,8 +40,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IDepositStateRpository.cs" />
-    <Compile Include="IDepositRpository.cs" />
+    <Compile Include="IAddCardHandler.cs" />
+    <Compile Include="Model\AspNetRoles.cs" />
+    <Compile Include="Model\AspNetUserClaims.cs" />
+    <Compile Include="Model\AspNetUserLogins.cs" />
+    <Compile Include="Model\AspNetUsers.cs" />
+    <Compile Include="Model\CardHistory.cs" />
+    <Compile Include="Model\Cards.cs" />
+    <Compile Include="Model\Currencies.cs" />
+    <Compile Include="Model\Deposits.cs" />
+    <Compile Include="Model\DepositStates.cs" />
+    <Compile Include="Model\DepositTerms.cs" />
+    <Compile Include="Model\DepositWaysOfAccumulation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
