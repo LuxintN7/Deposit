@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 using DepositDatabase;
-using DepositDatabase.Model;
+using DomainLogic.Model;
 
 namespace Deposit.Models
 {
