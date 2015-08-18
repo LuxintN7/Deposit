@@ -1,53 +1,52 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DepositDatabase.Model;
-using DomainLogic;
-using Microsoft.Practices.Unity;
-using Cards = DomainLogic.Model.Cards;
 
 namespace DepositDatabase
 {
-    public class AddCardHandler : IAddCardHandler
+    public class AddCardHandler : DomainLogic.IAddCardHandler
     {
-        [Dependency]
-        public IAddCardHandler DefaultAddCardHandler { get; set; }
+        public DomainLogic.IAddCardHandler DefaultAddCardHandler { get; set; }
         
-        private DepositEntities db;
+        private DepositEntities dbContext;
 
         public AddCardHandler()
         {
-            db = new DepositEntities();
+            dbContext = new DepositEntities();
         }
         
-        public Cards GetCardByRequisites(string id, string expirationMonth, string expirationYear, string secretCode)
+        public DomainLogic.Model.Cards GetCardByRequisites(string id, string expirationMonth, string expirationYear, string secretCode)
         {
-            var card = (from cards in db.Cards
+            var cardToAdd = (from cards in dbContext.Cards
                         where cards.Id == id
                               && cards.ExpirationMonth == expirationMonth
                               && cards.ExpirationYear == expirationYear
                               && cards.SecretCode == secretCode
-                        select cards).First();
-            return card.ToDomainLogicCard();
+                        select cards).FirstOrDefault();
+            return (cardToAdd == null) ? null : cardToAdd.ToDomainLogicCard();
+        }
+
+        public void SetCardOwnerId(DomainLogic.Model.Cards card, string userOwnerId)
+        {
+            var dbCard = dbContext.Cards.Find(card.Id);
+            dbCard.UserOwnerId = userOwnerId;
         }
 
         public void Dispose()
         {
-            if (db != null)
+            if (dbContext != null)
             {
-                db.Dispose();
+                dbContext.Dispose();
             }
         }
     }
-
+    
 
     public static class DepositDatabaseCardsExtension
     {
-        public static DomainLogic.Model.Cards ToDomainLogicCard(this DepositDatabase.Model.Cards card)
+        public static DomainLogic.Model.Cards ToDomainLogicCard(this Cards card)
         {
-            return new Cards()
+            return new DomainLogic.Model.Cards()
             {
                 Id = String.Copy(card.Id),
                 UserOwnerId = String.Copy(card.UserOwnerId),

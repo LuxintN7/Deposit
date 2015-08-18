@@ -5,12 +5,11 @@ using System.Linq;
 using System.Threading;
 using System.Web.Mvc;
 using Deposit.Models;
-//using DepositDatabase;
-//using DepositDatabase.Model;
 using DomainLogic;
 using DomainLogic.Model;
 using Microsoft.AspNet.Identity;
 using Microsoft.Practices.Unity;
+using DepositDatabase;
 
 namespace Deposit.Controllers
 {
@@ -22,7 +21,7 @@ namespace Deposit.Controllers
         {
             container = new UnityContainer();
 
-            container.RegisterType<IAddCardHandler, AddCardHandler>();
+            container.RegisterType<IAddCardHandler, AddCardHandler>(new InjectionConstructor());
         }
 
         [Authorize] 
@@ -70,18 +69,16 @@ namespace Deposit.Controllers
             {
                 ViewData["modelIsValid"] = true;
 
-                using (var db = new AddCardHandler)
+                using (var addCardHandler = container.Resolve<IAddCardHandler>())
                 {
-                    var card = GetCardByRequisites(model.Id, model.ExpirationMonth, model.ExpirationYear, model.SecretCode);
+                    var card = addCardHandler.GetCardByRequisites(model.Id, model.ExpirationMonth, model.ExpirationYear, model.SecretCode);
 
                     if (card == null)
                     {
                         return PartialView("_Message", new MessageViewModel("A card with such requisites does not exist.", false));
                     }
 
-                    card.UserOwnerId = User.Identity.GetUserId();
-
-                    db.SaveChanges();
+                    addCardHandler.SetCardOwnerId(card,User.Identity.GetUserId());
 
                     return RedirectToAction("GeneralInfoContent");
                 }

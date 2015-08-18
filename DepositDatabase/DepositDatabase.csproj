@@ -183,10 +183,6 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Deposit\Deposit.csproj">
-      <Project>{6199f38c-eab2-4f03-8c34-e0df734ad6b2}</Project>
-      <Name>Deposit</Name>
-    </ProjectReference>
     <ProjectReference Include="..\DomainLogic\DomainLogic.csproj">
       <Project>{99519033-bc43-40fd-a88e-c75bfbcb0a26}</Project>
       <Name>DomainLogic</Name>
