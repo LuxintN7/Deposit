@@ -22,6 +22,7 @@ namespace Deposit.Controllers
             container = new UnityContainer();
 
             container.RegisterType<IAddCardHandler, AddCardHandler>(new InjectionConstructor());
+            container.RegisterType<INewDepositHandler, NewDepositHandler>(new InjectionConstructor());
         }
 
         [Authorize] 
@@ -89,87 +90,86 @@ namespace Deposit.Controllers
         }
 
         #endregion
-        
-//#region OpenNewDeposit actions
-//        public ActionResult NewDeposit()
-//        {
-//            var termsId = Convert.ToByte(Request["termsId"]);
-//            ViewData["termsId"] = termsId;
-           
-//            var userId = User.Identity.GetUserId();
-//            var cards = CardsData.CreateUserCardsByCurrencyList(userId, termsId); 
-//            var waysOfAccumulation = DepositWaysOfAccumulationData.CreateWayList();
-//            var model = new NewDepositViewModel(cards, waysOfAccumulation);
 
-//            return PartialView("NewDeposit", model);
-//        }
+        #region OpenNewDeposit actions
+        //public ActionResult NewDeposit()
+        //{
+        //    var termsId = Convert.ToByte(Request["termsId"]);
+        //    ViewData["termsId"] = termsId;
 
-//        [HttpPost]
-//        public ActionResult NewDeposit(NewDepositViewModel model)
-//        {
-//            var termsId = Convert.ToByte(Request["termsId"]);
-//            ViewData["termsId"] = termsId;
-//            var userId = User.Identity.GetUserId();
+        //    var userId = User.Identity.GetUserId();
+        //    var cards = CardsData.CreateUserCardsByCurrencyList(userId, termsId);
+        //    var waysOfAccumulation = DepositWaysOfAccumulationData.CreateWayList();
+        //    var model = new NewDepositViewModel(cards, waysOfAccumulation);
 
-//            if (ModelState.IsValid)
-//            {
-//                using (var db = new DepositEntities())
-//                {
-//                    var card = CardsData.GetCardById(model.CardId, db);
+        //    return PartialView("NewDeposit", model);
+        //}
 
-//                    if (CardHasEnoughFunds(card.Balance, model.Amount))
-//                    {
-//                        var newDeposit = DepositsData.CreateDeposit(model, userId, termsId, card.Id, db);
-//                        DepositsData.AddNewDepositToDbContext(newDeposit, db);
+        [HttpPost]
+        public ActionResult NewDeposit(NewDepositViewModel model)
+        {
+            var termsId = Convert.ToByte(Request["termsId"]);
+            ViewData["termsId"] = termsId;
+            var userId = User.Identity.GetUserId();
 
-//                        card.Balance -= newDeposit.InitialAmount;
+            if (ModelState.IsValid)
+            {
+                using (var newDepositHandler = container.Resolve<INewDepositHandler>())
+                {
+                    var card = newDepositHandler.GetCardById(model.CardId);
 
-//                        string cardHistoryDescription = String.Format("Opening deposit #{0} of {1} ({2}).",
-//                            newDeposit.Id, newDeposit.Balance, newDeposit.DepositTerms.Currencies.Abbreviation);
-//                        CardHistoryData.AddRecordToDbContext(card, cardHistoryDescription, db);
+                    if (CardHasEnoughFunds(card.Balance, model.Amount))
+                    {
+                        var newDeposit = newDepositHandler
+                            .CreateNewDeposit(model.Amount,model.WayOfAccumulationId, userId,termsId, card.Id);
 
-//                        db.SaveChanges();
-//                    }
-//                    else
-//                    {
-//                        return PartialView("_Message", new MessageViewModel("Not enough money.", false));
-//                    }
+                        newDepositHandler.DecreaseCardBalanceByDepositAmount(newDeposit.InitialAmount,card.Id);
 
-//                    return PartialView("_Message", new MessageViewModel("Deposit has been opened successfully.", true));
-//                }
-//            }
+                        string cardHistoryDescription = String.Format("Opening deposit #{0} of {1} ({2}).",
+                            newDeposit.Id, newDeposit.Balance, newDeposit.DepositTerms.Currencies.Abbreviation);
+                        
+                        newDepositHandler.AddCardHistoryToDbContext(card.Id,cardHistoryDescription);
+                    }
+                    else
+                    {
+                        return PartialView("_Message", new MessageViewModel("Not enough money.", false));
+                    }
 
-//            var cards = CardsData.CreateUserCardsByCurrencyList(userId, termsId);
-//            var waysOfAccumulation = DepositWaysOfAccumulationData.CreateWayList();
-//            model = new NewDepositViewModel(cards, waysOfAccumulation);
+                    return PartialView("_Message", new MessageViewModel("Deposit has been opened successfully.", true));
+                }
+            }
 
-//            return PartialView("NewDeposit", model);
-//        }
+            var cards = CardsData.CreateUserCardsByCurrencyList(userId, termsId).ToDomainLogic();
+            var waysOfAccumulation = DepositWaysOfAccumulationData.CreateWayList().ToDomainLogic();
+            model = new NewDepositViewModel(cards, waysOfAccumulation);
 
-//        private bool CardHasEnoughFunds(Decimal cardBalance, decimal depositAmount)
-//        {
-//            return Convert.ToDecimal(depositAmount) <= cardBalance;
-//        }
-//#endregion
+            return PartialView("NewDeposit", model);
+        }
 
-//        public ActionResult CloseDeposit(int depositId, string cardId)
-//        {
-//            using (var db = new DepositEntities())
-//            {
-//                var card = CardsData.GetCardById(cardId, db);
-//                var deposit = DepositsData.GetDepositById(depositId, db);
+        private bool CardHasEnoughFunds(Decimal cardBalance, decimal depositAmount)
+        {
+            return Convert.ToDecimal(depositAmount) <= cardBalance;
+        }
+        #endregion
 
-//                card.Balance += deposit.Balance;
-//                deposit.DepositStates = DepositStatesData.GetStateByName("Closed", db);
-                
-//                var cardHistoryDescription = String.Format("Closing deposit #{0}. Income: {1} ({2}).",
-//                    deposit.Id, deposit.Balance, deposit.DepositTerms.Currencies.Abbreviation);
-//                CardHistoryData.AddRecordToDbContext(card, cardHistoryDescription, db);
+        //public ActionResult CloseDeposit(int depositId, string cardId)
+        //{
+        //    using (var db = new DepositEntities())
+        //    {
+        //        var card = CardsData.GetCardById(cardId, db);
+        //        var deposit = DepositsData.GetDepositById(depositId, db);
 
-//                db.SaveChanges();
-//            }
+        //        card.Balance += deposit.Balance;
+        //        deposit.DepositStates = DepositStatesData.GetStateByName("Closed", db);
 
-//            return PartialView("_Message", new MessageViewModel("Deposit has been closed successfully.", true));
-//        }
+        //        var cardHistoryDescription = String.Format("Closing deposit #{0}. Income: {1} ({2}).",
+        //            deposit.Id, deposit.Balance, deposit.DepositTerms.Currencies.Abbreviation);
+        //        CardHistoryData.AddRecordToDbContext(card, cardHistoryDescription, db);
+
+        //        db.SaveChanges();
+        //    }
+
+        //    return PartialView("_Message", new MessageViewModel("Deposit has been closed successfully.", true));
+        //}
     }
 }

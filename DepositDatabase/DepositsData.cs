@@ -44,7 +44,7 @@ namespace DepositDatabase
             var newDeposit = new Deposits()
             {
                 UserOwnerId = userId,
-                InitialAmount = Convert.ToDecimal(depositModel.Amount),
+                InitialAmount = depositModel.Amount,
                 StartDate = DateTime.Now,
                 EndDate = DateTime.Now.AddMonths(depositTerms.Months),
                 Balance = Convert.ToDecimal(depositModel.Amount),

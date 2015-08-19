@@ -82,11 +82,14 @@
   <ItemGroup>
     <Compile Include="AddCardHandler.cs" />
     <Compile Include="CardsData.cs" />
+    <Compile Include="CardsExtension.cs" />
     <Compile Include="DepositsData.cs" />
     <Compile Include="CardHistoryData.cs" />
+    <Compile Include="DepositsExtension.cs" />
     <Compile Include="DepositStatesData.cs" />
     <Compile Include="DepositTermsData.cs" />
     <Compile Include="DepositWaysOfAccumulationData.cs" />
+    <Compile Include="DepositWaysOfAccumulationExtension.cs" />
     <Compile Include="Model\AspNetRoles.cs">
       <DependentUpon>Deposit.tt</DependentUpon>
     </Compile>
@@ -135,6 +138,7 @@
     <Compile Include="Model\DepositWaysOfAccumulation.cs">
       <DependentUpon>Deposit.tt</DependentUpon>
     </Compile>
+    <Compile Include="NewDepositHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -5,9 +5,7 @@ using DepositDatabase.Model;
 namespace DepositDatabase
 {
     public class AddCardHandler : DomainLogic.IAddCardHandler
-    {
-        public DomainLogic.IAddCardHandler DefaultAddCardHandler { get; set; }
-        
+    {      
         private DepositEntities dbContext;
 
         public AddCardHandler()
@@ -23,7 +21,7 @@ namespace DepositDatabase
                               && cards.ExpirationYear == expirationYear
                               && cards.SecretCode == secretCode
                         select cards).FirstOrDefault();
-            return (cardToAdd == null) ? null : cardToAdd.ToDomainLogicCard();
+            return (cardToAdd == null) ? null : cardToAdd.ToDomainLogic();
         }
 
         public void SetCardOwnerId(DomainLogic.Model.Cards card, string userOwnerId)
@@ -40,23 +38,4 @@ namespace DepositDatabase
             }
         }
     }
-    
-
-    public static class DepositDatabaseCardsExtension
-    {
-        public static DomainLogic.Model.Cards ToDomainLogicCard(this Cards card)
-        {
-            return new DomainLogic.Model.Cards()
-            {
-                Id = String.Copy(card.Id),
-                UserOwnerId = String.Copy(card.UserOwnerId),
-                Balance = card.Balance,
-                ExpirationMonth = String.Copy(card.ExpirationMonth),
-                ExpirationYear = String.Copy(card.ExpirationYear),
-                SecretCode = String.Copy(card.SecretCode),
-                CurrencyId = card.CurrencyId
-            };
-        }
-    }
-
 }
