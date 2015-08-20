@@ -1,12 +1,11 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using DepositDatabase.Model;
 
 namespace DepositDatabase
 {
     public class AddCardHandler : DomainLogic.IAddCardHandler
     {      
-        private DepositEntities dbContext;
+        private readonly DepositEntities dbContext;
 
         public AddCardHandler()
         {
@@ -34,6 +33,11 @@ namespace DepositDatabase
         {
             if (dbContext != null)
             {
+                if (dbContext.HasUnsavedChanges())
+                {
+                    dbContext.SaveChanges();
+                }
+
                 dbContext.Dispose();
             }
         }

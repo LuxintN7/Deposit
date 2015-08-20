@@ -1,46 +1,55 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DepositDatabase.Model;
 
 namespace DepositDatabase
 {
     public class CloseDepositHandler : DomainLogic.ICloseDepositHandler
     {
-        public DomainLogic.Model.Cards GetCardById(string id)
+        private readonly DepositEntities dbContext;
+
+        public CloseDepositHandler()
         {
-            throw new NotImplementedException();
+            dbContext = new DepositEntities();
         }
 
         public DomainLogic.Model.Currencies GetCurrencyByDepositTermsId(byte depositTermsId)
         {
-            throw new NotImplementedException();
+            return DepositTermsData.GetTermsById(depositTermsId, dbContext).Currencies.ToDomainLogic();
         }
 
         public DomainLogic.Model.Deposits GetDepositById(int id)
         {
-            throw new NotImplementedException();
+            return DepositsData.GetDepositById(id, dbContext).ToDomainLogic();
         }
 
         public void IncreaseCardBalanceByDepositBalance(decimal depositBalance, string cardId)
         {
-            throw new NotImplementedException();
+            var card = CardsData.GetCardById(cardId, dbContext);
+            card.Balance += depositBalance;
         }
 
         public void SetDepositState(string name, int depositId)
         {
-            throw new NotImplementedException();
+            var deposit = DepositsData.GetDepositById(depositId, dbContext);
+            deposit.DepositStates = DepositStatesData.GetStateByName(name, dbContext);
         }
 
-        public void AddCardHistoryToDbContext(string cardId, string cardHistoryDescription)
+        public void AddCardHistoryRecord(string cardId, string cardHistoryDescription)
         {
-            throw new NotImplementedException();
+            var card = CardsData.GetCardById(cardId, dbContext);
+            CardHistoryData.AddRecordToDbContext(card, cardHistoryDescription, dbContext);
         }
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            if (dbContext != null)
+            {
+                if (dbContext.HasUnsavedChanges())
+                {
+                    dbContext.SaveChanges();
+                }
+
+                dbContext.Dispose();
+            }
         }
     }
 }

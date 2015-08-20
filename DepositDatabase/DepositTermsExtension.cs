@@ -19,5 +19,17 @@ namespace DepositDatabase
                 Name = terms.Name
             };
         }
+
+        public static List<DomainLogic.Model.DepositTerms> ToDomainLogic(this List<DepositTerms> list)
+        {
+            var terms = new List<DomainLogic.Model.DepositTerms>();
+
+            foreach (var term in list)
+            {
+                terms.Add(term.ToDomainLogic());
+            }
+
+            return terms;
+        }
     }
 }

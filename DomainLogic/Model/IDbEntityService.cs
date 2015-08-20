@@ -1,7 +1,10 @@
-﻿namespace DomainLogic.Model
+﻿using System.Collections.Generic;
+
+namespace DomainLogic.Model
 {
-    public interface IDbEntityService<out TEntity, in TId>
+    public interface IDbEntityService<TEntity, in TId>
     {
         TEntity GetById(TId id);
+        List<TEntity> GetList();
     }
 }

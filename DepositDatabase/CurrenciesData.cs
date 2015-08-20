@@ -8,13 +8,8 @@ using DepositDatabase.Model;
 
 namespace DepositDatabase
 {
-    public class CurrenciesData : DomainLogic.Model.ICurrenciesService
+    public class CurrenciesData
     {
-        public DomainLogic.Model.Currencies GetById(byte id)
-        {
-            return GetCurrencyById(id).ToDomainLogic();
-        }
-
         public static Currencies GetCurrencyById(byte id)
         {
             using (var dbContext = new DepositEntities())
@@ -26,6 +21,14 @@ namespace DepositDatabase
         public static Currencies GetCurrencyById(byte id, DepositEntities dbContext)
         {
             return dbContext.Currencies.Find(id);
+        }
+
+        public static List<Currencies> GetList()
+        {
+            using (var db = new DepositEntities())
+            {
+                return db.Currencies.ToList();
+            }
         }
     }
 }

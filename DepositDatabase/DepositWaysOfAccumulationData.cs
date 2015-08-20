@@ -19,7 +19,7 @@ namespace DepositDatabase
             return dbContext.DepositWaysOfAccumulation.First(d => d.Id == wayId);
         }
 
-        public static List<DepositWaysOfAccumulation> CreateWayList()
+        public static List<DepositWaysOfAccumulation> GetList()
         {
             using (var db = new DepositEntities())
             {

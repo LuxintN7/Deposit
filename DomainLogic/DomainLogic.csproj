@@ -58,6 +58,7 @@
     <Compile Include="Model\ICurrenciesService.cs" />
     <Compile Include="Model\IDbEntityService.cs" />
     <Compile Include="Model\IDepositTermsService.cs" />
+    <Compile Include="Model\IDepositWaysOfAccumulationService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

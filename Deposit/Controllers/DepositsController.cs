@@ -24,11 +24,13 @@ namespace Deposit.Controllers
 
         public DepositController()
         {
+            DiContainer.RegisterType<ICardsService, CardsService>(new InjectionConstructor());
+            DiContainer.RegisterType<IDepositWaysOfAccumulationService, DepositWaysOfAccumulationService>(new InjectionConstructor());
+            DiContainer.RegisterType<IDepositTermsService, DepositTermsService>(new InjectionConstructor());
+            DiContainer.RegisterType<ICurrenciesService, CurrenciesService>(new InjectionConstructor());
             DiContainer.RegisterType<IAddCardHandler, AddCardHandler>(new InjectionConstructor());
             DiContainer.RegisterType<INewDepositHandler, NewDepositHandler>(new InjectionConstructor());
             DiContainer.RegisterType<ICloseDepositHandler, CloseDepositHandler>(new InjectionConstructor());
-            DiContainer.RegisterType<IDepositTermsService, DepositTermsData>(new InjectionConstructor());
-            DiContainer.RegisterType<ICurrenciesService, CurrenciesData>(new InjectionConstructor());
         }
 
         [Authorize] 
@@ -106,8 +108,8 @@ namespace Deposit.Controllers
             ViewData["termsId"] = termsId;
 
             var userId = User.Identity.GetUserId();
-            var cards = CardsData.CreateUserCardsByCurrencyList(userId, termsId).ToDomainLogic();
-            var waysOfAccumulation = DepositWaysOfAccumulationData.CreateWayList().ToDomainLogic();
+            var cards = DiContainer.Resolve<ICardsService>().CreateUserCardsByCurrencyList(userId, termsId);
+            var waysOfAccumulation = DiContainer.Resolve<IDepositWaysOfAccumulationService>().GetList();
             var model = new NewDepositViewModel(cards, waysOfAccumulation);
 
             return PartialView("NewDeposit", model);
@@ -136,7 +138,7 @@ namespace Deposit.Controllers
                         string cardHistoryDescription = String.Format("Opening deposit #{0} of {1} ({2}).",
                             newDeposit.Id, newDeposit.Balance, newDepositHandler.GetCurrencyByDepositTermsId(newDeposit.TermId).Abbreviation);
                         
-                        newDepositHandler.AddCardHistoryToDbContext(card.Id,cardHistoryDescription);
+                        newDepositHandler.AddCardHistoryRecord(card.Id,cardHistoryDescription);
                     }
                     else
                     {
@@ -147,8 +149,8 @@ namespace Deposit.Controllers
                 }
             }
 
-            var cards = CardsData.CreateUserCardsByCurrencyList(userId, termsId).ToDomainLogic();
-            var waysOfAccumulation = DepositWaysOfAccumulationData.CreateWayList().ToDomainLogic();
+            var cards = DiContainer.Resolve<ICardsService>().CreateUserCardsByCurrencyList(userId, termsId);
+            var waysOfAccumulation = DiContainer.Resolve<IDepositWaysOfAccumulationService>().GetList();
             model = new NewDepositViewModel(cards, waysOfAccumulation);
 
             return PartialView("NewDeposit", model);
@@ -165,7 +167,6 @@ namespace Deposit.Controllers
         {
             using (var closeDepositHandler = DiContainer.Resolve<ICloseDepositHandler>())
             {
-                var card = closeDepositHandler.GetCardById(cardId);
                 var deposit = closeDepositHandler.GetDepositById(depositId);
 
                 closeDepositHandler.IncreaseCardBalanceByDepositBalance(deposit.Balance, cardId);
@@ -175,7 +176,7 @@ namespace Deposit.Controllers
                 var cardHistoryDescription = String.Format("Closing deposit #{0}. Income: {1} ({2}).",
                     deposit.Id, deposit.Balance, closeDepositHandler.GetCurrencyByDepositTermsId(deposit.TermId).Abbreviation);
                 
-                closeDepositHandler.AddCardHistoryToDbContext(cardId,cardHistoryDescription);
+                closeDepositHandler.AddCardHistoryRecord(cardId, cardHistoryDescription);
             }
 
             return PartialView("_Message", new MessageViewModel("Deposit has been closed successfully.", true));

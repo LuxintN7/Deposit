@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Linq;
 using DepositDatabase.Model;
 
 namespace DepositDatabase
 {
     public class NewDepositHandler : DomainLogic.INewDepositHandler
     {
-        private DepositEntities dbContext;
+        private readonly DepositEntities dbContext;
 
         public NewDepositHandler()
         {
@@ -15,7 +14,7 @@ namespace DepositDatabase
 
         public DomainLogic.Model.Cards GetCardById(string id)
         {
-            return CardsData.GetCardById(id).ToDomainLogic();
+            return CardsData.GetCardById(id, dbContext).ToDomainLogic();
         }
 
         public DomainLogic.Model.Currencies GetCurrencyByDepositTermsId(byte termsId)
@@ -59,12 +58,15 @@ namespace DepositDatabase
 
         public void Dispose()
         {
-            if (dbContext.HasUnsavedChanges())
+            if (dbContext != null)
             {
-                dbContext.SaveChanges();
-            }
+                if (dbContext.HasUnsavedChanges())
+                {
+                    dbContext.SaveChanges();
+                }
 
-            dbContext.Dispose();
+                dbContext.Dispose();
+            }
         }
     }
 }

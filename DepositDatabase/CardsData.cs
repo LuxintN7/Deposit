@@ -25,7 +25,7 @@ namespace DepositDatabase
 
             using (var dbContext = new DepositEntities())
             {
-                var currencyId = dbContext.DepositTerms.First(dt => dt.Id == termsId).CurrencyId;
+                var currencyId = DepositTermsData.GetTermsById(termsId, dbContext).CurrencyId;
                 cards = CreateUserCardsByCurrencyList(userId, currencyId, dbContext);
             }
 
@@ -39,6 +39,14 @@ namespace DepositDatabase
                 select c).ToList();
 
             return cards;
+        }
+
+        public static List<Cards> GetList()
+        {
+            using (var db = new DepositEntities())
+            {
+                return db.Cards.ToList();
+            }
         }
     }
 }
