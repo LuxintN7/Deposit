@@ -83,6 +83,7 @@
     <Compile Include="AddCardHandler.cs" />
     <Compile Include="CardsData.cs" />
     <Compile Include="CardsExtension.cs" />
+    <Compile Include="CloseDepositHandler.cs" />
     <Compile Include="CurrenciesData.cs" />
     <Compile Include="CurrenciesExtension.cs" />
     <Compile Include="DepositsData.cs" />

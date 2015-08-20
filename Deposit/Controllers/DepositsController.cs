@@ -26,6 +26,7 @@ namespace Deposit.Controllers
         {
             DiContainer.RegisterType<IAddCardHandler, AddCardHandler>(new InjectionConstructor());
             DiContainer.RegisterType<INewDepositHandler, NewDepositHandler>(new InjectionConstructor());
+            DiContainer.RegisterType<ICloseDepositHandler, CloseDepositHandler>(new InjectionConstructor());
             DiContainer.RegisterType<IDepositTermsService, DepositTermsData>(new InjectionConstructor());
             DiContainer.RegisterType<ICurrenciesService, CurrenciesData>(new InjectionConstructor());
         }
@@ -63,6 +64,7 @@ namespace Deposit.Controllers
 
 
 #region GeneralInfo actions
+
         public ActionResult AddCard()
         {
             return PartialView("AddCard");
@@ -94,9 +96,10 @@ namespace Deposit.Controllers
             return PartialView("AddCard");
         }
 
-        #endregion
+#endregion
 
-        #region OpenNewDeposit actions
+#region OpenNewDeposit actions
+
         public ActionResult NewDeposit()
         {
             var termsId = Convert.ToByte(Request["termsId"]);
@@ -151,30 +154,31 @@ namespace Deposit.Controllers
             return PartialView("NewDeposit", model);
         }
 
-        private bool CardHasEnoughFunds(Decimal cardBalance, decimal depositAmount)
+        private bool CardHasEnoughFunds(decimal cardBalance, decimal depositAmount)
         {
             return Convert.ToDecimal(depositAmount) <= cardBalance;
         }
-        #endregion
 
-        //public ActionResult CloseDeposit(int depositId, string cardId)
-        //{
-        //    using (var db = new DepositEntities())
-        //    {
-        //        var card = CardsData.GetCardById(cardId, db);
-        //        var deposit = DepositsData.GetDepositById(depositId, db);
+#endregion
 
-        //        card.Balance += deposit.Balance;
-        //        deposit.DepositStates = DepositStatesData.GetStateByName("Closed", db);
+        public ActionResult CloseDeposit(int depositId, string cardId)
+        {
+            using (var closeDepositHandler = DiContainer.Resolve<ICloseDepositHandler>())
+            {
+                var card = closeDepositHandler.GetCardById(cardId);
+                var deposit = closeDepositHandler.GetDepositById(depositId);
 
-        //        var cardHistoryDescription = String.Format("Closing deposit #{0}. Income: {1} ({2}).",
-        //            deposit.Id, deposit.Balance, deposit.DepositTerms.Currencies.Abbreviation);
-        //        CardHistoryData.AddRecordToDbContext(card, cardHistoryDescription, db);
+                closeDepositHandler.IncreaseCardBalanceByDepositBalance(deposit.Balance, cardId);
 
-        //        db.SaveChanges();
-        //    }
+                closeDepositHandler.SetDepositState("Closed", depositId);
 
-        //    return PartialView("_Message", new MessageViewModel("Deposit has been closed successfully.", true));
-        //}
+                var cardHistoryDescription = String.Format("Closing deposit #{0}. Income: {1} ({2}).",
+                    deposit.Id, deposit.Balance, closeDepositHandler.GetCurrencyByDepositTermsId(deposit.TermId).Abbreviation);
+                
+                closeDepositHandler.AddCardHistoryToDbContext(cardId,cardHistoryDescription);
+            }
+
+            return PartialView("_Message", new MessageViewModel("Deposit has been closed successfully.", true));
+        }
     }
 }

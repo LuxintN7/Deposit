@@ -51,7 +51,7 @@ namespace DepositDatabase
             card.Balance -= depositAmount;
         }
 
-        public void AddCardHistoryToDbContext(string cardId, string cardHistoryDescription)
+        public void AddCardHistoryRecord(string cardId, string cardHistoryDescription)
         {
             var card = CardsData.GetCardById(cardId, dbContext);
             CardHistoryData.AddRecordToDbContext(card, cardHistoryDescription, dbContext);

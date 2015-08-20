@@ -13,6 +13,6 @@ namespace DomainLogic
         Currencies GetCurrencyByDepositTermsId(byte depositTermsId);
         Deposits CreateNewDeposit(decimal depositAmount, byte wayOfAccumulationId, string userId, byte termsId, string cardId);
         void DecreaseCardBalanceByDepositAmount(decimal depositAmount, string cardId);
-        void AddCardHistoryToDbContext(string cardId, string cardHistoryDescription);
+        void AddCardHistoryRecord(string cardId, string cardHistoryDescription);
     }
 }
