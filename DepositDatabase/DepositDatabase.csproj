@@ -83,11 +83,14 @@
     <Compile Include="AddCardHandler.cs" />
     <Compile Include="CardsData.cs" />
     <Compile Include="CardsExtension.cs" />
+    <Compile Include="CurrenciesData.cs" />
+    <Compile Include="CurrenciesExtension.cs" />
     <Compile Include="DepositsData.cs" />
     <Compile Include="CardHistoryData.cs" />
     <Compile Include="DepositsExtension.cs" />
     <Compile Include="DepositStatesData.cs" />
     <Compile Include="DepositTermsData.cs" />
+    <Compile Include="DepositTermsExtension.cs" />
     <Compile Include="DepositWaysOfAccumulationData.cs" />
     <Compile Include="DepositWaysOfAccumulationExtension.cs" />
     <Compile Include="Model\AspNetRoles.cs">
@@ -111,6 +114,7 @@
     <Compile Include="Model\Currencies.cs">
       <DependentUpon>Deposit.tt</DependentUpon>
     </Compile>
+    <Compile Include="Model\DbContextExtension.cs" />
     <Compile Include="Model\Deposit.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -53,6 +53,10 @@
     <Compile Include="Model\DepositStates.cs" />
     <Compile Include="Model\DepositTerms.cs" />
     <Compile Include="Model\DepositWaysOfAccumulation.cs" />
+    <Compile Include="Model\ICardsService.cs" />
+    <Compile Include="Model\ICurrenciesService.cs" />
+    <Compile Include="Model\IDbEntityService.cs" />
+    <Compile Include="Model\IDepositTermsService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

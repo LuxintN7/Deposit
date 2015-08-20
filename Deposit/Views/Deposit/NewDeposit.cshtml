@@ -1,22 +1,22 @@
-﻿@using DepositDatabase
-@using DepositDatabase.Model
+﻿@using Deposit.Controllers;
+@using DomainLogic.Model 
+@using Microsoft.Practices.Unity
 @model Deposit.Models.NewDepositViewModel
 
 @{
     ViewBag.Title = "New deposit";
 }
 
-
 @using (Ajax.BeginForm("NewDeposit", new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "new-deposit-content", InsertionMode = InsertionMode.Replace }))
 {
     @Html.AntiForgeryToken()
-
-    byte depositTermsId = Convert.ToByte(ViewData["termsId"].ToString());
-
-    using (var db = new DepositEntities())
     {
-        var depositTerms = DepositTermsData.GetTermsById(depositTermsId, db);
+        byte depositTermsId = Convert.ToByte(ViewData["termsId"].ToString());
 
+        var currencyHandler = DepositController.DiContainer.Resolve<ICurrenciesService>();
+        var depositTermsHandler = DepositController.DiContainer.Resolve<IDepositTermsService>();
+        var depositTerms = depositTermsHandler.GetById(depositTermsId);
+    
         <div class="row">
 
             <div class="col-md-4">
@@ -28,7 +28,7 @@
                         <td>
                             <b>Currency</b>
                         </td>
-                        <td>@depositTerms.Currencies.Name</td>
+                        <td>@currencyHandler.GetById(depositTerms.CurrencyId).Name</td>
                     </tr>
                     <tr>
                         <td>

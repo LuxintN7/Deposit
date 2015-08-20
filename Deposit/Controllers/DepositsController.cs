@@ -15,14 +15,19 @@ namespace Deposit.Controllers
 {
     public class DepositController : Controller
     {
-        private UnityContainer container;
+        public static UnityContainer DiContainer { get; private set; }
+
+        static DepositController()
+        {
+            DiContainer = new UnityContainer();
+        }
 
         public DepositController()
         {
-            container = new UnityContainer();
-
-            container.RegisterType<IAddCardHandler, AddCardHandler>(new InjectionConstructor());
-            container.RegisterType<INewDepositHandler, NewDepositHandler>(new InjectionConstructor());
+            DiContainer.RegisterType<IAddCardHandler, AddCardHandler>(new InjectionConstructor());
+            DiContainer.RegisterType<INewDepositHandler, NewDepositHandler>(new InjectionConstructor());
+            DiContainer.RegisterType<IDepositTermsService, DepositTermsData>(new InjectionConstructor());
+            DiContainer.RegisterType<ICurrenciesService, CurrenciesData>(new InjectionConstructor());
         }
 
         [Authorize] 
@@ -70,7 +75,7 @@ namespace Deposit.Controllers
             {
                 ViewData["modelIsValid"] = true;
 
-                using (var addCardHandler = container.Resolve<IAddCardHandler>())
+                using (var addCardHandler = DiContainer.Resolve<IAddCardHandler>())
                 {
                     var card = addCardHandler.GetCardByRequisites(model.Id, model.ExpirationMonth, model.ExpirationYear, model.SecretCode);
 
@@ -92,18 +97,18 @@ namespace Deposit.Controllers
         #endregion
 
         #region OpenNewDeposit actions
-        //public ActionResult NewDeposit()
-        //{
-        //    var termsId = Convert.ToByte(Request["termsId"]);
-        //    ViewData["termsId"] = termsId;
+        public ActionResult NewDeposit()
+        {
+            var termsId = Convert.ToByte(Request["termsId"]);
+            ViewData["termsId"] = termsId;
 
-        //    var userId = User.Identity.GetUserId();
-        //    var cards = CardsData.CreateUserCardsByCurrencyList(userId, termsId);
-        //    var waysOfAccumulation = DepositWaysOfAccumulationData.CreateWayList();
-        //    var model = new NewDepositViewModel(cards, waysOfAccumulation);
+            var userId = User.Identity.GetUserId();
+            var cards = CardsData.CreateUserCardsByCurrencyList(userId, termsId).ToDomainLogic();
+            var waysOfAccumulation = DepositWaysOfAccumulationData.CreateWayList().ToDomainLogic();
+            var model = new NewDepositViewModel(cards, waysOfAccumulation);
 
-        //    return PartialView("NewDeposit", model);
-        //}
+            return PartialView("NewDeposit", model);
+        }
 
         [HttpPost]
         public ActionResult NewDeposit(NewDepositViewModel model)
@@ -114,7 +119,7 @@ namespace Deposit.Controllers
 
             if (ModelState.IsValid)
             {
-                using (var newDepositHandler = container.Resolve<INewDepositHandler>())
+                using (var newDepositHandler = DiContainer.Resolve<INewDepositHandler>())
                 {
                     var card = newDepositHandler.GetCardById(model.CardId);
 
@@ -126,7 +131,7 @@ namespace Deposit.Controllers
                         newDepositHandler.DecreaseCardBalanceByDepositAmount(newDeposit.InitialAmount,card.Id);
 
                         string cardHistoryDescription = String.Format("Opening deposit #{0} of {1} ({2}).",
-                            newDeposit.Id, newDeposit.Balance, newDeposit.DepositTerms.Currencies.Abbreviation);
+                            newDeposit.Id, newDeposit.Balance, newDepositHandler.GetCurrencyByDepositTermsId(newDeposit.TermId).Abbreviation);
                         
                         newDepositHandler.AddCardHistoryToDbContext(card.Id,cardHistoryDescription);
                     }

@@ -11,7 +11,7 @@ namespace DepositDatabase
             return new DomainLogic.Model.Cards()
             {
                 Id = String.Copy(card.Id),
-                UserOwnerId = String.Copy(card.UserOwnerId),
+                UserOwnerId = (card.UserOwnerId == null) ? null : String.Copy(card.UserOwnerId),
                 Balance = card.Balance,
                 ExpirationMonth = String.Copy(card.ExpirationMonth),
                 ExpirationYear = String.Copy(card.ExpirationYear),

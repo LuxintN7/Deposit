@@ -1,10 +1,16 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using DepositDatabase.Model;
 
 namespace DepositDatabase
 {
-    public static class DepositTermsData
+    public class DepositTermsData : DomainLogic.Model.IDepositTermsService
     {
+        public DomainLogic.Model.DepositTerms GetById(byte id)
+        {
+            return GetTermsById(id).ToDomainLogic();
+        }
+
         public static DepositTerms GetTermsById(byte id)
         {
             using (var dbContext = new DepositEntities())
