@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DepositDatabase.Model;
+﻿using System.Collections.Generic;
 
 namespace DepositDatabase
 {
-    public class CurrenciesService : DomainLogic.Model.ICurrenciesService
+    public class CurrenciesService : DomainLogic.ICurrenciesService
     {
         public DomainLogic.Model.Currencies GetById(byte id)
         {

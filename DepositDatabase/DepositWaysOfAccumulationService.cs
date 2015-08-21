@@ -2,7 +2,7 @@
 
 namespace DepositDatabase
 {
-    public class DepositWaysOfAccumulationService : DomainLogic.Model.IDepositWaysOfAccumulationService
+    public class DepositWaysOfAccumulationService : DomainLogic.IDepositWaysOfAccumulationService
     {
         public DomainLogic.Model.DepositWaysOfAccumulation GetById(byte id)
         {

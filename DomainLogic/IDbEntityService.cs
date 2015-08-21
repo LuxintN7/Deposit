@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace DomainLogic.Model
+namespace DomainLogic
 {
     public interface IDbEntityService<TEntity, in TId>
     {

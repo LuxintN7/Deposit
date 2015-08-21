@@ -40,9 +40,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IAddCardHandler.cs" />
-    <Compile Include="ICloseDepositHandler.cs" />
-    <Compile Include="INewDepositHandler.cs" />
+    <Compile Include="Handlers\IAddCardHandler.cs" />
+    <Compile Include="Handlers\ICloseDepositHandler.cs" />
+    <Compile Include="Handlers\INewDepositHandler.cs" />
     <Compile Include="Model\AspNetRoles.cs" />
     <Compile Include="Model\AspNetUserClaims.cs" />
     <Compile Include="Model\AspNetUserLogins.cs" />
@@ -54,13 +54,14 @@
     <Compile Include="Model\DepositStates.cs" />
     <Compile Include="Model\DepositTerms.cs" />
     <Compile Include="Model\DepositWaysOfAccumulation.cs" />
-    <Compile Include="Model\ICardsService.cs" />
-    <Compile Include="Model\ICurrenciesService.cs" />
-    <Compile Include="Model\IDbEntityService.cs" />
-    <Compile Include="Model\IDepositTermsService.cs" />
-    <Compile Include="Model\IDepositWaysOfAccumulationService.cs" />
+    <Compile Include="ICardsService.cs" />
+    <Compile Include="ICurrenciesService.cs" />
+    <Compile Include="IDbEntityService.cs" />
+    <Compile Include="IDepositTermsService.cs" />
+    <Compile Include="IDepositWaysOfAccumulationService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

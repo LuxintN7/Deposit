@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace DepositDatabase
 {
-    public class DepositTermsService : DomainLogic.Model.IDepositTermsService
+    public class DepositTermsService : DomainLogic.IDepositTermsService
     {
         public DomainLogic.Model.DepositTerms GetById(byte id)
         {

@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DepositDatabase.Model;
+﻿using System.Collections.Generic;
 
 namespace DepositDatabase
 {
-    public class CardsService : DomainLogic.Model.ICardsService
+    public class CardsService : DomainLogic.ICardsService
     {
         public DomainLogic.Model.Cards GetById(string id)
         {
