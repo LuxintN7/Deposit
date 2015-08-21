@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using DepositDatabase.Model;
 
-namespace DepositDatabase
+namespace DepositDatabase.Handlers
 {
     public class AddCardHandler : DomainLogic.IAddCardHandler
     {      

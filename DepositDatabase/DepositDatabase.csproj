@@ -80,11 +80,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddCardHandler.cs" />
+    <Compile Include="Handlers\AddCardHandler.cs" />
     <Compile Include="CardsData.cs" />
     <Compile Include="CardsExtension.cs" />
     <Compile Include="CardsService.cs" />
-    <Compile Include="CloseDepositHandler.cs" />
+    <Compile Include="Handlers\CloseDepositHandler.cs" />
     <Compile Include="CurrenciesData.cs" />
     <Compile Include="CurrenciesExtension.cs" />
     <Compile Include="CurrenciesService.cs" />
@@ -147,7 +147,7 @@
     <Compile Include="Model\DepositWaysOfAccumulation.cs">
       <DependentUpon>Deposit.tt</DependentUpon>
     </Compile>
-    <Compile Include="NewDepositHandler.cs" />
+    <Compile Include="Handlers\NewDepositHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

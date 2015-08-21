@@ -10,6 +10,7 @@ using DomainLogic.Model;
 using Microsoft.AspNet.Identity;
 using Microsoft.Practices.Unity;
 using DepositDatabase;
+using DepositDatabase.Handlers;
 
 namespace Deposit.Controllers
 {

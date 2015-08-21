@@ -1,6 +1,6 @@
 ﻿using DepositDatabase.Model;
 
-namespace DepositDatabase
+namespace DepositDatabase.Handlers
 {
     public class CloseDepositHandler : DomainLogic.ICloseDepositHandler
     {
