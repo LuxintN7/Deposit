@@ -159,7 +159,6 @@
     <None Include="App.Config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Deposit.bak" />
     <None Include="Model\Deposit.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Deposit.edmx</DependentUpon>
