@@ -5,12 +5,14 @@ using System.Linq;
 using System.Threading;
 using System.Web.Mvc;
 using Deposit.Models;
-using DomainLogic;
-using DomainLogic.Model;
 using Microsoft.AspNet.Identity;
 using Microsoft.Practices.Unity;
+using DomainLogic;
+using DomainLogic.Model;
+using DomainLogic.Handlers;
 using DepositDatabase;
 using DepositDatabase.Handlers;
+
 
 namespace Deposit.Controllers
 {

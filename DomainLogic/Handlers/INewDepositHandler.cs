@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DomainLogic.Model;
 
-namespace DomainLogic
+namespace DomainLogic.Handlers
 {
     public interface INewDepositHandler : IDisposable
     {

@@ -3,7 +3,7 @@ using DepositDatabase.Model;
 
 namespace DepositDatabase.Handlers
 {
-    public class NewDepositHandler : DomainLogic.INewDepositHandler
+    public class NewDepositHandler : DomainLogic.Handlers.INewDepositHandler
     {
         private readonly DepositEntities dbContext;
 

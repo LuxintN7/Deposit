@@ -2,7 +2,7 @@
 
 namespace DepositDatabase.Handlers
 {
-    public class CloseDepositHandler : DomainLogic.ICloseDepositHandler
+    public class CloseDepositHandler : DomainLogic.Handlers.ICloseDepositHandler
     {
         private readonly DepositEntities dbContext;
 

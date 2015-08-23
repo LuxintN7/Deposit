@@ -1,7 +1,7 @@
 ﻿using System;
 using DomainLogic.Model;
 
-namespace DomainLogic
+namespace DomainLogic.Handlers
 {
     public interface IAddCardHandler : IDisposable
     {
