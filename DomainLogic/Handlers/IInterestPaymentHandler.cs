@@ -8,7 +8,6 @@ namespace DomainLogic.Handlers
     {
         List<Deposits> GetActiveDeposits();
         void ExtendDeposit(int depositId, DateTime today);
-        void AddInterest(int depositId);
         void SetLastInterestPaymentDate(int depositId, DateTime date);
         void SetDepositState(int depositId, string stateName);
     }
