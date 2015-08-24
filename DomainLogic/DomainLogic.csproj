@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Handlers\IAddCardHandler.cs" />
     <Compile Include="Handlers\ICloseDepositHandler.cs" />
+    <Compile Include="Handlers\IInterestPaymentHandler.cs" />
     <Compile Include="Handlers\INewDepositHandler.cs" />
     <Compile Include="Model\AspNetRoles.cs" />
     <Compile Include="Model\AspNetUserClaims.cs" />
