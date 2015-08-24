@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
-using DepositDatabase;
 using DepositDatabase.Model;
 
 namespace DepositDatabase.Handlers
 {
-    class InterestPaymentHandler : DomainLogic.Handlers.IInterestPaymentHandler
+    public class InterestPaymentHandler : DomainLogic.Handlers.IInterestPaymentHandler
     {
         private readonly DepositEntities dbContext;
+
 
         public InterestPaymentHandler()
         {
@@ -23,6 +22,12 @@ namespace DepositDatabase.Handlers
                             select d).ToList();
 
             return deposits.ToDomainLogic();
+        }
+        
+        public string GetDepositStateName(int depositId)
+        {
+            var deposit = DepositsData.GetDepositById(depositId, dbContext);
+            return deposit.DepositStates.Name;
         }
 
         public void ExtendDeposit(int depositId, DateTime today)
@@ -68,5 +73,19 @@ namespace DepositDatabase.Handlers
                 CardHistoryData.AddRecordToDbContext(deposit.Cards, cardHistoryDescription, dbContext);
             }
         }
+
+        public void Dispose()
+        {
+            if (dbContext != null)
+            {
+                if (dbContext.HasUnsavedChanges())
+                {
+                    dbContext.SaveChanges();
+                }
+
+                dbContext.Dispose();
+            }
+        }
+
     }
 }

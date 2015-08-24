@@ -4,9 +4,10 @@ using DomainLogic.Model;
 
 namespace DomainLogic.Handlers
 {
-    public interface IInterestPaymentHandler
+    public interface IInterestPaymentHandler : IDisposable
     {
         List<Deposits> GetActiveDeposits();
+        string GetDepositStateName(int depositId);
         void ExtendDeposit(int depositId, DateTime today);
         void SetLastInterestPaymentDate(int depositId, DateTime date);
         void SetDepositState(int depositId, string stateName);
