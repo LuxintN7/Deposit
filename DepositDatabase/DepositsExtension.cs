@@ -1,4 +1,5 @@
-﻿using DepositDatabase.Model;
+﻿using System.Collections.Generic;
+using DepositDatabase.Model;
 
 namespace DepositDatabase
 {
@@ -21,6 +22,18 @@ namespace DepositDatabase
                 WayOfAccumulationId = deposit.WayOfAccumulationId,
                 Name = deposit.Name
             };
+        }
+
+        public static List<DomainLogic.Model.Deposits> ToDomainLogic(this List<Deposits> list)
+        {
+            var deposits = new List<DomainLogic.Model.Deposits>();
+
+            foreach (var deposit in list)
+            {
+                deposits.Add(deposit.ToDomainLogic());
+            }
+
+            return deposits;
         }
     }
 }
