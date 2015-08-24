@@ -98,6 +98,7 @@
     <Compile Include="DepositWaysOfAccumulationData.cs" />
     <Compile Include="DepositWaysOfAccumulationExtension.cs" />
     <Compile Include="DepositWaysOfAccumulationService.cs" />
+    <Compile Include="Handlers\InterestPaymentHandler.cs" />
     <Compile Include="Model\AspNetRoles.cs">
       <DependentUpon>Deposit.tt</DependentUpon>
     </Compile>
