@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Configuration;
-using System.Linq;
 using System.ServiceProcess;
 using System.Timers;
-using DepositDatabase;
-using DepositDatabase.Model;
+using Microsoft.Practices.Unity;
+using DomainLogic;
+using DomainLogic.Model;
+using DomainLogic.Handlers;
+using DepositDatabase.Handlers;
 
 namespace InterestPaymentService
 {
@@ -27,10 +29,11 @@ namespace InterestPaymentService
             } 
         }
 
+        private UnityContainer diContainer;
+
         public InterestPaymentService()
         {
             InitializeComponent();
-            logger = new Logger(AppDomain.CurrentDomain.BaseDirectory + "log.txt");
         }
 
         public void OnDebug()
@@ -40,9 +43,14 @@ namespace InterestPaymentService
 
         protected override void OnStart(string[] args)
         {
+            diContainer = new UnityContainer();
+            diContainer.RegisterType<IInterestPaymentHandler, InterestPaymentHandler>(new InjectionConstructor());
+
+            logger = new Logger(AppDomain.CurrentDomain.BaseDirectory + "log.txt");
+
             scheduledDateTime = DateTime.Parse(ConfigurationManager.AppSettings["ScheduledDateTime"]);
             intervalMinutes = Int32.Parse(ConfigurationManager.AppSettings["IntervalMinutes"]);
-            
+           
             timer = new Timer(TimerInterval);
             timer.Elapsed += TimerOnElapsed;
             timer.Start();
@@ -74,40 +82,36 @@ namespace InterestPaymentService
 
             try
             {
-                using (var db = new DepositEntities())
+                using (var handler = diContainer.Resolve<IInterestPaymentHandler>())
                 {
                     var today = DateTime.Now.Date;
 
-                    var deposits = (from d in db.Deposits
-                                    where d.DepositStates.Name != "Closed"
-                                    select d).ToList();
+                    var deposits = handler.GetActiveDeposits();
 
                     foreach (var deposit in deposits)
                     {
-                        if (deposit.DepositStates.Name.Equals("Pending"))
+                        if (handler.GetDepositStateName(deposit.Id) == "Pending")
                         {
                             // If a customer does not withdraw a deposit during the pending period 
                             // the deposit will be automatically extended for one more (the same) term
                             if (today - deposit.EndDate >= TimeSpan.FromDays(MaxPendingDays))
                             {
-                                deposit.DepositStates = DepositStatesData.GetStateByName("Extended", db);
-                                deposit.EndDate = today.AddMonths(deposit.DepositTerms.Months);
-                                deposit.LastInterestPaymentDate = today;
+                                handler.SetDepositState(deposit.Id, "Extended");
+                                handler.ExtendDeposit(deposit.Id, today);
+                                handler.SetLastInterestPaymentDate(deposit.Id, today);
                             }
                         }
                         else if (MonthHasPassed(deposit.StartDate, deposit.LastInterestPaymentDate))
                         {
-                            AddInterest(db, deposit);
-                            deposit.LastInterestPaymentDate = today;
+                            handler.AddInterest(deposit.Id);
+                            handler.SetLastInterestPaymentDate(deposit.Id, today);
 
                             if (today.Date == deposit.EndDate.Date)
                             {
-                                deposit.DepositStates = DepositStatesData.GetStateByName("Pending", db);
+                                handler.SetDepositState(deposit.Id, "Pending");
                             }
                         }
                     }
-                                                                             
-                    db.SaveChanges();
                 } 
                 
                 logger.WriteLine("Interest payment is completed.");
@@ -124,30 +128,6 @@ namespace InterestPaymentService
         private bool MonthHasPassed(DateTime startDate, DateTime? lastPaymentDate)
         {
             return DateTime.Today.Day == (lastPaymentDate ?? startDate).AddMonths(1).Day;
-        }
-
-        private void AddInterest(DepositEntities db, Deposits deposit)
-        {
-            const int daysInYear = 365;
-            decimal interestRate = deposit.DepositTerms.InterestRate;
-            DateTime today = DateTime.Today;
-
-            byte daysCount = (byte)(today - (deposit.LastInterestPaymentDate ?? deposit.StartDate)).TotalDays;
-
-            decimal interestSum = deposit.Balance * interestRate * daysCount / (100 * daysInYear);
-
-            if (deposit.DepositWaysOfAccumulation.Name.Equals("Capitalization"))
-            {
-                deposit.Balance += interestSum;
-            }
-            else
-            {
-                deposit.Cards.Balance += interestSum;
-
-                string cardHistoryDescription = String.Format("Interest payment in the amount of {0} ({1}).",
-                    interestSum, deposit.DepositTerms.Currencies.Name);
-                CardHistoryData.AddRecordToDbContext(deposit.Cards, cardHistoryDescription, db);
-            }
         }
 
         private void SaveScheduledDateTime(DateTime nextScheduledDateTime)
