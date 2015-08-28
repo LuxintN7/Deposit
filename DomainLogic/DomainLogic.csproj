@@ -44,6 +44,7 @@
     <Compile Include="Handlers\ICloseDepositHandler.cs" />
     <Compile Include="Handlers\IInterestPaymentHandler.cs" />
     <Compile Include="Handlers\INewDepositHandler.cs" />
+    <Compile Include="IDepositStatesService.cs" />
     <Compile Include="Model\AspNetRoles.cs" />
     <Compile Include="Model\AspNetUserClaims.cs" />
     <Compile Include="Model\AspNetUserLogins.cs" />

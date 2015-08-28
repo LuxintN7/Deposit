@@ -80,6 +80,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DepositStatesExtension.cs" />
+    <Compile Include="DepositStatesService.cs" />
     <Compile Include="Handlers\AddCardHandler.cs" />
     <Compile Include="CardsData.cs" />
     <Compile Include="CardsExtension.cs" />
