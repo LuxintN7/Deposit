@@ -130,14 +130,14 @@ namespace Deposit.Controllers
                 if (CardHasEnoughFunds(card.Balance, model.Amount))
                 {
                     var newDeposit = newDepositHandler
-                        .CreateNewDeposit(model.Amount,model.WayOfAccumulationId, userId,termsId, card.Id);
+                        .CreateNewDeposit(model.Amount, model.WayOfAccumulationId, userId,termsId, card.Id);
 
-                    newDepositHandler.DecreaseCardBalanceByDepositAmount(newDeposit.InitialAmount,card.Id);
+                    newDepositHandler.DecreaseCardBalanceByDepositAmount(newDeposit.InitialAmount, card.Id);
 
                     string cardHistoryDescription = String.Format("Opening deposit #{0} of {1} ({2}).",
                         newDeposit.Id, newDeposit.Balance, newDepositHandler.GetCurrencyByDepositTermsId(newDeposit.TermId).Abbreviation);
                         
-                    newDepositHandler.AddCardHistoryRecord(card.Id,cardHistoryDescription);
+                    newDepositHandler.AddCardHistoryRecord(card.Id, cardHistoryDescription);
                 }
                 else
                 {

@@ -48,7 +48,7 @@ namespace DepositDatabase
                 EndDate = DateTime.Now.AddMonths(depositTerms.Months),
                 Balance = Convert.ToDecimal(depositModel.Amount),
                 DepositWaysOfAccumulation = DepositWaysOfAccumulationData.GetWayById(depositModel.WayOfAccumulationId),
-                Cards = CardsData.GetCardById(cardId, dbContext),
+                Cards = CardsData.GetCardById(cardId),
                 DepositTerms = depositTerms,
                 DepositStates = DepositStatesData.GetStateByName("Opened")
             };
