@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,7 +24,6 @@ namespace DepositDatabase.Model
             if (instance == null)
             {
                 instance = new DepositEntities();
-                Debug.WriteLine("   INSTANCIATED " + instance.GetHashCode());
                 HttpContext.Current.Items[typeof (DepositEntities)] = instance;
                 HttpContext.Current.AddOnRequestCompleted(OnRequestCompleted);
             }
@@ -37,10 +35,8 @@ namespace DepositDatabase.Model
             var instance = (DepositEntities)HttpContext.Current.Items[typeof(DepositEntities)];
             if (instance != null)
             {
-                Debug.WriteLine("   DISPOSING... " + instance.GetHashCode());
                 if (instance.HasUnsavedChanges()) instance.SaveChanges();
                 instance.Dispose();
-                Debug.WriteLine("   DISPOSED " + instance.GetHashCode());
             }
         }
     }
