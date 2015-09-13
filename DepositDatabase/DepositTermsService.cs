@@ -7,7 +7,6 @@ namespace DepositDatabase
         public DomainLogic.Model.DepositTerms GetById(byte id)
         {
             return DepositTermsData.GetTermsById(id).ToDomainLogic();
-            
         }
 
         public List<DomainLogic.Model.DepositTerms> GetList()

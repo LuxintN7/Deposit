@@ -1,8 +1,8 @@
 ﻿@using DepositDatabase.Model
 @using Microsoft.AspNet.Identity
 <div class="row">
-        @using (var db = new DepositEntities())
-        {
+        @{
+            var db = DepositEntitiesExtension.GetInstance();
             var userId = User.Identity.GetUserId();
             var cardInfo = (from cards in db.Cards
                             where cards.AspNetUsers.Id == userId

@@ -6,7 +6,7 @@ namespace DepositDatabase
 {
     public class CardsData
     {
-        public static Cards GetCardById(string id)
+        public static Cards GetCardById(string id) 
         {
             return DepositEntitiesExtension.GetInstance().Cards.First(c => c.Id.Equals(id));
         }

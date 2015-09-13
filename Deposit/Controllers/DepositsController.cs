@@ -152,7 +152,7 @@ namespace Deposit.Controllers
             var waysOfAccumulation = DiContainer.Resolve<IDepositWaysOfAccumulationService>().GetList();
             model = new NewDepositViewModel(cards, waysOfAccumulation);
 
-            return PartialView("NewDeposit", model);
+            return PartialView("NewDeposit", model); 
         }
 
         private bool CardHasEnoughFunds(decimal cardBalance, decimal depositAmount)
