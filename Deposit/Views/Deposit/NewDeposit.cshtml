@@ -1,7 +1,6 @@
 ﻿@using Deposit.Controllers;
 @using DomainLogic
 @using DomainLogic.Model 
-@using Microsoft.Practices.Unity
 @model Deposit.Models.NewDepositViewModel
 
 @{
@@ -14,9 +13,7 @@
     {
         byte depositTermsId = Convert.ToByte(ViewData["termsId"].ToString());
 
-        var currencyHandler = DepositController.DiContainer.Resolve<ICurrenciesService>();
-        var depositTermsHandler = DepositController.DiContainer.Resolve<IDepositTermsService>();
-        var depositTerms = depositTermsHandler.GetById(depositTermsId);
+        var depositTerms = DepositController.DepositTermsService.GetById(depositTermsId);
     
         <div class="row">
 
@@ -29,7 +26,7 @@
                         <td>
                             <b>Currency</b>
                         </td>
-                        <td>@currencyHandler.GetById(depositTerms.CurrencyId).Name</td>
+                        <td>@DepositController.CurrenciesService.GetById(depositTerms.CurrencyId).Name</td>
                     </tr>
                     <tr>
                         <td>
