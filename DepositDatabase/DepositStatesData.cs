@@ -17,6 +17,12 @@ namespace DepositDatabase
             return DepositEntitiesExtension.GetInstance().DepositStates.First(ds => ds.Name.Equals(name));
         }
 
+        // Required for InterestPaymentService
+        public static DepositStates GetStateByName(string name, DepositEntities dbContext)
+        {
+            return dbContext.DepositStates.First(ds => ds.Name.Equals(name));
+        }
+
         public static List<DepositStates> GetList()
         {
             return DepositEntitiesExtension.GetInstance().DepositStates.ToList();

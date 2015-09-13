@@ -9,7 +9,6 @@ namespace DepositDatabase.Handlers
     {
         private readonly DepositEntities dbContext;
 
-
         public InterestPaymentHandler()
         {
             dbContext = new DepositEntities();
@@ -45,7 +44,7 @@ namespace DepositDatabase.Handlers
         public void SetDepositState(int depositId, string stateName)
         {
             var deposit = DepositsData.GetDepositById(depositId, dbContext);
-            deposit.DepositStates = DepositStatesData.GetStateByName(stateName);
+            deposit.DepositStates = DepositStatesData.GetStateByName(stateName, dbContext);
         }
         
         public void AddInterest(int depositId)
@@ -86,6 +85,5 @@ namespace DepositDatabase.Handlers
                 dbContext.Dispose();
             }
         }
-
     }
 }
