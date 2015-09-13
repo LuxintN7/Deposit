@@ -13,33 +13,32 @@ namespace DepositDatabase
 
     public static class DepositsData
     {
-        public static Deposits GetDepositById(int id)
-        {
-            using (var dbContext = new DepositEntities())
-            {
-                return GetDepositById(id, dbContext);
-            }
-        }
-
+        // Required for InterestPaymentService
         public static Deposits GetDepositById(int id, DepositEntities dbContext)
         {
              return dbContext.Deposits.First(d => d.Id == id);
         }
 
-        public static void AddNewDepositToDbContext(Deposits newDeposit, DepositEntities dbContext)
+        public static Deposits GetDepositById(int id)
         {
-            dbContext.Deposits.Add(newDeposit);
+            return DepositEntitiesExtension.GetInstance().Deposits.First(d => d.Id == id);
         }
 
-        public static void AddNewDepositToDbContext(INewDeposit depositModel, string userId, byte termsId, string cardId, DepositEntities dbContext)
+        public static void AddNewDepositToDbContext(Deposits newDeposit)
         {
-            var newDeposit = CreateDeposit(depositModel, userId, termsId, cardId, dbContext);
-            dbContext.Deposits.Add(newDeposit);
+            DepositEntitiesExtension.GetInstance().Deposits.Add(newDeposit);
         }
 
-        public static Deposits CreateDeposit(INewDeposit depositModel, string userId, byte termsId, string cardId, DepositEntities dbContext)
+        public static void AddNewDepositToDbContext(INewDeposit depositModel, string userId, byte termsId, string cardId)
         {
-            var depositTerms = DepositTermsData.GetTermsById(termsId, dbContext);
+            var newDeposit = CreateDeposit(depositModel, userId, termsId, cardId);
+            DepositEntitiesExtension.GetInstance().Deposits.Add(newDeposit);
+        }
+
+        public static Deposits CreateDeposit(INewDeposit depositModel, string userId, byte termsId, string cardId)
+        {
+            var dbContext = DepositEntitiesExtension.GetInstance();
+            var depositTerms = DepositTermsData.GetTermsById(termsId);
 
             var newDeposit = new Deposits()
             {
@@ -48,10 +47,10 @@ namespace DepositDatabase
                 StartDate = DateTime.Now,
                 EndDate = DateTime.Now.AddMonths(depositTerms.Months),
                 Balance = Convert.ToDecimal(depositModel.Amount),
-                DepositWaysOfAccumulation = DepositWaysOfAccumulationData.GetWayById(depositModel.WayOfAccumulationId, dbContext),
+                DepositWaysOfAccumulation = DepositWaysOfAccumulationData.GetWayById(depositModel.WayOfAccumulationId),
                 Cards = CardsData.GetCardById(cardId, dbContext),
                 DepositTerms = depositTerms,
-                DepositStates = DepositStatesData.GetStateByName("Opened", dbContext)
+                DepositStates = DepositStatesData.GetStateByName("Opened")
             };
 
             return newDeposit;

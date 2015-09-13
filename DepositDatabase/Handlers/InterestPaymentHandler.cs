@@ -45,7 +45,7 @@ namespace DepositDatabase.Handlers
         public void SetDepositState(int depositId, string stateName)
         {
             var deposit = DepositsData.GetDepositById(depositId, dbContext);
-            deposit.DepositStates = DepositStatesData.GetStateByName(stateName, dbContext);
+            deposit.DepositStates = DepositStatesData.GetStateByName(stateName);
         }
         
         public void AddInterest(int depositId)

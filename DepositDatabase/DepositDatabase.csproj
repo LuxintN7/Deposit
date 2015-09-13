@@ -123,7 +123,7 @@
     <Compile Include="Model\Currencies.cs">
       <DependentUpon>Deposit.tt</DependentUpon>
     </Compile>
-    <Compile Include="Model\DbContextExtension.cs" />
+    <Compile Include="Model\DepositEntitiesExtension.cs" />
     <Compile Include="Model\Deposit.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

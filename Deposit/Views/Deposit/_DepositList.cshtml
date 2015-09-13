@@ -24,14 +24,14 @@
     </ul>
 
     <div id="deposit-list-content" class="menu-content">
-       @using (var db = new DepositEntities())
-       {
-           var userId = User.Identity.GetUserId();
+       @{ var db = DepositEntitiesExtension.GetInstance();
 
-           var deposits = (from d in db.Deposits
-                           where d.AspNetUsers.Id == userId && (d.DepositStates.Name != "Closed")
-              select d).ToList();
-           
+        var userId = User.Identity.GetUserId();
+
+        var deposits = (from d in db.Deposits
+                        where d.AspNetUsers.Id == userId && (d.DepositStates.Name != "Closed")
+                        select d).ToList();
+
            <table class="table table-bordered">
                <caption>
                    <h4>My deposits</h4>

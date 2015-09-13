@@ -3,7 +3,7 @@ using DomainLogic.Model;
 
 namespace DomainLogic.Handlers
 {
-    public interface ICloseDepositHandler : IDisposable
+    public interface ICloseDepositHandler
     {
         Currencies GetCurrencyByDepositTermsId(byte depositTermsId);
         Deposits GetDepositById(int id);

@@ -78,20 +78,20 @@ namespace Deposit.Controllers
             {
                 ViewData["modelIsValid"] = true;
 
-                using (var addCardHandler = DiContainer.Resolve<IAddCardHandler>())
+                var addCardHandler = DiContainer.Resolve<IAddCardHandler>();
+                
+                var card = addCardHandler.GetCardByRequisites(model.Id, model.ExpirationMonth, model.ExpirationYear, model.SecretCode);
+
+                if (card == null)
                 {
-                    var card = addCardHandler.GetCardByRequisites(model.Id, model.ExpirationMonth, model.ExpirationYear, model.SecretCode);
-
-                    if (card == null)
-                    {
-                        return PartialView("_Message", new MessageViewModel("A card with such requisites does not exist.", false));
-                    }
-
-                    addCardHandler.SetCardOwnerId(card,User.Identity.GetUserId());
-
-                    return RedirectToAction("GeneralInfoContent");
+                    return PartialView("_Message", new MessageViewModel("A card with such requisites does not exist.", false));
                 }
+
+                addCardHandler.SetCardOwnerId(card,User.Identity.GetUserId());
+
+                return RedirectToAction("GeneralInfoContent");
             }
+            
 
             ViewData["modelIsValid"] = false;
             return PartialView("AddCard");
@@ -123,30 +123,30 @@ namespace Deposit.Controllers
 
             if (ModelState.IsValid)
             {
-                using (var newDepositHandler = DiContainer.Resolve<INewDepositHandler>())
+                var newDepositHandler = DiContainer.Resolve<INewDepositHandler>();
+                
+                var card = newDepositHandler.GetCardById(model.CardId);
+
+                if (CardHasEnoughFunds(card.Balance, model.Amount))
                 {
-                    var card = newDepositHandler.GetCardById(model.CardId);
+                    var newDeposit = newDepositHandler
+                        .CreateNewDeposit(model.Amount,model.WayOfAccumulationId, userId,termsId, card.Id);
 
-                    if (CardHasEnoughFunds(card.Balance, model.Amount))
-                    {
-                        var newDeposit = newDepositHandler
-                            .CreateNewDeposit(model.Amount,model.WayOfAccumulationId, userId,termsId, card.Id);
+                    newDepositHandler.DecreaseCardBalanceByDepositAmount(newDeposit.InitialAmount,card.Id);
 
-                        newDepositHandler.DecreaseCardBalanceByDepositAmount(newDeposit.InitialAmount,card.Id);
-
-                        string cardHistoryDescription = String.Format("Opening deposit #{0} of {1} ({2}).",
-                            newDeposit.Id, newDeposit.Balance, newDepositHandler.GetCurrencyByDepositTermsId(newDeposit.TermId).Abbreviation);
+                    string cardHistoryDescription = String.Format("Opening deposit #{0} of {1} ({2}).",
+                        newDeposit.Id, newDeposit.Balance, newDepositHandler.GetCurrencyByDepositTermsId(newDeposit.TermId).Abbreviation);
                         
-                        newDepositHandler.AddCardHistoryRecord(card.Id,cardHistoryDescription);
-                    }
-                    else
-                    {
-                        return PartialView("_Message", new MessageViewModel("Not enough money.", false));
-                    }
-
-                    return PartialView("_Message", new MessageViewModel("Deposit has been opened successfully.", true));
+                    newDepositHandler.AddCardHistoryRecord(card.Id,cardHistoryDescription);
                 }
+                else
+                {
+                    return PartialView("_Message", new MessageViewModel("Not enough money.", false));
+                }
+
+                return PartialView("_Message", new MessageViewModel("Deposit has been opened successfully.", true));
             }
+            
 
             var cards = DiContainer.Resolve<ICardsService>().CreateUserCardsByCurrencyList(userId, termsId);
             var waysOfAccumulation = DiContainer.Resolve<IDepositWaysOfAccumulationService>().GetList();
@@ -164,19 +164,18 @@ namespace Deposit.Controllers
 
         public ActionResult CloseDeposit(int depositId, string cardId)
         {
-            using (var closeDepositHandler = DiContainer.Resolve<ICloseDepositHandler>())
-            {
-                var deposit = closeDepositHandler.GetDepositById(depositId);
+            var closeDepositHandler = DiContainer.Resolve<ICloseDepositHandler>();
+            
+            var deposit = closeDepositHandler.GetDepositById(depositId);
 
-                closeDepositHandler.IncreaseCardBalanceByDepositBalance(deposit.Balance, cardId);
+            closeDepositHandler.IncreaseCardBalanceByDepositBalance(deposit.Balance, cardId);
 
-                closeDepositHandler.SetDepositState("Closed", depositId);
+            closeDepositHandler.SetDepositState("Closed", depositId);
 
-                var cardHistoryDescription = String.Format("Closing deposit #{0}. Income: {1} ({2}).",
-                    deposit.Id, deposit.Balance, closeDepositHandler.GetCurrencyByDepositTermsId(deposit.TermId).Abbreviation);
+            var cardHistoryDescription = String.Format("Closing deposit #{0}. Income: {1} ({2}).",
+                deposit.Id, deposit.Balance, closeDepositHandler.GetCurrencyByDepositTermsId(deposit.TermId).Abbreviation);
                 
-                closeDepositHandler.AddCardHistoryRecord(cardId, cardHistoryDescription);
-            }
+            closeDepositHandler.AddCardHistoryRecord(cardId, cardHistoryDescription);
 
             return PartialView("_Message", new MessageViewModel("Deposit has been closed successfully.", true));
         }
