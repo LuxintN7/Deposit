@@ -7,7 +7,7 @@ namespace DepositDatabase.Handlers
     {      
         public DomainLogic.Model.Cards GetCardByRequisites(string id, string expirationMonth, string expirationYear, string secretCode)
         {
-            var cardToAdd = (from cards in DepositEntitiesExtension.GetInstance().Cards
+            var cardToAdd = (from cards in DepositDbContextExtension.GetInstance().Cards
                         where cards.Id == id
                               && cards.ExpirationMonth == expirationMonth
                               && cards.ExpirationYear == expirationYear
@@ -18,7 +18,7 @@ namespace DepositDatabase.Handlers
 
         public void SetCardOwnerId(DomainLogic.Model.Cards card, string userOwnerId)
         {
-            var dbCard = DepositEntitiesExtension.GetInstance().Cards.Find(card.Id);
+            var dbCard = DepositDbContextExtension.GetInstance().Cards.Find(card.Id);
             dbCard.UserOwnerId = userOwnerId;
         }
     }

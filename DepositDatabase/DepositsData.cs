@@ -14,30 +14,30 @@ namespace DepositDatabase
     public static class DepositsData
     {
         // Required for InterestPaymentService
-        public static Deposits GetDepositById(int id, DepositEntities dbContext)
+        public static Deposits GetDepositById(int id, DepositDbContext dbContext)
         {
              return dbContext.Deposits.First(d => d.Id == id);
         }
 
         public static Deposits GetDepositById(int id)
         {
-            return DepositEntitiesExtension.GetInstance().Deposits.First(d => d.Id == id);
+            return DepositDbContextExtension.GetInstance().Deposits.First(d => d.Id == id);
         }
 
         public static void AddNewDepositToDbContext(Deposits newDeposit)
         {
-            DepositEntitiesExtension.GetInstance().Deposits.Add(newDeposit);
+            DepositDbContextExtension.GetInstance().Deposits.Add(newDeposit);
         }
 
         public static void AddNewDepositToDbContext(INewDeposit depositModel, string userId, byte termsId, string cardId)
         {
             var newDeposit = CreateDeposit(depositModel, userId, termsId, cardId);
-            DepositEntitiesExtension.GetInstance().Deposits.Add(newDeposit);
+            DepositDbContextExtension.GetInstance().Deposits.Add(newDeposit);
         }
 
         public static Deposits CreateDeposit(INewDeposit depositModel, string userId, byte termsId, string cardId)
         {
-            var dbContext = DepositEntitiesExtension.GetInstance();
+            var dbContext = DepositDbContextExtension.GetInstance();
             var depositTerms = DepositTermsData.GetTermsById(termsId);
 
             var newDeposit = new Deposits()

@@ -5,6 +5,13 @@ using DomainLogic;
 using DomainLogic.Handlers;
 using Microsoft.Practices.Unity;
 using Microsoft.Practices.Unity.Configuration;
+using System.Data.Entity;
+using Deposit.Models;
+using Microsoft.AspNet.Identity;
+using Deposit.Controllers;
+using DepositDatabase.Model;
+using Microsoft.AspNet.Identity.EntityFramework;
+using DepositDatabase.Model.DbContextFactories;
 
 namespace Deposit.App_Start
 {
@@ -47,6 +54,15 @@ namespace Deposit.App_Start
             container.RegisterType<IAddCardHandler, AddCardHandler>(new InjectionConstructor());
             container.RegisterType<INewDepositHandler, NewDepositHandler>(new InjectionConstructor());
             container.RegisterType<ICloseDepositHandler, CloseDepositHandler>(new InjectionConstructor());
+            
+            container.RegisterType<DbContext, DepositDbContext>(new InjectionConstructor());
+            container.RegisterType<IDepositDbContextFactory, DepositDbContextFactoryWithPresetData>(new InjectionConstructor());
+
+            container.RegisterType<UserManager<AspNetUser>>(new HierarchicalLifetimeManager());
+            container.RegisterType<IUserStore<AspNetUser>, UserStore<AspNetUser>>(new HierarchicalLifetimeManager());
+            container.RegisterType<AccountController>(new InjectionConstructor());
+
+            container.RegisterType<IUserStore<AspNetUser>, UserStore<AspNetUser>>(new InjectionConstructor());
         }
     }
 }

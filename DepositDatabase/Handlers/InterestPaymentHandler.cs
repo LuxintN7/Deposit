@@ -7,11 +7,11 @@ namespace DepositDatabase.Handlers
 {
     public class InterestPaymentHandler : DomainLogic.Handlers.IInterestPaymentHandler
     {
-        private readonly DepositEntities dbContext;
+        private readonly DepositDbContext dbContext;
 
         public InterestPaymentHandler()
         {
-            dbContext = new DepositEntities();
+            dbContext = new DepositDbContext();
         }
 
         public List<DomainLogic.Model.Deposits> GetActiveDeposits()

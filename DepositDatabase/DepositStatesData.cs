@@ -8,24 +8,24 @@ namespace DepositDatabase
     {
         public static DepositStates GetById(byte id)
         {
-            return DepositEntitiesExtension.GetInstance().DepositStates.First(d => d.Id == id);
+            return DepositDbContextExtension.GetInstance().DepositStates.First(d => d.Id == id);
             
         }
 
         public static DepositStates GetStateByName(string name)
         {
-            return DepositEntitiesExtension.GetInstance().DepositStates.First(ds => ds.Name.Equals(name));
+            return DepositDbContextExtension.GetInstance().DepositStates.First(ds => ds.Name.Equals(name));
         }
 
         // Required for InterestPaymentService
-        public static DepositStates GetStateByName(string name, DepositEntities dbContext)
+        public static DepositStates GetStateByName(string name, DepositDbContext dbContext)
         {
             return dbContext.DepositStates.First(ds => ds.Name.Equals(name));
         }
 
         public static List<DepositStates> GetList()
         {
-            return DepositEntitiesExtension.GetInstance().DepositStates.ToList();
+            return DepositDbContextExtension.GetInstance().DepositStates.ToList();
         }
     }
 }

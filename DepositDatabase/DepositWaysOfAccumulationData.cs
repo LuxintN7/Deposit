@@ -8,12 +8,12 @@ namespace DepositDatabase
     {
         public static DepositWaysOfAccumulation GetWayById(byte wayId)
         {
-            return DepositEntitiesExtension.GetInstance().DepositWaysOfAccumulation.First(d => d.Id == wayId);
+            return DepositDbContextExtension.GetInstance().DepositWaysOfAccumulation.First(d => d.Id == wayId);
         }
 
         public static List<DepositWaysOfAccumulation> GetList()
         {
-            return DepositEntitiesExtension.GetInstance().DepositWaysOfAccumulation.ToList();
+            return DepositDbContextExtension.GetInstance().DepositWaysOfAccumulation.ToList();
         }
     }
 }

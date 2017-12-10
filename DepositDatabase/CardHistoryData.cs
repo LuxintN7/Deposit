@@ -8,11 +8,11 @@ namespace DepositDatabase
         public static void AddRecordToDbContext(Cards card, string description)
         {
             var newRecord = CreateRecord(card, description);
-            DepositEntitiesExtension.GetInstance().CardHistory.Add(newRecord);
+            DepositDbContextExtension.GetInstance().CardHistory.Add(newRecord);
         }
         
         // Required for InterestPaymentService
-        public static void AddRecordToDbContext(Cards card, string description, DepositEntities dbContext)
+        public static void AddRecordToDbContext(Cards card, string description, DepositDbContext dbContext)
         {
             var newRecord = CreateRecord(card, description);
             dbContext.CardHistory.Add(newRecord);

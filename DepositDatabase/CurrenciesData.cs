@@ -12,12 +12,12 @@ namespace DepositDatabase
     {
         public static Currencies GetCurrencyById(byte id)
         {
-            return DepositEntitiesExtension.GetInstance().Currencies.Find(id);
+            return DepositDbContextExtension.GetInstance().Currencies.Find(id);
         }
 
         public static List<Currencies> GetList()
         {
-            return DepositEntitiesExtension.GetInstance().Currencies.ToList();
+            return DepositDbContextExtension.GetInstance().Currencies.ToList();
         }
     }
 }

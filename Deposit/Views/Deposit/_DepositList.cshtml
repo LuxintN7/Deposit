@@ -24,7 +24,7 @@
     </ul>
 
     <div id="deposit-list-content" class="menu-content">
-       @{ var db = DepositEntitiesExtension.GetInstance();
+       @{ var db = DepositDbContextExtension.GetInstance();
 
         var userId = User.Identity.GetUserId();
 

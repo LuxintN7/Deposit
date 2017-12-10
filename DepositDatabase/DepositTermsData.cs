@@ -9,12 +9,12 @@ namespace DepositDatabase
     {
         public static DepositTerms GetTermsById(byte id)
         {
-            return DepositEntitiesExtension.GetInstance().DepositTerms.First(d => d.Id == id);
+            return DepositDbContextExtension.GetInstance().DepositTerms.First(d => d.Id == id);
         }
 
         public static List<DepositTerms> GetList()
         {
-            return DepositEntitiesExtension.GetInstance().DepositTerms.ToList();
+            return DepositDbContextExtension.GetInstance().DepositTerms.ToList();
         }
     }
 }

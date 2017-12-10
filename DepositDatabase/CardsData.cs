@@ -8,11 +8,11 @@ namespace DepositDatabase
     {
         public static Cards GetCardById(string id) 
         {
-            return DepositEntitiesExtension.GetInstance().Cards.First(c => c.Id.Equals(id));
+            return DepositDbContextExtension.GetInstance().Cards.First(c => c.Id.Equals(id));
         }
 
         // Required for InterestPaymentService
-        public static Cards GetCardById(string id, DepositEntities dbContext)
+        public static Cards GetCardById(string id, DepositDbContext dbContext)
         {
             return dbContext.Cards.First(c => c.Id.Equals(id));
         }
@@ -21,7 +21,7 @@ namespace DepositDatabase
         {
             var currencyId = DepositTermsData.GetTermsById(termsId).CurrencyId;
 
-            List<Cards> cards = (from c in DepositEntitiesExtension.GetInstance().Cards
+            List<Cards> cards = (from c in DepositDbContextExtension.GetInstance().Cards
                 where c.AspNetUsers.Id == userId && c.Currencies.Id == currencyId
                 select c).ToList();
 
@@ -30,7 +30,7 @@ namespace DepositDatabase
 
         public static List<Cards> GetList()
         {
-            return DepositEntitiesExtension.GetInstance().Cards.ToList();
+            return DepositDbContextExtension.GetInstance().Cards.ToList();
         }
     }
 }

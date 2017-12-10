@@ -2,7 +2,7 @@
 @using Microsoft.AspNet.Identity
 <div class="row">
         @{
-            var db = DepositEntitiesExtension.GetInstance();
+            var db = DepositDbContextExtension.GetInstance();
             var userId = User.Identity.GetUserId();
             var cardInfo = (from cards in db.Cards
                             where cards.AspNetUsers.Id == userId
