@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DomainLogic.Model
 {
-    public class Deposits
+    public class Deposit
     {
         public int Id { get; set; }
 

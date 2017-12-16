@@ -1,6 +1,6 @@
 namespace DomainLogic.Model
 {
-    public class AspNetUserClaims
+    public class AspNetUserClaim
     {
         public int Id { get; set; }
         public string UserId { get; set; }

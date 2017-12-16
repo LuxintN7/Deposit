@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DomainLogic.Model
 {
-    public class DepositWaysOfAccumulation
+    public class DepositWayOfAccumulation
     {
         public byte Id { get; set; }
 

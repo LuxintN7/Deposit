@@ -27,11 +27,12 @@ namespace DepositDatabase.Model
 
         private static void OnRequestCompleted(HttpContext context)
         {
-            var instance = (DepositDbContext)HttpContext.Current.Items[typeof(DepositDbContext)];
-            if (instance != null)
+            var instance = HttpContext.Current.Items[typeof(DepositDbContext)];
+            if (instance is DepositDbContext dbContext)
             {
-                if (instance.HasUnsavedChanges()) instance.SaveChanges();
-                instance.Dispose();
+                if (dbContext.HasUnsavedChanges()) dbContext.SaveChanges();
+                //HttpContext.Current.Items.Remove(instance); TODO: is it needed here?
+                dbContext.Dispose();
             }
         }
     }

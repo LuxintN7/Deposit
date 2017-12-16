@@ -1,18 +1,17 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using DomainLogic.Model;
 
 namespace DepositDatabase.Model
 {
-    public class Deposits
+    public class Deposit
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         public string UserOwnerId { get; set; }
-        public byte TermId { get; set; }
+        public byte DepositTermId { get; set; }
 
         [Display(Name = "Initial amount")]
         public decimal InitialAmount { get; set; }
@@ -25,31 +24,30 @@ namespace DepositDatabase.Model
 
         [Display(Name = "End date")]
         public DateTime EndDate { get; set; }
-
-
+        
         [Display(Name = "Last interest payment date")]
-        public Nullable<DateTime> LastInterestPaymentDate { get; set; }
+        public DateTime? LastInterestPaymentDate { get; set; }
 
-        public byte StateId { get; set; }
-        public byte WayOfAccumulationId { get; set; }
-        public string CardForAccumulationId { get; set; }
+        public byte DepositStateId { get; set; }
+        public byte DepositWayOfAccumulationId { get; set; }
+        public string CardId { get; set; }
 
         [Display(Name = "Deposit name")]
         public string Name { get; set; }
 
         [Display(Name = "Owner")]
-        public virtual AspNetUser AspNetUsers { get; set; }
+        public virtual AspNetUser UserOwner { get; set; }
 
         [Display(Name = "Card for accumulation")]
-        public virtual Cards Cards { get; set; }
+        public virtual Card Card { get; set; }
 
         [Display(Name = "State")]
-        public virtual DepositStates DepositStates { get; set; }
+        public virtual DepositState DepositState { get; set; }
 
         [Display(Name = "Deposit terms")]
-        public virtual DepositTerms DepositTerms { get; set; }
+        public virtual DepositTerm DepositTerm { get; set; }
 
         [Display(Name = "Way of accumulation")]
-        public virtual DepositWaysOfAccumulation DepositWaysOfAccumulation { get; set; }
+        public virtual DepositWayOfAccumulation DepositWayOfAccumulation { get; set; }
     }
 }

@@ -4,15 +4,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DepositDatabase.Model
 {
-    public class DepositTerms
+    public class DepositTerm
     {
-        public DepositTerms()
+        public DepositTerm()
         {
-            Deposits = new HashSet<Deposits>();
+            Deposits = new HashSet<Deposit>();
         }
 
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public byte Id { get; set; }
 
         public byte CurrencyId { get; set; }
@@ -27,8 +27,8 @@ namespace DepositDatabase.Model
         public string Name { get; set; }
 
         [Display(Name = "Currency")]
-        public virtual Currencies Currencies { get; set; }
+        public virtual Currency Currency { get; set; }
 
-        public virtual ICollection<Deposits> Deposits { get; set; }
+        public virtual ICollection<Deposit> Deposits { get; set; }
     }
 }

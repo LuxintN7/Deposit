@@ -1,18 +1,21 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNet.Identity.EntityFramework;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DepositDatabase.Model
 {
-    public class Cards
+    public class Card
     {
-        public Cards()
+        public Card()
         {
-            CardHistory = new HashSet<CardHistory>();
-            Deposits = new HashSet<Deposits>();
+            CardHistoryRecords = new HashSet<CardHistory>();
+            Deposits = new HashSet<Deposit>();
         }
-    
+
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public string Id { get; set; }
+
         public string UserOwnerId { get; set; }
 
         [Display(Name = "Expiration month")]
@@ -30,13 +33,13 @@ namespace DepositDatabase.Model
         public decimal Balance { get; set; }
         
         [Display(Name = "Owner")]
-        public virtual IdentityUser AspNetUsers { get; set; }
-
-        public virtual ICollection<CardHistory> CardHistory { get; set; }
+        public virtual AspNetUser UserOwner { get; set; }
 
         [Display(Name = "Currency")]
-        public virtual Currencies Currencies { get; set; }
+        public virtual Currency Currency { get; set; }
 
-        public virtual ICollection<Deposits> Deposits { get; set; }
+        public virtual ICollection<CardHistory> CardHistoryRecords { get; set; }
+        
+        public virtual ICollection<Deposit> Deposits { get; set; }
     }
 }

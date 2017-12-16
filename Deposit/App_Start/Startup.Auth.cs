@@ -1,6 +1,5 @@
 ﻿using System;
 using Deposit.App_Start;
-using Deposit.Models;
 using DepositDatabase.Model;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;

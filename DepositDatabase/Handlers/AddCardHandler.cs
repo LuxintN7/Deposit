@@ -5,7 +5,7 @@ namespace DepositDatabase.Handlers
 {
     public class AddCardHandler : DomainLogic.Handlers.IAddCardHandler
     {      
-        public DomainLogic.Model.Cards GetCardByRequisites(string id, string expirationMonth, string expirationYear, string secretCode)
+        public DomainLogic.Model.Card GetCardByRequisites(string id, string expirationMonth, string expirationYear, string secretCode)
         {
             var cardToAdd = (from cards in DepositDbContextExtension.GetInstance().Cards
                         where cards.Id == id
@@ -16,7 +16,7 @@ namespace DepositDatabase.Handlers
             return (cardToAdd == null) ? null : cardToAdd.ToDomainLogic();
         }
 
-        public void SetCardOwnerId(DomainLogic.Model.Cards card, string userOwnerId)
+        public void SetCardOwnerId(DomainLogic.Model.Card card, string userOwnerId)
         {
             var dbCard = DepositDbContextExtension.GetInstance().Cards.Find(card.Id);
             dbCard.UserOwnerId = userOwnerId;

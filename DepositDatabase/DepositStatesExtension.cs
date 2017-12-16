@@ -5,18 +5,18 @@ namespace DepositDatabase
 {
     public static class DepositStatesExtension
     {
-        public static DomainLogic.Model.DepositStates ToDomainLogic(this DepositStates state)
+        public static DomainLogic.Model.DepositState ToDomainLogic(this DepositState state)
         {
-            return new DomainLogic.Model.DepositStates()
+            return new DomainLogic.Model.DepositState()
             { 
                Id = state.Id,
                Name = state.Name
             };
         }
 
-        public static List<DomainLogic.Model.DepositStates> ToDomainLogic(this List<DepositStates> list)
+        public static List<DomainLogic.Model.DepositState> ToDomainLogic(this List<DepositState> list)
         {
-            var states = new List<DomainLogic.Model.DepositStates>();
+            var states = new List<DomainLogic.Model.DepositState>();
 
             foreach (var state in list)
             {

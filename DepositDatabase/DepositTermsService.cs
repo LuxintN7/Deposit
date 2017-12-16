@@ -4,12 +4,12 @@ namespace DepositDatabase
 {
     public class DepositTermsService : DomainLogic.IDepositTermsService
     {
-        public DomainLogic.Model.DepositTerms GetById(byte id)
+        public DomainLogic.Model.DepositTerm GetById(byte id)
         {
-            return DepositTermsData.GetTermsById(id).ToDomainLogic();
+            return DepositTermsData.GetTermById(id).ToDomainLogic();
         }
 
-        public List<DomainLogic.Model.DepositTerms> GetList()
+        public List<DomainLogic.Model.DepositTerm> GetList()
         {
             return DepositTermsData.GetList().ToDomainLogic();
         }

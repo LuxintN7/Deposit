@@ -6,9 +6,9 @@ namespace DepositDatabase
 {
     public static class CardsExtension
     {
-        public static DomainLogic.Model.Cards ToDomainLogic(this Cards card)
+        public static DomainLogic.Model.Card ToDomainLogic(this Card card)
         {
-            return new DomainLogic.Model.Cards()
+            return new DomainLogic.Model.Card()
             {
                 Id = String.Copy(card.Id),
                 UserOwnerId = (card.UserOwnerId == null) ? null : String.Copy(card.UserOwnerId),
@@ -20,9 +20,9 @@ namespace DepositDatabase
             };
         }
 
-        public static List<DomainLogic.Model.Cards> ToDomainLogic(this List<Cards> list)
+        public static List<DomainLogic.Model.Card> ToDomainLogic(this List<Card> list)
         {
-            var domainLogicCards = new List<DomainLogic.Model.Cards>();
+            var domainLogicCards = new List<DomainLogic.Model.Card>();
 
             foreach (var card in list)
             {

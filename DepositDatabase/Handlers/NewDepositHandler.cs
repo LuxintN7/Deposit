@@ -1,35 +1,36 @@
 ﻿using System;
 using DepositDatabase.Model;
+using DepositState = DomainLogic.Model.DepositState;
 
 namespace DepositDatabase.Handlers
 {
     public class NewDepositHandler : DomainLogic.Handlers.INewDepositHandler
     {
-        public DomainLogic.Model.Cards GetCardById(string id)
+        public DomainLogic.Model.Card GetCardById(string id)
         {
             return CardsData.GetCardById(id).ToDomainLogic();
         }
 
-        public DomainLogic.Model.Currencies GetCurrencyByDepositTermsId(byte termsId)
+        public DomainLogic.Model.Currency GetCurrencyByDepositTermsId(byte termsId)
         {
-            return DepositTermsData.GetTermsById(termsId).Currencies.ToDomainLogic();
+            return DepositTermsData.GetTermById(termsId).Currency.ToDomainLogic();
         }
 
-        public DomainLogic.Model.Deposits CreateNewDeposit(decimal depositAmount, byte wayOfAccumulationId, string userId, byte termsId, string cardId)
+        public DomainLogic.Model.Deposit CreateNewDeposit(decimal depositAmount, byte wayOfAccumulationId, string userId, byte termsId, string cardId)
         {
-            var depositTerms = DepositTermsData.GetTermsById(termsId);
+            var depositTerm = DepositTermsData.GetTermById(termsId);
 
-            var newDeposit = new Deposits()
+            var newDeposit = new Deposit()
             {
                 UserOwnerId = userId,
                 InitialAmount = depositAmount,
                 StartDate = DateTime.Now,
-                EndDate = DateTime.Now.AddMonths(depositTerms.Months),
+                EndDate = DateTime.Now.AddMonths(depositTerm.Months),
                 Balance = depositAmount,
-                DepositWaysOfAccumulation = DepositWaysOfAccumulationData.GetWayById(wayOfAccumulationId),
-                Cards = CardsData.GetCardById(cardId),
-                DepositTerms = depositTerms,
-                DepositStates = DepositStatesData.GetStateByName("Opened")
+                DepositWayOfAccumulation = DepositWaysOfAccumulationData.GetWayById(wayOfAccumulationId),
+                Card = CardsData.GetCardById(cardId),
+                DepositTerm = depositTerm,
+                DepositState = DepositStatesData.GetStateByName(DepositState.OpenedDepositStateName)
             };
 
             DepositsData.AddNewDepositToDbContext(newDeposit);

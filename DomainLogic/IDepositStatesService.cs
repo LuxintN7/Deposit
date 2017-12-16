@@ -2,8 +2,8 @@
 
 namespace DomainLogic
 {
-    public interface IDepositStatesService : IDbEntityService<DepositStates, byte>
+    public interface IDepositStatesService : IDbEntityService<DepositState, byte>
     {
-        DepositStates GetByName(string name);
+        DepositState GetByName(string name);
     }
 }

@@ -6,29 +6,29 @@ namespace DepositDatabase
 {
     public class CardsData
     {
-        public static Cards GetCardById(string id) 
+        public static Card GetCardById(string id) 
         {
             return DepositDbContextExtension.GetInstance().Cards.First(c => c.Id.Equals(id));
         }
 
         // Required for InterestPaymentService
-        public static Cards GetCardById(string id, DepositDbContext dbContext)
+        public static Card GetCardById(string id, DepositDbContext dbContext)
         {
             return dbContext.Cards.First(c => c.Id.Equals(id));
         }
 
-        public static List<Cards> CreateUserCardsByCurrencyList(string userId, byte termsId)
+        public static List<Card> CreateUserCardsByCurrencyList(string userId, byte termsId)
         {
-            var currencyId = DepositTermsData.GetTermsById(termsId).CurrencyId;
+            var currencyId = DepositTermsData.GetTermById(termsId).CurrencyId;
 
-            List<Cards> cards = (from c in DepositDbContextExtension.GetInstance().Cards
-                where c.AspNetUsers.Id == userId && c.Currencies.Id == currencyId
+            List<Card> cards = (from c in DepositDbContextExtension.GetInstance().Cards
+                where c.UserOwner.Id == userId && c.Currency.Id == currencyId
                 select c).ToList();
 
             return cards;
         }
 
-        public static List<Cards> GetList()
+        public static List<Card> GetList()
         {
             return DepositDbContextExtension.GetInstance().Cards.ToList();
         }

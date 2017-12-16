@@ -1,27 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using DepositDatabase.Model;
 
 namespace DepositDatabase
 {
     public static class DepositWaysOfAccumulationExtension
     {
-        public static DomainLogic.Model.DepositWaysOfAccumulation ToDomainLogic(
-            this DepositWaysOfAccumulation wayOfAccumulation)
+        public static DomainLogic.Model.DepositWayOfAccumulation ToDomainLogic(
+            this DepositWayOfAccumulation wayOfAccumulation)
         {
-            return new DomainLogic.Model.DepositWaysOfAccumulation()
+            return new DomainLogic.Model.DepositWayOfAccumulation
             {
                 Id = wayOfAccumulation.Id,
                 Name = wayOfAccumulation.Name
             };
         }
 
-        public static List<DomainLogic.Model.DepositWaysOfAccumulation> ToDomainLogic(this List<DepositWaysOfAccumulation> list)
+        public static List<DomainLogic.Model.DepositWayOfAccumulation> ToDomainLogic(this List<DepositWayOfAccumulation> list)
         {
-            var domainLogicWays = new List<DomainLogic.Model.DepositWaysOfAccumulation>();
+            var domainLogicWays = new List<DomainLogic.Model.DepositWayOfAccumulation>();
 
             foreach (var way in list)
             {

@@ -6,12 +6,12 @@ namespace DepositDatabase
 {
     public class DepositWaysOfAccumulationData
     {
-        public static DepositWaysOfAccumulation GetWayById(byte wayId)
+        public static DepositWayOfAccumulation GetWayById(byte wayId)
         {
             return DepositDbContextExtension.GetInstance().DepositWaysOfAccumulation.First(d => d.Id == wayId);
         }
 
-        public static List<DepositWaysOfAccumulation> GetList()
+        public static List<DepositWayOfAccumulation> GetList()
         {
             return DepositDbContextExtension.GetInstance().DepositWaysOfAccumulation.ToList();
         }

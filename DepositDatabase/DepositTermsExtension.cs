@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using DepositDatabase.Model;
 
 namespace DepositDatabase
 {
     public static class DepositTermsExtension
     {
-        public static DomainLogic.Model.DepositTerms ToDomainLogic(this DepositTerms terms)
+        public static DomainLogic.Model.DepositTerm ToDomainLogic(this DepositTerm terms)
         {
-            return new DomainLogic.Model.DepositTerms()
+            return new DomainLogic.Model.DepositTerm()
             {
                 Id = terms.Id,
                 CurrencyId = terms.CurrencyId,
@@ -20,9 +16,9 @@ namespace DepositDatabase
             };
         }
 
-        public static List<DomainLogic.Model.DepositTerms> ToDomainLogic(this List<DepositTerms> list)
+        public static List<DomainLogic.Model.DepositTerm> ToDomainLogic(this List<DepositTerm> list)
         {
-            var terms = new List<DomainLogic.Model.DepositTerms>();
+            var terms = new List<DomainLogic.Model.DepositTerm>();
 
             foreach (var term in list)
             {

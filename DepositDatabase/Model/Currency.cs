@@ -5,16 +5,16 @@ using System.Linq;
 
 namespace DepositDatabase.Model
 {
-    public class Currencies
+    public class Currency
     {
-        public Currencies()
+        public Currency()
         {
-            Cards = new HashSet<Cards>();
-            DepositTerms = new HashSet<DepositTerms>();
+            Cards = new HashSet<Card>();
+            DepositTerms = new HashSet<DepositTerm>();
         }
 
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public byte Id { get; set; }
         
         [Display(Name = "Currency")]
@@ -23,10 +23,10 @@ namespace DepositDatabase.Model
         [Display(Name = "Currency")]
         public string Abbreviation { get; set; }
     
-        public virtual ICollection<Cards> Cards { get; set; }
-        public virtual ICollection<DepositTerms> DepositTerms { get; set; }
+        public virtual ICollection<Card> Cards { get; set; }
+        public virtual ICollection<DepositTerm> DepositTerms { get; set; }
 
-        public static Currencies GetById(byte id, DepositDbContext context)
+        public static Currency GetById(int id, DepositDbContext context)
         {
             return context.Currencies.FirstOrDefault(c => c.Id == id);
         }

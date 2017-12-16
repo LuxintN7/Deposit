@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using DepositDatabase.Model;
+using DepositState = DomainLogic.Model.DepositState;
 
 namespace DepositDatabase
 {
@@ -14,17 +15,17 @@ namespace DepositDatabase
     public static class DepositsData
     {
         // Required for InterestPaymentService
-        public static Deposits GetDepositById(int id, DepositDbContext dbContext)
+        public static Deposit GetDepositById(int id, DepositDbContext dbContext)
         {
              return dbContext.Deposits.First(d => d.Id == id);
         }
 
-        public static Deposits GetDepositById(int id)
+        public static Deposit GetDepositById(int id)
         {
             return DepositDbContextExtension.GetInstance().Deposits.First(d => d.Id == id);
         }
 
-        public static void AddNewDepositToDbContext(Deposits newDeposit)
+        public static void AddNewDepositToDbContext(Deposit newDeposit)
         {
             DepositDbContextExtension.GetInstance().Deposits.Add(newDeposit);
         }
@@ -35,22 +36,22 @@ namespace DepositDatabase
             DepositDbContextExtension.GetInstance().Deposits.Add(newDeposit);
         }
 
-        public static Deposits CreateDeposit(INewDeposit depositModel, string userId, byte termsId, string cardId)
+        public static Deposit CreateDeposit(INewDeposit depositModel, string userId, byte termsId, string cardId)
         {
             var dbContext = DepositDbContextExtension.GetInstance();
-            var depositTerms = DepositTermsData.GetTermsById(termsId);
+            var depositTerms = DepositTermsData.GetTermById(termsId);
 
-            var newDeposit = new Deposits()
+            var newDeposit = new Deposit()
             {
                 UserOwnerId = userId,
                 InitialAmount = depositModel.Amount,
                 StartDate = DateTime.Now,
                 EndDate = DateTime.Now.AddMonths(depositTerms.Months),
                 Balance = Convert.ToDecimal(depositModel.Amount),
-                DepositWaysOfAccumulation = DepositWaysOfAccumulationData.GetWayById(depositModel.WayOfAccumulationId),
-                Cards = CardsData.GetCardById(cardId),
-                DepositTerms = depositTerms,
-                DepositStates = DepositStatesData.GetStateByName("Opened")
+                DepositWayOfAccumulation = DepositWaysOfAccumulationData.GetWayById(depositModel.WayOfAccumulationId),
+                Card = CardsData.GetCardById(cardId),
+                DepositTerm = depositTerms,
+                DepositState = DepositStatesData.GetStateByName(DepositState.OpenedDepositStateName)
             };
 
             return newDeposit;

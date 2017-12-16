@@ -5,7 +5,7 @@
             var db = DepositDbContextExtension.GetInstance();
             var userId = User.Identity.GetUserId();
             var cardInfo = (from cards in db.Cards
-                            where cards.AspNetUsers.Id == userId
+                            where cards.UserOwner.Id == userId
                             select cards).ToList();
 
             // Card list
@@ -26,7 +26,7 @@
                                         <th class="text-center width-75-perc">Balance</th>
                                     </tr>
                                     <tr>
-                                        <td class="text-center">@cardInfo[i].Currencies.Name</td>
+                                        <td class="text-center">@cardInfo[i].Currency.Name</td>
                                         <td class="text-right">@cardInfo[i].Balance</td>
                                     </tr>
                                 </table>
@@ -51,8 +51,8 @@
                         {
                             var cardId = cardInfo[i].Id;
                             var cardHistory = (from ch in db.CardHistory
-                                               join cards in db.Cards on ch.Cards.Id equals cards.Id
-                                               where ch.Cards.Id == cardId
+                                               join cards in db.Cards on ch.Card.Id equals cards.Id
+                                               where ch.Card.Id == cardId
                                                orderby ch.DateTime descending
                                                select ch).Take(5).ToList();
 

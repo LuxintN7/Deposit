@@ -3,9 +3,9 @@ using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace DepositDatabase.Model
 {
-    public class AspNetRoles : IdentityRole
+    public class AspNetRole : IdentityRole
     {
-        public AspNetRoles()
+        public AspNetRole()
         {
             AspNetUsers = new HashSet<AspNetUser>();
         }

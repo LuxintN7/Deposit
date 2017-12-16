@@ -3,8 +3,6 @@ using System.Configuration;
 using System.ServiceProcess;
 using System.Timers;
 using Microsoft.Practices.Unity;
-using DomainLogic;
-using DomainLogic.Model;
 using DomainLogic.Handlers;
 using DepositDatabase.Handlers;
 

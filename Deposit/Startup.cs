@@ -1,5 +1,4 @@
 ﻿using Deposit;
-using DepositDatabase.Model;
 using Microsoft.Owin;
 using Owin;
 

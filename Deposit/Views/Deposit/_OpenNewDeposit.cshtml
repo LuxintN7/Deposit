@@ -1,5 +1,5 @@
 ﻿@using DepositDatabase.Model
-@model IEnumerable<DepositTerms>
+@model IEnumerable<DepositTerm>
 
 <div id="menu" class="menu-frame">
     <ul class="nav nav-tabs margin-top-50">
@@ -31,7 +31,7 @@
                     @Html.DisplayNameFor(model => model.Name)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Currencies.Name)
+                    @Html.DisplayNameFor(model => model.Currency.Name)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Months)
@@ -42,18 +42,18 @@
                 <th></th>    
             </tr>
 
-            @using (var db = new DepositEntities())
-            {
+            @{
+                var db = DepositDbContextExtension.GetInstance();
                 var depositTerms = db.DepositTerms.ToList();
 
-                foreach (DepositTerms depositTerm in depositTerms)
+                foreach (DepositTerm depositTerm in depositTerms)
                 {
                     <tr>
                         <td>
                             @Html.DisplayFor(modelItem => depositTerm.Name)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => depositTerm.Currencies.Name)
+                            @Html.DisplayFor(modelItem => depositTerm.Currency.Name)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => depositTerm.Months)
@@ -62,10 +62,10 @@
                             @Html.DisplayFor(modelItem => depositTerm.InterestRate) %
                         </td>
                         <td>
-                            @using (Ajax.BeginForm("NewDeposit", new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "new-deposit-content", InsertionMode = InsertionMode.Replace }))
+                            @using (Ajax.BeginForm("NewDeposit", new AjaxOptions() {HttpMethod = "GET", UpdateTargetId = "new-deposit-content", InsertionMode = InsertionMode.Replace}))
                             {
                                 @Html.Hidden("termsId", depositTerm.Id)
-                                <input type="submit" value="Open new deposit" class=" btn btn-primary btn-xs" />
+                                <input type="submit" value="Open new deposit" class=" btn btn-primary btn-xs"/>
                             }
                         </td>
                     </tr>

@@ -1,6 +1,6 @@
 namespace DomainLogic.Model
 {
-    public class AspNetUserLogins
+    public class AspNetUserLogin
     {
         public string LoginProvider { get; set; }
         public string ProviderKey { get; set; }

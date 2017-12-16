@@ -56,8 +56,19 @@ namespace Deposit.App_Start
             container.RegisterType<ICloseDepositHandler, CloseDepositHandler>(new InjectionConstructor());
             
             container.RegisterType<DbContext, DepositDbContext>(new InjectionConstructor());
-            container.RegisterType<IDepositDbContextFactory, DepositDbContextFactoryWithPresetData>(new InjectionConstructor());
 
+            using (var dbContext = container.Resolve<DbContext>())
+            {
+                if (dbContext.Database.Exists())
+                {
+                    container.RegisterType<IDepositDbContextFactory, DepositDbContextFactory>(new InjectionConstructor());
+                }
+                else
+                {
+                    container.RegisterType<IDepositDbContextFactory, DepositDbContextFactoryWithPresetData>(new InjectionConstructor());
+                }
+            }
+            
             container.RegisterType<UserManager<AspNetUser>>(new HierarchicalLifetimeManager());
             container.RegisterType<IUserStore<AspNetUser>, UserStore<AspNetUser>>(new HierarchicalLifetimeManager());
             container.RegisterType<AccountController>(new InjectionConstructor());

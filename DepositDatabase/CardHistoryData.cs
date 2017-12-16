@@ -5,26 +5,26 @@ namespace DepositDatabase
 {
     public static class CardHistoryData
     {
-        public static void AddRecordToDbContext(Cards card, string description)
+        public static void AddRecordToDbContext(Card card, string description)
         {
             var newRecord = CreateRecord(card, description);
             DepositDbContextExtension.GetInstance().CardHistory.Add(newRecord);
         }
         
         // Required for InterestPaymentService
-        public static void AddRecordToDbContext(Cards card, string description, DepositDbContext dbContext)
+        public static void AddRecordToDbContext(Card card, string description, DepositDbContext dbContext)
         {
             var newRecord = CreateRecord(card, description);
             dbContext.CardHistory.Add(newRecord);
         }
 
-        public static CardHistory CreateRecord(Cards card, string description)
+        public static CardHistory CreateRecord(Card card, string description)
         {
             var newRecord = new CardHistory()
             {
                 DateTime = DateTime.Now,
                 Desription = description,
-                Cards = card
+                Card = card
             };
 
             return newRecord;

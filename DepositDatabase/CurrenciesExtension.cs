@@ -5,9 +5,9 @@ namespace DepositDatabase
 {
     public static class CurrenciesExtension
     {
-        public static DomainLogic.Model.Currencies ToDomainLogic(this Currencies currency)
+        public static DomainLogic.Model.Currency ToDomainLogic(this Currency currency)
         {
-            return new DomainLogic.Model.Currencies()
+            return new DomainLogic.Model.Currency()
             {
                 Id = currency.Id,
                 Abbreviation = currency.Abbreviation,
@@ -15,9 +15,9 @@ namespace DepositDatabase
             };
         }
 
-        public static List<DomainLogic.Model.Currencies> ToDomainLogic(this List<Currencies> list)
+        public static List<DomainLogic.Model.Currency> ToDomainLogic(this List<Currency> list)
         {
-            var currencies = new List<DomainLogic.Model.Currencies>();
+            var currencies = new List<DomainLogic.Model.Currency>();
 
             foreach (var currency in list)
             {

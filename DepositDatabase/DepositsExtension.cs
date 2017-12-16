@@ -5,9 +5,9 @@ namespace DepositDatabase
 {
     public static class DepositsExtension
     {
-        public static DomainLogic.Model.Deposits ToDomainLogic(this Deposits deposit)
+        public static DomainLogic.Model.Deposit ToDomainLogic(this Deposit deposit)
         {
-            return new DomainLogic.Model.Deposits()
+            return new DomainLogic.Model.Deposit()
             {
                 Id = deposit.Id,
                 UserOwnerId = deposit.UserOwnerId,
@@ -16,17 +16,17 @@ namespace DepositDatabase
                 StartDate = deposit.StartDate,
                 EndDate = deposit.EndDate,
                 LastInterestPaymentDate = deposit.LastInterestPaymentDate,
-                CardForAccumulationId = deposit.CardForAccumulationId,
-                StateId = deposit.StateId,
-                TermId = deposit.TermId,
-                WayOfAccumulationId = deposit.WayOfAccumulationId,
+                CardForAccumulationId = deposit.CardId,
+                StateId = deposit.DepositStateId,
+                TermId = deposit.DepositTermId,
+                WayOfAccumulationId = deposit.DepositWayOfAccumulationId,
                 Name = deposit.Name
             };
         }
 
-        public static List<DomainLogic.Model.Deposits> ToDomainLogic(this List<Deposits> list)
+        public static List<DomainLogic.Model.Deposit> ToDomainLogic(this List<Deposit> list)
         {
-            var deposits = new List<DomainLogic.Model.Deposits>();
+            var deposits = new List<DomainLogic.Model.Deposit>();
 
             foreach (var deposit in list)
             {

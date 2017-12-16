@@ -4,20 +4,20 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DepositDatabase.Model
 {
-    public class DepositWaysOfAccumulation
+    public class DepositWayOfAccumulation
     {
-        public DepositWaysOfAccumulation()
+        public DepositWayOfAccumulation()
         {
-            Deposits = new HashSet<Deposits>();
+            Deposits = new HashSet<Deposit>();
         }
 
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public byte Id { get; set; }
 
         [Display(Name = "Way of accumulation")]
         public string Name { get; set; }
     
-        public virtual ICollection<Deposits> Deposits { get; set; }
+        public virtual ICollection<Deposit> Deposits { get; set; }
     }
 }

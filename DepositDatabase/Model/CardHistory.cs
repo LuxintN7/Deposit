@@ -1,14 +1,18 @@
 using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DepositDatabase.Model
 {
-    public partial class CardHistory
+    public class CardHistory
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public string IdCard { get; set; }
+        public string CardId { get; set; }
         public DateTime DateTime { get; set; }
         public string Desription { get; set; }
     
-        public virtual Cards Cards { get; set; }
+        public virtual Card Card { get; set; }
     }
 }

@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DomainLogic.Model
 {
-    public class Cards
+    public class Card
     {
         public string Id { get; set; }
         public string UserOwnerId { get; set; }

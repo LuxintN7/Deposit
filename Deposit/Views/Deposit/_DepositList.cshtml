@@ -1,6 +1,6 @@
 ﻿@using DepositDatabase.Model
 @using Microsoft.AspNet.Identity
-@model Deposits
+@model Deposit
 
 <div id="menu" class="menu-frame">
     <ul class="nav nav-tabs margin-top-50">
@@ -26,11 +26,11 @@
     <div id="deposit-list-content" class="menu-content">
        @{ var db = DepositDbContextExtension.GetInstance();
 
-        var userId = User.Identity.GetUserId();
+           var userId = User.Identity.GetUserId();
 
-        var deposits = (from d in db.Deposits
-                        where d.AspNetUsers.Id == userId && (d.DepositStates.Name != "Closed")
-                        select d).ToList();
+           var deposits = (from d in db.Deposits
+                           where d.UserOwner.Id == userId && (d.DepositState.Name != DomainLogic.Model.DepositState.ClosedDepositStateName)
+                           select d).ToList();
 
            <table class="table table-bordered">
                <caption>
@@ -39,9 +39,9 @@
                <tr>
                    <th>@Html.DisplayNameFor(model => model.StartDate)</th>
                    <th>@Html.DisplayNameFor(model => model.EndDate)</th>
-                   <th>@Html.DisplayNameFor(model => model.DepositStates)</th>
-                   <th>@Html.DisplayNameFor(model => model.DepositTerms.Currencies)</th>
-                   <th>@Html.DisplayNameFor(model => model.DepositTerms.InterestRate)</th>
+                   <th>@Html.DisplayNameFor(model => model.DepositState)</th>
+                   <th>@Html.DisplayNameFor(model => model.DepositTerm.Currency)</th>
+                   <th>@Html.DisplayNameFor(model => model.DepositTerm.InterestRate)</th>
                    <th>@Html.DisplayNameFor(model => model.Balance)</th>
                    <th>Paid interest</th>
                    <th></th>
@@ -51,13 +51,13 @@
                    <tr>
                        <td>@deposit.StartDate.Date</td>
                        <td>@deposit.EndDate.Date</td>
-                       <td>@deposit.DepositStates.Name</td>
-                       <td>@deposit.DepositTerms.Currencies.Name</td>
-                       <td>@deposit.DepositTerms.InterestRate %</td>
+                       <td>@deposit.DepositState.Name</td>
+                       <td>@deposit.DepositTerm.Currency.Name</td>
+                       <td>@deposit.DepositTerm.InterestRate %</td>
                        <td>@deposit.Balance</td>
                        <td>@(deposit.Balance - deposit.InitialAmount)</td>
                        <td>
-                            @using (Ajax.BeginForm("CloseDeposit", new { depositId = deposit.Id, cardId = deposit.Cards.Id}, 
+                            @using (Ajax.BeginForm("CloseDeposit", new { depositId = deposit.Id, cardId = deposit.Card.Id},
                                 new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "deposit-list-content", InsertionMode = InsertionMode.Replace }))
                             {
                                 <input type="submit" value="Close deposit" class=" btn btn-primary btn-xs" />

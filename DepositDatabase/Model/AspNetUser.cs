@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -11,18 +10,18 @@ namespace DepositDatabase.Model
     {
         public AspNetUser()
         {
-            AspNetUserClaims = new HashSet<AspNetUserClaims>();
-            AspNetUserLogins = new HashSet<AspNetUserLogins>();
-            Cards = new HashSet<Cards>();
-            Deposits = new HashSet<Deposits>();
-            AspNetRoles = new HashSet<AspNetRoles>();
+            AspNetUserClaims = new HashSet<AspNetUserClaim>();
+            AspNetUserLogins = new HashSet<AspNetUserLogin>();
+            Cards = new HashSet<Card>();
+            Deposits = new HashSet<Deposit>();
+            AspNetRoles = new HashSet<AspNetRole>();
         }
 
-        public virtual ICollection<AspNetUserClaims> AspNetUserClaims { get; set; }
-        public virtual ICollection<AspNetUserLogins> AspNetUserLogins { get; set; }
-        public virtual ICollection<Cards> Cards { get; set; }
-        public virtual ICollection<Deposits> Deposits { get; set; }
-        public virtual ICollection<AspNetRoles> AspNetRoles { get; set; }
+        public virtual ICollection<AspNetUserClaim> AspNetUserClaims { get; set; }
+        public virtual ICollection<AspNetUserLogin> AspNetUserLogins { get; set; }
+        public virtual ICollection<Card> Cards { get; set; }
+        public virtual ICollection<Deposit> Deposits { get; set; }
+        public virtual ICollection<AspNetRole> AspNetRoles { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<AspNetUser> manager)
         {

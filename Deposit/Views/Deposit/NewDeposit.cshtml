@@ -1,7 +1,6 @@
 ﻿@using Deposit.Controllers;
-@using DomainLogic
 @using DomainLogic.Model 
-@model Deposit.Models.NewDepositViewModel
+@model global::Deposit.Models.NewDepositViewModel
 
 @{
     ViewBag.Title = "New deposit";
@@ -73,7 +72,7 @@
                     <div class="form-group">
                         @Html.LabelFor(model => model.WaysOfAccumulation, htmlAttributes: new {@class = "control-label col-md-3"})
                         <div class="col-md-9">
-                            @foreach (DepositWaysOfAccumulation waysOfAccumulation in Model.WaysOfAccumulation)
+                            @foreach (DepositWayOfAccumulation waysOfAccumulation in Model.WaysOfAccumulation)
                             {
                                 var wayId = waysOfAccumulation.Id;
 

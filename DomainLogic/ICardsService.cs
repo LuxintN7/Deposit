@@ -3,8 +3,8 @@ using DomainLogic.Model;
 
 namespace DomainLogic
 {
-    public interface ICardsService : IDbEntityService<Cards, string>
+    public interface ICardsService : IDbEntityService<Card, string>
     {
-        List<Cards> CreateUserCardsByCurrencyList(string userId, byte termsId);
+        List<Card> CreateUserCardsByCurrencyList(string userId, byte termsId);
     }
 }

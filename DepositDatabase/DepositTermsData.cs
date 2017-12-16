@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using DepositDatabase.Model;
 
@@ -7,12 +6,12 @@ namespace DepositDatabase
 {
     public class DepositTermsData
     {
-        public static DepositTerms GetTermsById(byte id)
+        public static DepositTerm GetTermById(byte id)
         {
             return DepositDbContextExtension.GetInstance().DepositTerms.First(d => d.Id == id);
         }
 
-        public static List<DepositTerms> GetList()
+        public static List<DepositTerm> GetList()
         {
             return DepositDbContextExtension.GetInstance().DepositTerms.ToList();
         }

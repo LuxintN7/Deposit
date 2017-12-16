@@ -1,5 +1,4 @@
-﻿using System.ServiceProcess;
-using System.Threading;
+﻿using System.Threading;
 
 namespace InterestPaymentService
 {

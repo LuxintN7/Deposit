@@ -2,7 +2,7 @@
 
 namespace DomainLogic
 {
-    public interface IDepositWaysOfAccumulationService : IDbEntityService<DepositWaysOfAccumulation, byte>
+    public interface IDepositWaysOfAccumulationService : IDbEntityService<DepositWayOfAccumulation, byte>
     {
     }
 }

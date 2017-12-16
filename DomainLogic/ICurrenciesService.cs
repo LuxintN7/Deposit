@@ -2,7 +2,7 @@
 
 namespace DomainLogic
 {
-    public interface ICurrenciesService : IDbEntityService<Currencies, byte>
+    public interface ICurrenciesService : IDbEntityService<Currency, byte>
     {
     }
 }

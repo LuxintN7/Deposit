@@ -2,12 +2,9 @@
 using System.Web.Mvc;
 using Deposit.Models;
 using Microsoft.AspNet.Identity;
-using Microsoft.Practices.Unity;
 using DomainLogic;
 using DomainLogic.Model;
 using DomainLogic.Handlers;
-using DepositDatabase;
-using DepositDatabase.Handlers;
 
 
 namespace Deposit.Controllers
@@ -80,7 +77,7 @@ namespace Deposit.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddCard(Cards model)
+        public ActionResult AddCard(Card model)
         {
             if (ModelState.IsValid)
             {
@@ -172,7 +169,7 @@ namespace Deposit.Controllers
 
             CloseDepositHandler.IncreaseCardBalanceByDepositBalance(deposit.Balance, cardId);
 
-            CloseDepositHandler.SetDepositState("Closed", depositId);
+            CloseDepositHandler.SetDepositState(DepositState.ClosedDepositStateName, depositId);
 
             var cardHistoryDescription = String.Format("Closing deposit #{0}. Income: {1} ({2}).",
                 deposit.Id, deposit.Balance, CloseDepositHandler.GetCurrencyByDepositTermsId(deposit.TermId).Abbreviation);

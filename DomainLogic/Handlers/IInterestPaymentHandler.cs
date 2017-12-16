@@ -6,7 +6,7 @@ namespace DomainLogic.Handlers
 {
     public interface IInterestPaymentHandler : IDisposable
     {
-        List<Deposits> GetActiveDeposits();
+        List<Deposit> GetActiveDeposits();
         string GetDepositStateName(int depositId);
         void ExtendDeposit(int depositId, DateTime today);
         void SetLastInterestPaymentDate(int depositId, DateTime date);
