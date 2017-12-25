@@ -7,7 +7,7 @@ namespace DomainLogic.Model
         public const string OpenedDepositStateName = "Opened";
         public const string ClosedDepositStateName = "Closed";
 
-        public byte Id { get; set; }
+        public int Id { get; set; }
 
         [Display(Name = "State")]
         public string Name { get; set; }

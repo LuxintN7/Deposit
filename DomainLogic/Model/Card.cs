@@ -16,7 +16,7 @@ namespace DomainLogic.Model
         [Display(Name = "Secret code")]
         public string SecretCode { get; set; }
 
-        public byte CurrencyId { get; set; }
+        public int CurrencyId { get; set; }
         
         [Display(Name = "Balance")]
         public decimal Balance { get; set; }

@@ -8,7 +8,7 @@ namespace DomainLogic.Model
         public int Id { get; set; }
 
         public string UserOwnerId { get; set; }
-        public byte TermId { get; set; }
+        public int TermId { get; set; }
 
         [Display(Name = "Initial amount")]
         public decimal InitialAmount { get; set; }

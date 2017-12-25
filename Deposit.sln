@@ -13,6 +13,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DepositDatabase", "DepositD
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainLogic", "DomainLogic\DomainLogic.csproj", "{99519033-BC43-40FD-A88E-C75BFBCB0A26}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AspNetCoreMigration", "AspNetCoreMigration", "{8700215C-3F1B-46E3-A816-BDEDA8BB9667}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DepositDatabaseCore", "DepositDatabaseCore\DepositDatabaseCore.csproj", "{0801BA93-66B3-4528-9F11-E38E4B6325DF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DepositCore", "DepositCore\DepositCore.csproj", "{39699E32-5DCE-4528-855D-B198D16B9F49}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,9 +45,21 @@ Global
 		{99519033-BC43-40FD-A88E-C75BFBCB0A26}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{99519033-BC43-40FD-A88E-C75BFBCB0A26}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{99519033-BC43-40FD-A88E-C75BFBCB0A26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0801BA93-66B3-4528-9F11-E38E4B6325DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0801BA93-66B3-4528-9F11-E38E4B6325DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0801BA93-66B3-4528-9F11-E38E4B6325DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0801BA93-66B3-4528-9F11-E38E4B6325DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39699E32-5DCE-4528-855D-B198D16B9F49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39699E32-5DCE-4528-855D-B198D16B9F49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39699E32-5DCE-4528-855D-B198D16B9F49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39699E32-5DCE-4528-855D-B198D16B9F49}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0801BA93-66B3-4528-9F11-E38E4B6325DF} = {8700215C-3F1B-46E3-A816-BDEDA8BB9667}
+		{39699E32-5DCE-4528-855D-B198D16B9F49} = {8700215C-3F1B-46E3-A816-BDEDA8BB9667}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3C809490-20C7-4F0B-8309-E01964C2530A}
