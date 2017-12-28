@@ -4,7 +4,7 @@ namespace DepositDatabaseCore
 {
     public class CurrenciesService : DomainLogic.ICurrenciesService
     {
-        public DomainLogic.Model.Currency GetById(byte id)
+        public DomainLogic.Model.Currency GetById(int id)
         {
             return CurrenciesData.GetCurrencyById(id).ToDomainLogic();
         }

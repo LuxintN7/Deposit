@@ -1,0 +1,103 @@
+﻿@using DepositCore.Controllers;
+@using DomainLogic.Model 
+@model global::DepositCore.Models.NewDepositViewModel
+
+@{
+    ViewBag.Title = "New deposit";
+}
+
+@{
+    @Html.AntiForgeryToken()
+    @Html.BeginForm( FormMethod.Post)
+    {
+        var depositTermsId = Convert.ToInt32(ViewData["termsId"].ToString());
+
+        var depositTerms = DepositController.DepositTermsService.GetById(depositTermsId);
+
+        var zz = DepositController.CurrenciesService.GetById(depositTerms.CurrencyId).Name;
+        var zz2 = depositTerms.InterestRate;
+
+        <div class="row">
+
+            <div class="col-md-4">
+                <table class="table-bordered table-condensed">
+                    <caption>
+                        <h4>Terms</h4>
+                    </caption>
+                    <tr>
+                        <td>
+                            <b>Currency</b>
+                        </td>
+                        <td>@DepositController.CurrenciesService.GetById(depositTerms.CurrencyId).Name</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Period</b>
+                        </td>
+                        <td>
+                            @depositTerms.Months @(depositTerms.Months == 1 ? "month" : "months")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Interest rate</b>
+                        </td>
+                        <td>@depositTerms.InterestRate %</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="col-md-8">
+                <div class="form-horizontal">
+                    <h4>Making a deposit</h4>
+                    <hr/>
+
+                    @Html.ValidationSummary(true, "", new {@class = "text-danger"})
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Amount, htmlAttributes: new {@class = "control-label col-md-3"})
+                        <div class="col-md-9">
+                            @Html.EditorFor(model => model.Amount, new {htmlAttributes = new {@class = "form-control"}})
+                            @Html.ValidationMessageFor(model => model.Amount, "", new {@class = "text-danger"})
+                        </div>
+                    </div>
+
+
+                    @Html.ValidationSummary(true, "", new {@class = "text-danger"})
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CardId, htmlAttributes: new {@class = "control-label col-md-3"})
+                        <div class="col-md-9">
+                            @Html.DropDownListFor(model => model.CardId, Model.Cards, new {@class = "form-control"})
+                            @Html.ValidationMessageFor(model => model.CardId, "", new {@class = "text-danger"})
+                        </div>
+                    </div>
+
+                    @Html.ValidationSummary(true, "", new {@class = "text-danger"})
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.WaysOfAccumulation, htmlAttributes: new {@class = "control-label col-md-3"})
+                        <div class="col-md-9">
+                            @foreach (DepositWayOfAccumulation waysOfAccumulation in Model.WaysOfAccumulation)
+                            {
+                                var wayId = waysOfAccumulation.Id;
+
+                                @Html.RadioButtonFor(model => model.WayOfAccumulationId, waysOfAccumulation.Id, new {id = "way" + wayId})
+                                @Html.Label(waysOfAccumulation.Name)
+                                <br/>
+                            }
+                            @Html.ValidationMessageFor(model => model.CardId, "", new {@class = "text-danger"})
+                        </div>
+                    </div>
+                </div>
+
+                @Html.Hidden("termsId", depositTermsId)
+                <div class="form-group">
+                    <div class="col-md-offset-3 col-md-9">
+                        <input id="openNewDepositConfirmButton" type="submit" value="Confirm" class="btn btn-success"/>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    }
+}
+

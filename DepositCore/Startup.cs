@@ -11,7 +11,11 @@ using Microsoft.Extensions.DependencyInjection;
 //using DepositCore.Data;
 using DepositCore.Models;
 using DepositCore.Services;
+using DepositDatabaseCore;
+using DepositDatabaseCore.Handlers;
 using DepositDatabaseCore.Model;
+using DomainLogic;
+using DomainLogic.Handlers;
 
 namespace DepositCore
 {
@@ -36,6 +40,15 @@ namespace DepositCore
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
+
+            services.AddSingleton<IConfiguration>(Configuration);
+            services.AddTransient<ICardsService, CardsService>();
+            services.AddTransient<IDepositWaysOfAccumulationService, DepositWaysOfAccumulationService>();
+            services.AddTransient<IDepositTermsService, DepositTermsService>();
+            services.AddTransient<ICurrenciesService, CurrenciesService>();
+            services.AddTransient<IAddCardHandler, AddCardHandler>();
+            services.AddTransient<INewDepositHandler, NewDepositHandler>();
+            services.AddTransient<ICloseDepositHandler, CloseDepositHandler>();
 
             services.AddMvc();
         }

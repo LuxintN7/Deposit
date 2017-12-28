@@ -1,0 +1,66 @@
+﻿@using DepositDatabaseCore.Model
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<AspNetUser> userManager;
+    
+@model Deposit
+
+<div id="tabMenu" class="menu-frame">
+    
+    <ul class="nav nav-tabs margin-top-50">
+        <li role="presentation">
+            <a id="generalInfoTabLink">General info</a>
+        </li>
+        <li role="presentation" class="active">
+            <a id="depositListTabLink">Deposit list</a>
+        </li>
+        <li role="presentation">
+            <a id="openNewDepositTabLink">Open new deposit</a>
+        </li>
+    </ul>
+
+    <div id="deposit-list-content" class="menu-content">
+       @{
+           using (var db = new DepositDbContext())
+           {
+
+               var userId = userManager.GetUserId(User);
+
+               var deposits = (from d in db.Deposits
+                   where d.UserOwner.Id == userId && (d.DepositState.Name != DomainLogic.Model.DepositState.ClosedDepositStateName)
+                   select d).ToList();
+
+               <table class="table table-bordered">
+                   <caption>
+                       <h4>My deposits</h4>
+                   </caption>
+                   <tr>
+                       <th>@Html.DisplayNameFor(model => model.StartDate)</th>
+                       <th>@Html.DisplayNameFor(model => model.EndDate)</th>
+                       <th>@Html.DisplayNameFor(model => model.DepositState)</th>
+                       <th>@Html.DisplayNameFor(model => model.DepositTerm.Currency)</th>
+                       <th>@Html.DisplayNameFor(model => model.DepositTerm.InterestRate)</th>
+                       <th>@Html.DisplayNameFor(model => model.Balance)</th>
+                       <th>Paid interest</th>
+                       <th></th>
+                   </tr>
+                   @foreach (var deposit in deposits)
+                   {
+                       <tr>
+                           <td>@deposit.StartDate.Date</td>
+                           <td>@deposit.EndDate.Date</td>
+                           <td>@deposit.DepositState.Name</td>
+                           <td>@deposit.DepositTerm.Currency.Name</td>
+                           <td>@deposit.DepositTerm.InterestRate %</td>
+                           <td>@deposit.Balance</td>
+                           <td>@(deposit.Balance - deposit.InitialAmount)</td>
+                           <td>
+                               @*Close deposit buttons*@
+                               <input id="closeDepositSubmitButton@(deposit.Id)" data-depositId="@deposit.Id" data-cardId="@deposit.Card.Id" type="submit"  value="Close deposit" class=" btn btn-primary btn-xs"/>
+                           </td>
+                       </tr>
+                   }
+               </table>
+           }
+       }
+    </div>
+</div>

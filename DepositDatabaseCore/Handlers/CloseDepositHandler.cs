@@ -1,8 +1,10 @@
-﻿namespace DepositDatabaseCore.Handlers
+﻿using DomainLogic.Model;
+
+namespace DepositDatabaseCore.Handlers
 {
     public class CloseDepositHandler : DomainLogic.Handlers.ICloseDepositHandler
     {
-        public DomainLogic.Model.Currency GetCurrencyByDepositTermsId(byte depositTermsId)
+        public Currency GetCurrencyByDepositTermsId(int depositTermsId)
         {
             return DepositTermsData.GetTermById(depositTermsId).Currency.ToDomainLogic();
         }

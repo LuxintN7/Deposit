@@ -6,12 +6,18 @@ namespace DepositDatabaseCore.Model
 {
     public class DepositDbContext : IdentityDbContext<AspNetUser>
     {
+        private static DbContextOptions<DepositDbContext> options;
+
         public DepositDbContext(DbContextOptions<DepositDbContext> options)
             : base(options)
         {
+            if (DepositDbContext.options == null)
+            {
+                DepositDbContext.options = options;
+            }
         }
 
-        public DepositDbContext()
+        public DepositDbContext() : this(options)
         {
         }
 

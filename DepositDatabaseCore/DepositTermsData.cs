@@ -6,7 +6,7 @@ namespace DepositDatabaseCore
 {
     public class DepositTermsData
     {
-        public static DepositTerm GetTermById(byte id)
+        public static DepositTerm GetTermById(int id)
         {
             using (var dbContext = new DepositDbContext())
             {
@@ -14,7 +14,7 @@ namespace DepositDatabaseCore
             }
         }
 
-        public static DepositTerm GetTermById(DepositDbContext dbContext, byte id)
+        public static DepositTerm GetTermById(DepositDbContext dbContext, int id)
         {
             return dbContext.DepositTerms.First(d => d.Id == id);
         }

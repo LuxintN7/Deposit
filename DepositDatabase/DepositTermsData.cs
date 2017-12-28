@@ -6,7 +6,7 @@ namespace DepositDatabase
 {
     public class DepositTermsData
     {
-        public static DepositTerm GetTermById(byte id)
+        public static DepositTerm GetTermById(int id)
         {
             return DepositDbContextExtension.GetInstance().DepositTerms.First(d => d.Id == id);
         }

@@ -4,7 +4,7 @@ namespace DepositDatabaseCore
 {
     public class DepositTermsService : DomainLogic.IDepositTermsService
     {
-        public DomainLogic.Model.DepositTerm GetById(byte id)
+        public DomainLogic.Model.DepositTerm GetById(int id)
         {
             return DepositTermsData.GetTermById(id).ToDomainLogic();
         }

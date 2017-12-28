@@ -1,5 +1,6 @@
 ﻿using System;
 using DepositDatabaseCore.Model;
+using Currency = DomainLogic.Model.Currency;
 using DepositState = DomainLogic.Model.DepositState;
 
 namespace DepositDatabaseCore.Handlers
@@ -11,12 +12,12 @@ namespace DepositDatabaseCore.Handlers
             return CardsData.GetCardById(id).ToDomainLogic();
         }
 
-        public DomainLogic.Model.Currency GetCurrencyByDepositTermsId(byte termsId)
+        public Currency GetCurrencyByDepositTermsId(int termsId)
         {
             return DepositTermsData.GetTermById(termsId).Currency.ToDomainLogic();
         }
 
-        public DomainLogic.Model.Deposit CreateNewDeposit(decimal depositAmount, byte wayOfAccumulationId, string userId, byte termsId, string cardId)
+        public DomainLogic.Model.Deposit CreateNewDeposit(decimal depositAmount, int wayOfAccumulationId, string userId, int termsId, string cardId)
         {
             var depositTerm = DepositTermsData.GetTermById(termsId);
 

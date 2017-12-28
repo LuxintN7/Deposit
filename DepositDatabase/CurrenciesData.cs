@@ -7,7 +7,7 @@ namespace DepositDatabase
 {
     public class CurrenciesData
     {
-        public static Currency GetCurrencyById(byte id)
+        public static Currency GetCurrencyById(int id)
         {
             return DepositDbContextExtension.GetInstance().Currencies.Find(id);
         }

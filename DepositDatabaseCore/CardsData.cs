@@ -20,7 +20,7 @@ namespace DepositDatabaseCore
             return dbContext.Cards.First(c => c.Id.Equals(id));
         }
 
-        public static List<Card> CreateUserCardsByCurrencyList(string userId, byte termsId)
+        public static List<Card> CreateUserCardsByCurrencyList(string userId, int termsId)
         {
             using (var dbContext = new DepositDbContext())
             {
@@ -28,7 +28,7 @@ namespace DepositDatabaseCore
             }
         }
 
-        public static List<Card> CreateUserCardsByCurrencyList(DepositDbContext dbContext, string userId, byte termsId)
+        public static List<Card> CreateUserCardsByCurrencyList(DepositDbContext dbContext, string userId, int termsId)
         {
             var currencyId = DepositTermsData.GetTermById(dbContext, termsId).CurrencyId;
 

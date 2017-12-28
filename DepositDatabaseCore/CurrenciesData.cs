@@ -6,7 +6,7 @@ namespace DepositDatabaseCore
 {
     public class CurrenciesData
     {
-        public static Currency GetCurrencyById(byte id)
+        public static Currency GetCurrencyById(int id)
         {
             using (var dbContext = new DepositDbContext())
             {
@@ -14,7 +14,7 @@ namespace DepositDatabaseCore
             }
         }
 
-        public static Currency GetCurrencyById(DepositDbContext dbContext, byte id)
+        public static Currency GetCurrencyById(DepositDbContext dbContext, int id)
         {
             return dbContext.Currencies.Find(id);
         }

@@ -6,7 +6,7 @@ namespace DepositDatabaseCore
 {
     public class DepositWaysOfAccumulationData
     {
-        public static DepositWayOfAccumulation GetWayById(byte wayId)
+        public static DepositWayOfAccumulation GetWayById(int wayId)
         {
             using (var dbContext = new DepositDbContext())
             {
@@ -14,7 +14,7 @@ namespace DepositDatabaseCore
             }
         }
 
-        public static DepositWayOfAccumulation GetWayById(DepositDbContext dbContext, byte wayId)
+        public static DepositWayOfAccumulation GetWayById(DepositDbContext dbContext, int wayId)
         {
             return dbContext.DepositWaysOfAccumulation.First(d => d.Id == wayId);
         }

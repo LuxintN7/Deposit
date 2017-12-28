@@ -19,6 +19,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\images\convenience.jpg" />
+    <None Include="wwwroot\images\profitability.jpg" />
+    <None Include="wwwroot\images\reliability.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\DepositDatabaseCore\DepositDatabaseCore.csproj" />
   </ItemGroup>
 
