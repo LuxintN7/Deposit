@@ -8,45 +8,43 @@
 
 @{
     @Html.AntiForgeryToken()
-    @Html.BeginForm( FormMethod.Post)
-    {
-        var depositTermsId = Convert.ToInt32(ViewData["termsId"].ToString());
 
-        var depositTerms = DepositController.DepositTermsService.GetById(depositTermsId);
+    var depositTermsId = Convert.ToInt32(ViewData["termsId"].ToString());
 
-        var zz = DepositController.CurrenciesService.GetById(depositTerms.CurrencyId).Name;
-        var zz2 = depositTerms.InterestRate;
+    var depositTerms = DepositController.DepositTermsService.GetById(depositTermsId);
 
-        <div class="row">
+    <div class="row">
 
-            <div class="col-md-4">
-                <table class="table-bordered table-condensed">
-                    <caption>
-                        <h4>Terms</h4>
-                    </caption>
-                    <tr>
-                        <td>
-                            <b>Currency</b>
-                        </td>
-                        <td>@DepositController.CurrenciesService.GetById(depositTerms.CurrencyId).Name</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>Period</b>
-                        </td>
-                        <td>
-                            @depositTerms.Months @(depositTerms.Months == 1 ? "month" : "months")
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>Interest rate</b>
-                        </td>
-                        <td>@depositTerms.InterestRate %</td>
-                    </tr>
-                </table>
-            </div>
+        <div class="col-md-4">
+            <table class="table-bordered table-condensed">
+                <caption>
+                    <h4>Terms</h4>
+                </caption>
+                <tr>
+                    <td>
+                        <b>Currency</b>
+                    </td>
+                    <td>@DepositController.CurrenciesService.GetById(depositTerms.CurrencyId).Name</td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>Period</b>
+                    </td>
+                    <td>
+                        @depositTerms.Months @(depositTerms.Months == 1 ? "month" : "months")
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>Interest rate</b>
+                    </td>
+                    <td>@depositTerms.InterestRate %</td>
+                </tr>
+            </table>
+        </div>
 
+        <form asp-action="NewDeposit" asp-controller="Deposit" data-ajax-method="POST" data-ajax="true" data-ajax-update="#new-deposit-content" data-ajax-mode="replace">
+           
             <div class="col-md-8">
                 <div class="form-horizontal">
                     <h4>Making a deposit</h4>
@@ -89,6 +87,7 @@
                 </div>
 
                 @Html.Hidden("termsId", depositTermsId)
+
                 <div class="form-group">
                     <div class="col-md-offset-3 col-md-9">
                         <input id="openNewDepositConfirmButton" type="submit" value="Confirm" class="btn btn-success"/>
@@ -96,8 +95,8 @@
                 </div>
 
             </div>
+        </form>
 
-        </div>
-    }
+    </div>
 }
 

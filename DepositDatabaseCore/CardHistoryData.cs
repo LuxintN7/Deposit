@@ -9,12 +9,12 @@ namespace DepositDatabaseCore
         {
             using (var dbContext = new DepositDbContext())
             {
-                AddRecordToDbContext(card, description, dbContext);
+                AddRecordToDbContext(dbContext, card, description);
             }
         }
         
         // Required for InterestPaymentService
-        public static void AddRecordToDbContext(Card card, string description, DepositDbContext dbContext)
+        public static void AddRecordToDbContext(DepositDbContext dbContext, Card card, string description)
         {
             var newRecord = CreateRecord(card, description);
             dbContext.CardHistory.Add(newRecord);
@@ -26,7 +26,7 @@ namespace DepositDatabaseCore
             {
                 DateTime = DateTime.Now,
                 Desription = description,
-                Card = card
+                CardId = card.Id
             };
 
             return newRecord;

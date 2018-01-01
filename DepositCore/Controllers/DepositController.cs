@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using DepositCore.Models;
 using DepositDatabaseCore.Model;
 using DomainLogic;
@@ -19,7 +18,7 @@ namespace DepositCore.Controllers
     public class DepositController : Controller
     {
         public static IConfiguration Configuration { get; private set; }
-        public static UserManager<DepositDatabaseCore.Model.AspNetUser> UserManager { get; private set; }
+        public static UserManager<AspNetUser> UserManager { get; private set; }
         public static ICardsService CardsService { get; private set; }
         public static IDepositWaysOfAccumulationService DepositWaysOfAccumulationService { get; private set; }
         public static IDepositTermsService DepositTermsService { get; private set; }
@@ -30,7 +29,7 @@ namespace DepositCore.Controllers
         
         public DepositController(
             IConfiguration configuration,
-            UserManager<DepositDatabaseCore.Model.AspNetUser> userManager, 
+            UserManager<AspNetUser> userManager, 
             ICardsService cardsService,
             IDepositWaysOfAccumulationService depositWaysOfAccumulationService,
             IDepositTermsService depositTermsService,
@@ -86,24 +85,25 @@ namespace DepositCore.Controllers
 
         public ActionResult AddCard()
         {
-            return PartialView("AddCard");
+            var cardModel = new DomainLogic.Model.Card();
+            return PartialView("AddCard", cardModel);
         }
 
         [HttpPost]
-        public ActionResult AddCard(Card serializedCard)
+        public ActionResult AddCard(Card card)
         {
             if (ModelState.IsValid)
             {
                 ViewData["modelIsValid"] = true;
               
-                var card = AddCardHandler.GetCardByRequisites(serializedCard.Id, serializedCard.ExpirationMonth, serializedCard.ExpirationYear, serializedCard.SecretCode);
+                var foundCard = AddCardHandler.GetCardByRequisites(card.Id, card.ExpirationMonth, card.ExpirationYear, card.SecretCode);
 
-                if (card == null)
+                if (foundCard == null)
                 {
                     return PartialView("_Message", new MessageViewModel("A card with such requisites does not exist.", false));
                 }
 
-                AddCardHandler.SetCardOwnerId(card, UserManager.GetUserId(User));
+                AddCardHandler.SetCardOwnerId(foundCard, UserManager.GetUserId(User));
 
                 return RedirectToAction("GeneralInfoContent");
             }
@@ -119,7 +119,6 @@ namespace DepositCore.Controllers
 
         public ActionResult NewDeposit(int termsId)
         {
-            //var termsId = Convert.ToInt32(Request.Query["termsId"]);
             ViewData["termsId"] = termsId;
 
             var userId = UserManager.GetUserId(User);
@@ -174,20 +173,22 @@ namespace DepositCore.Controllers
             return Convert.ToDecimal(depositAmount) <= cardBalance;
         }
 
-#endregion
+        #endregion
 
-        public ActionResult CloseDeposit(int depositId, string cardId)
+        [HttpPost]
+        public ActionResult CloseDeposit(int depositId)
         {
             var deposit = CloseDepositHandler.GetDepositById(depositId);
 
-            CloseDepositHandler.IncreaseCardBalanceByDepositBalance(deposit.Balance, cardId);
+            CloseDepositHandler.IncreaseCardBalanceByDepositBalance(deposit.Balance, deposit.CardForAccumulationId);
 
             CloseDepositHandler.SetDepositState(DepositState.ClosedDepositStateName, depositId);
 
             var cardHistoryDescription = String.Format("Closing deposit #{0}. Income: {1} ({2}).",
-                deposit.Id, deposit.Balance, CloseDepositHandler.GetCurrencyByDepositTermsId(deposit.TermId).Abbreviation);
-                
-            CloseDepositHandler.AddCardHistoryRecord(cardId, cardHistoryDescription);
+                deposit.Id, deposit.Balance,
+                CloseDepositHandler.GetCurrencyByDepositTermsId(deposit.TermId).Abbreviation);
+
+            CloseDepositHandler.AddCardHistoryRecord(deposit.CardForAccumulationId, cardHistoryDescription);
 
             return PartialView("_Message", new MessageViewModel("Deposit has been closed successfully.", true));
         }

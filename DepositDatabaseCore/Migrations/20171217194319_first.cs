@@ -200,7 +200,7 @@ namespace DepositDatabaseCore.Migrations
                 {
                     Id = table.Column<string>(nullable: false),
                     Balance = table.Column<decimal>(nullable: false),
-                    CurrencyId = table.Column<byte>(nullable: false),
+                    CurrencyId = table.Column<int>(nullable: false),
                     CurrencyId1 = table.Column<int>(nullable: true),
                     ExpirationMonth = table.Column<string>(nullable: true),
                     ExpirationYear = table.Column<string>(nullable: true),
@@ -232,7 +232,7 @@ namespace DepositDatabaseCore.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     CurrencyId = table.Column<int>(nullable: false),
                     InterestRate = table.Column<decimal>(nullable: false),
-                    Months = table.Column<byte>(nullable: false),
+                    Months = table.Column<int>(nullable: false),
                     Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -275,11 +275,11 @@ namespace DepositDatabaseCore.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Balance = table.Column<decimal>(nullable: false),
                     CardId = table.Column<string>(nullable: true),
-                    DepositStateId = table.Column<byte>(nullable: false),
+                    DepositStateId = table.Column<int>(nullable: false),
                     DepositStateId1 = table.Column<int>(nullable: true),
-                    DepositTermId = table.Column<byte>(nullable: false),
+                    DepositTermId = table.Column<int>(nullable: false),
                     DepositTermId1 = table.Column<int>(nullable: true),
-                    DepositWayOfAccumulationId = table.Column<byte>(nullable: false),
+                    DepositWayOfAccumulationId = table.Column<int>(nullable: false),
                     DepositWayOfAccumulationId1 = table.Column<int>(nullable: true),
                     EndDate = table.Column<DateTime>(nullable: false),
                     InitialAmount = table.Column<decimal>(nullable: false),

@@ -20,28 +20,21 @@ namespace DepositCore.Models
         [Display(Name = "Deposit amount")]
         public decimal Amount { get; set; }
         
-        public IEnumerable<SelectListItem> Cards
-        {
-            get { return new SelectList(cards, "Id", "Id"); }
-        }
-        
-        private readonly List<DepositWayOfAccumulation> waysOfAccumulation;
+        public IEnumerable<SelectListItem> Cards => new SelectList(cards, nameof(Card.Id), nameof(Card.Id));
+
         [Display(Name = "Way of accumulation")]
-        public List<DepositWayOfAccumulation> WaysOfAccumulation
-        {
-            get { return waysOfAccumulation; }
-        }
+        public List<DepositWayOfAccumulation> WaysOfAccumulation { get; }
 
         public NewDepositViewModel()
         {
             cards = new List<Card>();
-            waysOfAccumulation = new List<DepositWayOfAccumulation>();
+            WaysOfAccumulation = new List<DepositWayOfAccumulation>();
         }
 
         public NewDepositViewModel(List<Card> cards, List<DepositWayOfAccumulation> waysOfAccumulation)
         {
             this.cards = cards;
-            this.waysOfAccumulation = waysOfAccumulation;
+            this.WaysOfAccumulation = waysOfAccumulation;
         }
     }
 

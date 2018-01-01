@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using DepositDatabaseCore.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace DepositDatabaseCore
 {
@@ -16,7 +17,7 @@ namespace DepositDatabaseCore
 
         public static DepositTerm GetTermById(DepositDbContext dbContext, int id)
         {
-            return dbContext.DepositTerms.First(d => d.Id == id);
+            return dbContext.DepositTerms.Include(t => t.Currency).First(d => d.Id == id);
         }
 
         public static List<DepositTerm> GetList()

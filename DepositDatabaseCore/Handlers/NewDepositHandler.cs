@@ -19,19 +19,17 @@ namespace DepositDatabaseCore.Handlers
 
         public DomainLogic.Model.Deposit CreateNewDeposit(decimal depositAmount, int wayOfAccumulationId, string userId, int termsId, string cardId)
         {
-            var depositTerm = DepositTermsData.GetTermById(termsId);
-
             var newDeposit = new Deposit()
             {
                 UserOwnerId = userId,
                 InitialAmount = depositAmount,
                 StartDate = DateTime.Now,
-                EndDate = DateTime.Now.AddMonths(depositTerm.Months),
+                EndDate = DateTime.Now.AddMonths(DepositTermsData.GetTermById(termsId).Months),
                 Balance = depositAmount,
-                DepositWayOfAccumulation = DepositWaysOfAccumulationData.GetWayById(wayOfAccumulationId),
-                Card = CardsData.GetCardById(cardId),
-                DepositTerm = depositTerm,
-                DepositState = DepositStatesData.GetStateByName(DepositState.OpenedDepositStateName)
+                DepositWayOfAccumulationId = wayOfAccumulationId,
+                CardId = cardId,
+                DepositTermId = termsId,
+                DepositStateId = DepositStatesData.GetStateByName(DepositState.OpenedDepositStateName).Id
             };
 
             DepositsData.AddNewDepositToDbContext(newDeposit);
@@ -41,8 +39,11 @@ namespace DepositDatabaseCore.Handlers
 
         public void DecreaseCardBalanceByDepositAmount(decimal depositAmount, string cardId)
         {
-            var card = CardsData.GetCardById(cardId);
-            card.Balance -= depositAmount;
+            using (var dbContext = new DepositDbContext())
+            {
+                var card = CardsData.GetCardById(dbContext, cardId);
+                card.Balance -= depositAmount;
+            }
         }
 
         public void AddCardHistoryRecord(string cardId, string cardHistoryDescription)

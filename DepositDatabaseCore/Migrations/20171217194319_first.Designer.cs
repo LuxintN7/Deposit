@@ -78,7 +78,7 @@ namespace DepositDatabaseCore.Migrations
 
                     b.Property<decimal>("Balance");
 
-                    b.Property<byte>("CurrencyId");
+                    b.Property<int>("CurrencyId");
 
                     b.Property<int?>("CurrencyId1");
 
@@ -140,15 +140,15 @@ namespace DepositDatabaseCore.Migrations
 
                     b.Property<string>("CardId");
 
-                    b.Property<byte>("DepositStateId");
+                    b.Property<int>("DepositStateId");
 
                     b.Property<int?>("DepositStateId1");
 
-                    b.Property<byte>("DepositTermId");
+                    b.Property<int>("DepositTermId");
 
                     b.Property<int?>("DepositTermId1");
 
-                    b.Property<byte>("DepositWayOfAccumulationId");
+                    b.Property<int>("DepositWayOfAccumulationId");
 
                     b.Property<int?>("DepositWayOfAccumulationId1");
 
@@ -200,7 +200,7 @@ namespace DepositDatabaseCore.Migrations
 
                     b.Property<decimal>("InterestRate");
 
-                    b.Property<byte>("Months");
+                    b.Property<int>("Months");
 
                     b.Property<string>("Name");
 

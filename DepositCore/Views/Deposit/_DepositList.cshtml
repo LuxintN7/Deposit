@@ -1,5 +1,6 @@
 ﻿@using DepositDatabaseCore.Model
 @using Microsoft.AspNetCore.Identity
+@using Microsoft.EntityFrameworkCore
 @inject UserManager<AspNetUser> userManager;
     
 @model Deposit
@@ -7,14 +8,14 @@
 <div id="tabMenu" class="menu-frame">
     
     <ul class="nav nav-tabs margin-top-50">
-        <li role="presentation">
-            <a id="generalInfoTabLink">General info</a>
+        <li role="presentation" >
+            <a id="generalInfoTabLink" role="button">General info</a>
         </li>
         <li role="presentation" class="active">
-            <a id="depositListTabLink">Deposit list</a>
+            <a id="depositListTabLink" role="button">Deposit list</a>
         </li>
         <li role="presentation">
-            <a id="openNewDepositTabLink">Open new deposit</a>
+            <a id="openNewDepositTabLink" role="button">Open new deposit</a>
         </li>
     </ul>
 
@@ -25,9 +26,9 @@
 
                var userId = userManager.GetUserId(User);
 
-               var deposits = (from d in db.Deposits
-                   where d.UserOwner.Id == userId && (d.DepositState.Name != DomainLogic.Model.DepositState.ClosedDepositStateName)
-                   select d).ToList();
+               var deposits = (from d in db.Deposits.Include(d => d.UserOwner).Include(d => d.DepositState).Include(d => d.DepositTerm).Include(d => d.DepositTerm.Currency).Include(d => d.Card)
+                               where d.UserOwner.Id == userId && (d.DepositState.Name != DomainLogic.Model.DepositState.ClosedDepositStateName)
+                               select d).ToList();
 
                <table class="table table-bordered">
                    <caption>
@@ -55,7 +56,9 @@
                            <td>@(deposit.Balance - deposit.InitialAmount)</td>
                            <td>
                                @*Close deposit buttons*@
-                               <input id="closeDepositSubmitButton@(deposit.Id)" data-depositId="@deposit.Id" data-cardId="@deposit.Card.Id" type="submit"  value="Close deposit" class=" btn btn-primary btn-xs"/>
+                               <form asp-action="CloseDeposit" asp-controller="Deposit" asp-route-depositId="@deposit.Id" data-ajax-method="POST" data-ajax="true" data-ajax-update="#deposit-list-content" data-ajax-mode="replace">
+                                   <input id="closeDepositSubmitButton@(deposit.Id)" type="submit" value="Close deposit" class=" btn btn-primary btn-xs" />
+                               </form>
                            </td>
                        </tr>
                    }

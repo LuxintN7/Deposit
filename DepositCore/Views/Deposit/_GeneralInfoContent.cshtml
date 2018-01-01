@@ -43,9 +43,11 @@
                 <br/>
                 
                 @*Add new card*@
-                <input id="addNewCardButton" type="button" class="btn btn-primary" value="Add new card" />
-                
-            </div>
+                <form asp-action="AddCard" asp-controller="Deposit" data-ajax="true" data-ajax-update="#info-content" data-ajax-mode="replace" data-ajax-method="GET">
+                    <input id="addNewCardButton" type="submit" class="btn btn-primary" value="Add new card" />
+                </form>
+
+</div>
 
             //Card history table
             <div class="col-md-8">
@@ -56,10 +58,10 @@
                     {
                         var cardId = cardInfo[i].Id;
                         var cardHistory = (from ch in db.CardHistory
-                            join cards in db.Cards on ch.Card.Id equals cards.Id
-                            where ch.Card.Id == cardId
-                            orderby ch.DateTime descending
-                            select ch).Take(5).ToList();
+                                           join cards in db.Cards on ch.Card.Id equals cards.Id
+                                           where ch.Card.Id == cardId
+                                           orderby ch.DateTime descending
+                                           select ch).Take(5).ToList();
 
                         <div class="panel border-none margin-0">
 

@@ -12,6 +12,7 @@ namespace DepositDatabaseCore
                 Id = terms.Id,
                 CurrencyId = terms.CurrencyId,
                 InterestRate = terms.InterestRate,
+                Months = terms.Months,
                 Name = terms.Name
             };
         }

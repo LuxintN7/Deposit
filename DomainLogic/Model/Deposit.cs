@@ -25,8 +25,8 @@ namespace DomainLogic.Model
         [Display(Name = "Last interest payment date")]
         public DateTime? LastInterestPaymentDate { get; set; }
 
-        public byte StateId { get; set; }
-        public byte WayOfAccumulationId { get; set; }
+        public int StateId { get; set; }
+        public int WayOfAccumulationId { get; set; }
         public string CardForAccumulationId { get; set; }
 
         [Display(Name = "Deposit name")]

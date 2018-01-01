@@ -1,4 +1,5 @@
-﻿using DomainLogic.Model;
+﻿using DepositDatabaseCore.Model;
+using Currency = DomainLogic.Model.Currency;
 
 namespace DepositDatabaseCore.Handlers
 {
@@ -16,20 +17,29 @@ namespace DepositDatabaseCore.Handlers
 
         public void IncreaseCardBalanceByDepositBalance(decimal depositBalance, string cardId)
         {
-            var card = CardsData.GetCardById(cardId);
-            card.Balance += depositBalance;
+            using (var dbContext = new DepositDbContext())
+            {
+                var card = CardsData.GetCardById(dbContext, cardId);
+                card.Balance += depositBalance;
+            }
         }
 
         public void SetDepositState(string name, int depositId)
         {
-            var deposit = DepositsData.GetDepositById(depositId);
-            deposit.DepositState = DepositStatesData.GetStateByName(name);
+            using (var dbContext = new DepositDbContext())
+            {
+                var deposit = DepositsData.GetDepositById(dbContext, depositId);
+                deposit.DepositStateId = DepositStatesData.GetStateByName(name).Id;
+            }
         }
 
         public void AddCardHistoryRecord(string cardId, string cardHistoryDescription)
         {
-            var card = CardsData.GetCardById(cardId);
-            CardHistoryData.AddRecordToDbContext(card, cardHistoryDescription);
+            using (var dbContext = new DepositDbContext())
+            {
+                var card = CardsData.GetCardById(dbContext, cardId);
+                CardHistoryData.AddRecordToDbContext(dbContext, card, cardHistoryDescription);
+            }
         }
     }
 }

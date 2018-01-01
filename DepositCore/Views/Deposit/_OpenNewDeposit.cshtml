@@ -5,13 +5,13 @@
     
     <ul class="nav nav-tabs margin-top-50">
         <li role="presentation">
-            <a id="generalInfoTabLink">General info</a>
+            <a id="generalInfoTabLink" role="button">General info</a>
         </li>
         <li role="presentation">
-            <a id="depositListTabLink">Deposit list</a>
+            <a id="depositListTabLink" role="button">Deposit list</a>
         </li>
         <li role="presentation" class="active">
-            <a id="openNewDepositTabLink">Open new deposit</a>
+            <a id="openNewDepositTabLink" role="button">Open new deposit</a>
         </li>
     </ul>
 
@@ -34,10 +34,9 @@
                 <th></th>
             </tr>
 
-        @using (Html.BeginForm(FormMethod.Post))
-        {
 
-            using (var db = new DepositDbContext())
+
+            @using (var db = new DepositDbContext())
             {
                 var depositTerms = db.DepositTerms.ToList();
 
@@ -57,15 +56,15 @@
                             @Html.DisplayFor(modelItem => depositTerm.InterestRate) %
                         </td>
                         <td>
-
-                            @Html.Hidden("termsId", depositTerm.Id)
-                            <input id="openNewDepositButton@(depositTerm.Id)" data-termsId="@depositTerm.Id" type="submit" value="Open new deposit" class=" btn btn-primary btn-xs"/>
-
+                            <form asp-action="NewDeposit" asp-controller="Deposit" asp-route-termsId="@depositTerm.Id" data-ajax-method="GET" data-ajax="true" data-ajax-update="#new-deposit-content" data-ajax-mode="replace">
+                                @Html.Hidden("termsId", depositTerm.Id)
+                                <input id="openNewDepositButton@(depositTerm.Id)" data-termsId="@depositTerm.Id" type="submit" value="Open new deposit" class=" btn btn-primary btn-xs"/>
+                            </form>
                         </td>
                     </tr>
                 }
             }
-        }
+
         </table>
 
     </div>

@@ -3,21 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Deposit", "Deposit\Deposit.csproj", "{6199F38C-EAB2-4F03-8C34-E0DF734AD6B2}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterestPaymentService", "InterestPaymentService\InterestPaymentService.csproj", "{9E9FF201-2B2A-43FA-A848-32D8CD778112}"
-EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "InterestPaymentServiceSetup", "InterestPaymentServiceSetup\InterestPaymentServiceSetup.vdproj", "{885B374A-E4A7-46F8-A48A-73B73F7D3441}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DepositDatabase", "DepositDatabase\DepositDatabase.csproj", "{ABECCF88-6E8E-489B-BFD4-51D644A14082}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainLogic", "DomainLogic\DomainLogic.csproj", "{99519033-BC43-40FD-A88E-C75BFBCB0A26}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AspNetCoreMigration", "AspNetCoreMigration", "{8700215C-3F1B-46E3-A816-BDEDA8BB9667}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DepositDatabaseCore", "DepositDatabaseCore\DepositDatabaseCore.csproj", "{0801BA93-66B3-4528-9F11-E38E4B6325DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DepositDatabaseCore", "DepositDatabaseCore\DepositDatabaseCore.csproj", "{0801BA93-66B3-4528-9F11-E38E4B6325DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DepositCore", "DepositCore\DepositCore.csproj", "{39699E32-5DCE-4528-855D-B198D16B9F49}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DepositCore", "DepositCore\DepositCore.csproj", "{39699E32-5DCE-4528-855D-B198D16B9F49}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Deposit", "Deposit\Deposit.csproj", "{6199F38C-EAB2-4F03-8C34-E0DF734AD6B2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DepositDatabase", "DepositDatabase\DepositDatabase.csproj", "{ABECCF88-6E8E-489B-BFD4-51D644A14082}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,22 +21,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{6199F38C-EAB2-4F03-8C34-E0DF734AD6B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6199F38C-EAB2-4F03-8C34-E0DF734AD6B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6199F38C-EAB2-4F03-8C34-E0DF734AD6B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6199F38C-EAB2-4F03-8C34-E0DF734AD6B2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9E9FF201-2B2A-43FA-A848-32D8CD778112}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9E9FF201-2B2A-43FA-A848-32D8CD778112}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9E9FF201-2B2A-43FA-A848-32D8CD778112}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9E9FF201-2B2A-43FA-A848-32D8CD778112}.Release|Any CPU.Build.0 = Release|Any CPU
-		{885B374A-E4A7-46F8-A48A-73B73F7D3441}.Debug|Any CPU.ActiveCfg = Debug
-		{885B374A-E4A7-46F8-A48A-73B73F7D3441}.Debug|Any CPU.Build.0 = Debug
-		{885B374A-E4A7-46F8-A48A-73B73F7D3441}.Release|Any CPU.ActiveCfg = Release
-		{885B374A-E4A7-46F8-A48A-73B73F7D3441}.Release|Any CPU.Build.0 = Release
-		{ABECCF88-6E8E-489B-BFD4-51D644A14082}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ABECCF88-6E8E-489B-BFD4-51D644A14082}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ABECCF88-6E8E-489B-BFD4-51D644A14082}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ABECCF88-6E8E-489B-BFD4-51D644A14082}.Release|Any CPU.Build.0 = Release|Any CPU
 		{99519033-BC43-40FD-A88E-C75BFBCB0A26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{99519033-BC43-40FD-A88E-C75BFBCB0A26}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{99519033-BC43-40FD-A88E-C75BFBCB0A26}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -53,6 +33,14 @@ Global
 		{39699E32-5DCE-4528-855D-B198D16B9F49}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39699E32-5DCE-4528-855D-B198D16B9F49}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{39699E32-5DCE-4528-855D-B198D16B9F49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6199F38C-EAB2-4F03-8C34-E0DF734AD6B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6199F38C-EAB2-4F03-8C34-E0DF734AD6B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6199F38C-EAB2-4F03-8C34-E0DF734AD6B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6199F38C-EAB2-4F03-8C34-E0DF734AD6B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABECCF88-6E8E-489B-BFD4-51D644A14082}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABECCF88-6E8E-489B-BFD4-51D644A14082}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABECCF88-6E8E-489B-BFD4-51D644A14082}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABECCF88-6E8E-489B-BFD4-51D644A14082}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

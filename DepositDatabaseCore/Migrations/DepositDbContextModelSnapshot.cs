@@ -139,17 +139,11 @@ namespace DepositDatabaseCore.Migrations
 
                     b.Property<string>("CardId");
 
-                    b.Property<byte>("DepositStateId");
+                    b.Property<int>("DepositStateId");
 
-                    b.Property<int?>("DepositStateId1");
+                    b.Property<int>("DepositTermId");
 
-                    b.Property<byte>("DepositTermId");
-
-                    b.Property<int?>("DepositTermId1");
-
-                    b.Property<byte>("DepositWayOfAccumulationId");
-
-                    b.Property<int?>("DepositWayOfAccumulationId1");
+                    b.Property<int>("DepositWayOfAccumulationId");
 
                     b.Property<DateTime>("EndDate");
 
@@ -167,11 +161,11 @@ namespace DepositDatabaseCore.Migrations
 
                     b.HasIndex("CardId");
 
-                    b.HasIndex("DepositStateId1");
+                    b.HasIndex("DepositStateId");
 
-                    b.HasIndex("DepositTermId1");
+                    b.HasIndex("DepositTermId");
 
-                    b.HasIndex("DepositWayOfAccumulationId1");
+                    b.HasIndex("DepositWayOfAccumulationId");
 
                     b.HasIndex("UserOwnerId");
 
@@ -356,15 +350,18 @@ namespace DepositDatabaseCore.Migrations
 
                     b.HasOne("DepositDatabaseCore.Model.DepositState", "DepositState")
                         .WithMany("Deposits")
-                        .HasForeignKey("DepositStateId1");
+                        .HasForeignKey("DepositStateId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("DepositDatabaseCore.Model.DepositTerm", "DepositTerm")
                         .WithMany("Deposits")
-                        .HasForeignKey("DepositTermId1");
+                        .HasForeignKey("DepositTermId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("DepositDatabaseCore.Model.DepositWayOfAccumulation", "DepositWayOfAccumulation")
                         .WithMany("Deposits")
-                        .HasForeignKey("DepositWayOfAccumulationId1");
+                        .HasForeignKey("DepositWayOfAccumulationId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("DepositDatabaseCore.Model.AspNetUser", "UserOwner")
                         .WithMany("Deposits")

@@ -11,7 +11,7 @@ namespace DepositDatabaseCore.Model
         public int Id { get; set; }
 
         public string UserOwnerId { get; set; }
-        public byte DepositTermId { get; set; }
+        public int DepositTermId { get; set; }
 
         [Display(Name = "Initial amount")]
         public decimal InitialAmount { get; set; }
@@ -28,8 +28,8 @@ namespace DepositDatabaseCore.Model
         [Display(Name = "Last interest payment date")]
         public DateTime? LastInterestPaymentDate { get; set; }
 
-        public byte DepositStateId { get; set; }
-        public byte DepositWayOfAccumulationId { get; set; }
+        public int DepositStateId { get; set; }
+        public int DepositWayOfAccumulationId { get; set; }
         public string CardId { get; set; }
 
         [Display(Name = "Deposit name")]

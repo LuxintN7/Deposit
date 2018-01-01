@@ -69,7 +69,7 @@ namespace DepositDatabaseCore.Handlers
 
                 string cardHistoryDescription = String.Format("Interest payment in the amount of {0} ({1}).",
                     interestSum, deposit.DepositTerm.Currency.Name);
-                CardHistoryData.AddRecordToDbContext(deposit.Card, cardHistoryDescription, dbContext);
+                CardHistoryData.AddRecordToDbContext(dbContext, deposit.Card, cardHistoryDescription);
             }
         }
 
