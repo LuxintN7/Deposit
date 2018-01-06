@@ -1,0 +1,69 @@
+﻿@using DepositDatabaseCore.Model
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.EntityFrameworkCore
+@inject UserManager<AspNetUser> userManager;
+    
+@model Deposit
+
+<div id="tabMenu" class="menu-frame">
+    
+    <ul class="nav nav-tabs margin-top-50">
+        <li role="presentation" >
+            <a id="generalInfoTabLink" role="button">General info</a>
+        </li>
+        <li role="presentation" class="active">
+            <a id="depositListTabLink" role="button">Deposit list</a>
+        </li>
+        <li role="presentation">
+            <a id="openNewDepositTabLink" role="button">Open new deposit</a>
+        </li>
+    </ul>
+
+    <div id="deposit-list-content" class="menu-content">
+       @{
+           using (var db = new DepositDbContext())
+           {
+
+               var userId = userManager.GetUserId(User);
+
+               var deposits = (from d in db.Deposits.Include(d => d.UserOwner).Include(d => d.DepositState).Include(d => d.DepositTerm).Include(d => d.DepositTerm.Currency).Include(d => d.Card)
+                               where d.UserOwner.Id == userId && (d.DepositState.Name != DomainLogic.Model.DepositState.ClosedDepositStateName)
+                               select d).ToList();
+
+               <table class="table table-bordered">
+                   <caption>
+                       <h4>My deposits</h4>
+                   </caption>
+                   <tr>
+                       <th>@Html.DisplayNameFor(model => model.StartDate)</th>
+                       <th>@Html.DisplayNameFor(model => model.EndDate)</th>
+                       <th>@Html.DisplayNameFor(model => model.DepositState)</th>
+                       <th>@Html.DisplayNameFor(model => model.DepositTerm.Currency)</th>
+                       <th>@Html.DisplayNameFor(model => model.DepositTerm.InterestRate)</th>
+                       <th>@Html.DisplayNameFor(model => model.Balance)</th>
+                       <th>Paid interest</th>
+                       <th></th>
+                   </tr>
+                   @foreach (var deposit in deposits)
+                   {
+                       <tr>
+                           <td>@deposit.StartDate.Date</td>
+                           <td>@deposit.EndDate.Date</td>
+                           <td>@deposit.DepositState.Name</td>
+                           <td>@deposit.DepositTerm.Currency.Name</td>
+                           <td>@deposit.DepositTerm.InterestRate %</td>
+                           <td>@deposit.Balance</td>
+                           <td>@(deposit.Balance - deposit.InitialAmount)</td>
+                           <td>
+                               @*Close deposit buttons*@
+                               <form asp-action="CloseDeposit" asp-controller="Deposit" asp-route-depositId="@deposit.Id" data-ajax-method="POST" data-ajax="true" data-ajax-update="#deposit-list-content" data-ajax-mode="replace">
+                                   <input id="closeDepositSubmitButton@(deposit.Id)" type="submit" value="Close deposit" class=" btn btn-primary btn-xs" />
+                               </form>
+                           </td>
+                       </tr>
+                   }
+               </table>
+           }
+       }
+    </div>
+</div>

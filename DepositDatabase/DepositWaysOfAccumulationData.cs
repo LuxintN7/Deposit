@@ -6,7 +6,7 @@ namespace DepositDatabase
 {
     public class DepositWaysOfAccumulationData
     {
-        public static DepositWayOfAccumulation GetWayById(byte wayId)
+        public static DepositWayOfAccumulation GetWayById(int wayId)
         {
             return DepositDbContextExtension.GetInstance().DepositWaysOfAccumulation.First(d => d.Id == wayId);
         }

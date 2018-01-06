@@ -17,7 +17,7 @@ namespace DepositDatabase
             return dbContext.Cards.First(c => c.Id.Equals(id));
         }
 
-        public static List<Card> CreateUserCardsByCurrencyList(string userId, byte termsId)
+        public static List<Card> CreateUserCardsByCurrencyList(string userId, int termsId)
         {
             var currencyId = DepositTermsData.GetTermById(termsId).CurrencyId;
 

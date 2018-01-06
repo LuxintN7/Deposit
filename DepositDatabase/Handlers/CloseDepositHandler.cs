@@ -2,7 +2,7 @@
 {
     public class CloseDepositHandler : DomainLogic.Handlers.ICloseDepositHandler
     {
-        public DomainLogic.Model.Currency GetCurrencyByDepositTermsId(byte depositTermsId)
+        public DomainLogic.Model.Currency GetCurrencyByDepositTermsId(int depositTermsId)
         {
             return DepositTermsData.GetTermById(depositTermsId).Currency.ToDomainLogic();
         }

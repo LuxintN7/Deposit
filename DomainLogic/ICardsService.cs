@@ -5,6 +5,6 @@ namespace DomainLogic
 {
     public interface ICardsService : IDbEntityService<Card, string>
     {
-        List<Card> CreateUserCardsByCurrencyList(string userId, byte termsId);
+        List<Card> CreateUserCardsByCurrencyList(string userId, int termsId);
     }
 }

@@ -4,12 +4,12 @@ namespace DomainLogic.Model
 {
     public class DepositTerm
     {
-        public byte Id { get; set; }
+        public int Id { get; set; }
 
-        public byte CurrencyId { get; set; }
+        public int CurrencyId { get; set; }
 
         [Display(Name = "Months")]
-        public byte Months { get; set; }
+        public int Months { get; set; }
 
         [Display(Name = "Interest rate")]
         public decimal InterestRate { get; set; }

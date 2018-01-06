@@ -9,7 +9,7 @@ namespace DepositDatabase
             return CardsData.GetCardById(id).ToDomainLogic();
         }
 
-        public List<DomainLogic.Model.Card> CreateUserCardsByCurrencyList(string userId, byte termsId) 
+        public List<DomainLogic.Model.Card> CreateUserCardsByCurrencyList(string userId, int termsId) 
         {
             return CardsData.CreateUserCardsByCurrencyList(userId, termsId).ToDomainLogic();
         }

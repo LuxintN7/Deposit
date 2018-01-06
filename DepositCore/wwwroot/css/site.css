@@ -1,0 +1,136 @@
+﻿/* Carousel */
+.carousel-caption p {
+    font-size: 20px;
+    line-height: 1.4;
+}
+
+/* Make .svg files in the carousel display properly in older browsers */
+.carousel-inner .item img[src$=".svg"] {
+    width: 100%;
+}
+
+/*   old settings   */ 
+
+/* Hide/rearrange for smaller screens */
+@media screen and (max-width: 767px) {
+    /* Hide captions */
+    .carousel-caption {
+        display: none;
+    }
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+    margin-bottom: 40px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+
+.bg-royal-blue {
+    background-color: royalblue;
+    color: white;
+}
+
+.bg-light-grey {
+    background-color: #f3f3f3;
+    color: black;
+}
+
+.padding-50 {
+    padding: 50px;
+}
+
+.vertical-margin-50 {
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.padding-bottom-25 {
+    padding-bottom: 25px;
+}
+
+.fixed-max-size {
+    max-width: 1000px;
+    max-height: 338px;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 40px;
+}
+
+.grey-border li {
+    border: 2px solid #808080;
+}
+
+.grey-border .active {
+    background-color: #808080;
+}
+
+.margin-top-50 {
+    margin-top: 50px;
+}
+
+.menu-frame {
+    margin: 0 auto;
+    width: 800px;
+}
+
+.menu-content {
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    padding: 15px;
+}
+
+.align-center {
+    margin: 0 auto;
+    width: 90%;
+}
+
+.history-table {
+    width: 100%;
+}
+
+.width-25-perc {
+    width: 25%;
+}
+
+.width-75-perc {
+    width: 75%;
+}
+
+.border-none {
+    border: none;
+}
+
+.margin-0 {
+    margin: 0;
+}

@@ -1,0 +1,72 @@
+﻿@using DepositDatabaseCore.Model
+@model IEnumerable<DepositTerm>
+
+<div id="tabMenu" class="menu-frame">
+    
+    <ul class="nav nav-tabs margin-top-50">
+        <li role="presentation">
+            <a id="generalInfoTabLink" role="button">General info</a>
+        </li>
+        <li role="presentation">
+            <a id="depositListTabLink" role="button">Deposit list</a>
+        </li>
+        <li role="presentation" class="active">
+            <a id="openNewDepositTabLink" role="button">Open new deposit</a>
+        </li>
+    </ul>
+
+    <div id="new-deposit-content" class="menu-content">
+
+        <table class="table table-hover">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Currency.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Months)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.InterestRate)
+                </th>
+                <th></th>
+            </tr>
+
+
+
+            @using (var db = new DepositDbContext())
+            {
+                var depositTerms = db.DepositTerms.ToList();
+
+                foreach (DepositTerm depositTerm in depositTerms)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => depositTerm.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => depositTerm.Currency.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => depositTerm.Months)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => depositTerm.InterestRate) %
+                        </td>
+                        <td>
+                            <form asp-action="NewDeposit" asp-controller="Deposit" asp-route-termsId="@depositTerm.Id" data-ajax-method="GET" data-ajax="true" data-ajax-update="#new-deposit-content" data-ajax-mode="replace">
+                                @Html.Hidden("termsId", depositTerm.Id)
+                                <input id="openNewDepositButton@(depositTerm.Id)" data-termsId="@depositTerm.Id" type="submit" value="Open new deposit" class=" btn btn-primary btn-xs"/>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            }
+
+        </table>
+
+    </div>
+
+</div>

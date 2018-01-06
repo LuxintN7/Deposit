@@ -2,7 +2,7 @@
 
 namespace DomainLogic
 {
-    public interface IDepositTermsService : IDbEntityService<DepositTerm, byte>
+    public interface IDepositTermsService : IDbEntityService<DepositTerm, int>
     {
 
     }
