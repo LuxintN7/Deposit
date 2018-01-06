@@ -149,7 +149,7 @@ namespace DepositCore
 
             dbContext.DepositWaysOfAccumulation.AddRange(new List<DepositWayOfAccumulation>()
             {
-                new DepositWayOfAccumulation{Name = "Add to deposit sum"},
+                new DepositWayOfAccumulation{Name = "Add to deposit balance (capitalization)"},
                 new DepositWayOfAccumulation{Name = "Transfer to card"}
             });
 

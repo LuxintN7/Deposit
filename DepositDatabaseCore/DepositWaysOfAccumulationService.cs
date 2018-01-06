@@ -4,7 +4,7 @@ namespace DepositDatabaseCore
 {
     public class DepositWaysOfAccumulationService : DomainLogic.IDepositWaysOfAccumulationService
     {
-        public DomainLogic.Model.DepositWayOfAccumulation GetById(byte id)
+        public DomainLogic.Model.DepositWayOfAccumulation GetById(int id)
         {
             return DepositWaysOfAccumulationData.GetWayById(id).ToDomainLogic();
         }

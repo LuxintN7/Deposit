@@ -77,7 +77,7 @@ namespace DepositDatabaseCore.Migrations
 
                     b.Property<decimal>("Balance");
 
-                    b.Property<byte>("CurrencyId");
+                    b.Property<int>("CurrencyId");
 
                     b.Property<int?>("CurrencyId1");
 
@@ -193,7 +193,7 @@ namespace DepositDatabaseCore.Migrations
 
                     b.Property<decimal>("InterestRate");
 
-                    b.Property<byte>("Months");
+                    b.Property<int>("Months");
 
                     b.Property<string>("Name");
 

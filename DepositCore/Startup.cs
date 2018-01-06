@@ -31,12 +31,21 @@ namespace DepositCore
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddDbContext<DepositDbContext>(options =>
-            //    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")/*, b => b.MigrationsAssembly("DepositDatabaseCore")*/));
+            if (Configuration.GetSection("CustomerSettings").GetValue<bool>("UseSQLite"))
+            {
+                // Use SQLite fopr deploying on Linux
+                services.AddDbContext<DepositDbContext>(options =>
+                    options.UseSqlite(Configuration.GetConnectionString("DefaultConnectionSQLite")));
+            }
+            else
+            {
+                // Use SQL Server by default
+                services.AddDbContext<DepositDbContext>(options =>
+                    options.UseSqlServer(
+                        Configuration.GetConnectionString(
+                            "DefaultConnection") /*, b => b.MigrationsAssembly("DepositDatabaseCore")*/));
+            }
 
-            // Use SQLite fopr deploying on Linux
-            services.AddDbContext<DepositDbContext>(options =>
-                options.UseSqlite(Configuration.GetConnectionString("DefaultConnectionSQLite")));
 
             services.AddIdentity<AspNetUser, IdentityRole>()
                 .AddEntityFrameworkStores<DepositDbContext>()

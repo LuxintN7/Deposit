@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
+using System.Linq.Expressions;
 using DepositDatabaseCore.Model;
+using Microsoft.EntityFrameworkCore;
 using DepositState = DomainLogic.Model.DepositState;
 
 namespace DepositDatabaseCore
@@ -8,7 +10,7 @@ namespace DepositDatabaseCore
     public interface INewDeposit
     {
         string CardId { get; set; }
-        byte WayOfAccumulationId { get; set; }
+        int WayOfAccumulationId { get; set; }
         decimal Amount { get; set; }
     }
 
@@ -22,10 +24,14 @@ namespace DepositDatabaseCore
             }
         }
 
-        // Required for InterestPaymentService
-        public static Deposit GetDepositById(DepositDbContext dbContext, int id)
+        public static Deposit GetDepositById(DepositDbContext dbContext, int id, Expression<Func<Deposit, Object>> includeExpression = null)
         {
-             return dbContext.Deposits.First(d => d.Id == id);
+            if (includeExpression == null)
+            {
+                return dbContext.Deposits.First(d => d.Id == id); 
+            }
+            
+            return dbContext.Deposits.Include(includeExpression).First(d => d.Id == id);
         }
 
         public static void AddNewDepositToDbContext(Deposit newDeposit)
@@ -41,13 +47,13 @@ namespace DepositDatabaseCore
             dbContext.Deposits.Add(newDeposit);
         }
 
-        public static void AddNewDepositToDbContext(DepositDbContext dbContext, INewDeposit depositModel, string userId, byte termsId, string cardId)
+        public static void AddNewDepositToDbContext(DepositDbContext dbContext, INewDeposit depositModel, string userId, int termsId, string cardId)
         {
             var newDeposit = CreateDeposit(dbContext, depositModel, userId, termsId, cardId);
             dbContext.Deposits.Add(newDeposit);
         }
 
-        public static Deposit CreateDeposit(DepositDbContext dbContext, INewDeposit depositModel, string userId, byte termsId, string cardId)
+        public static Deposit CreateDeposit(DepositDbContext dbContext, INewDeposit depositModel, string userId, int termsId, string cardId)
         {
             var depositTerms = DepositTermsData.GetTermById(dbContext, termsId);
 

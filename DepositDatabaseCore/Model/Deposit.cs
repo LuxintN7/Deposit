@@ -20,9 +20,11 @@ namespace DepositDatabaseCore.Model
         public decimal Balance { get; set; }
 
         [Display(Name = "Start date")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime StartDate { get; set; }
 
         [Display(Name = "End date")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime EndDate { get; set; }
         
         [Display(Name = "Last interest payment date")]

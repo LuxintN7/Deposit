@@ -18,7 +18,7 @@ namespace DepositDatabaseCore.Model
         public int CurrencyId { get; set; }
 
         [Display(Name = "Months")]
-        public byte Months { get; set; }
+        public int Months { get; set; }
 
         [Display(Name = "Interest rate")]
         public decimal InterestRate { get; set; }

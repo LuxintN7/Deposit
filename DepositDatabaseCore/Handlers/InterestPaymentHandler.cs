@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DepositDatabaseCore.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace DepositDatabaseCore.Handlers
 {
@@ -9,9 +10,9 @@ namespace DepositDatabaseCore.Handlers
     {
         private readonly DepositDbContext dbContext;
 
-        public InterestPaymentHandler()
+        public InterestPaymentHandler(DepositDbContext dbContext)
         {
-            dbContext = new DepositDbContext();
+            this.dbContext = dbContext;
         }
 
         public List<DomainLogic.Model.Deposit> GetActiveDeposits()
@@ -25,7 +26,7 @@ namespace DepositDatabaseCore.Handlers
         
         public string GetDepositStateName(int depositId)
         {
-            var deposit = DepositsData.GetDepositById(dbContext, depositId);
+            var deposit = dbContext.Deposits.Include(d => d.DepositState).First(d => d.Id == depositId);
             return deposit.DepositState.Name;
         }
 
@@ -43,32 +44,36 @@ namespace DepositDatabaseCore.Handlers
 
         public void SetDepositState(int depositId, string stateName)
         {
-            var deposit = DepositsData.GetDepositById(dbContext, depositId);
+            var deposit = dbContext.Deposits.Include(d => d.DepositState).First(d => d.Id == depositId);
             deposit.DepositState = DepositStatesData.GetStateByName(dbContext, stateName);
         }
         
         public void AddInterest(int depositId)
         {
-            var deposit = DepositsData.GetDepositById(dbContext, depositId);
+            var deposit = dbContext.Deposits
+                .Include(d => d.DepositTerm)
+                .Include(d => d.DepositTerm.Currency)
+                .Include(d => d.DepositWayOfAccumulation)
+                .Include(d => d.Card)
+                .First(d => d.Id == depositId);
 
             const int daysInYear = 365;
             decimal interestRate = deposit.DepositTerm.InterestRate;
-            DateTime today = DateTime.Today;
+            DateTime currentTime = DateTime.Now;
 
-            byte daysCount = (byte)(today - (deposit.LastInterestPaymentDate ?? deposit.StartDate)).TotalDays;
+            var totalDays = (int)(currentTime - (deposit.LastInterestPaymentDate ?? deposit.StartDate)).TotalDays;
 
-            decimal interestSum = deposit.Balance * interestRate * daysCount / (100 * daysInYear);
+            decimal interestSum = deposit.Balance * interestRate * totalDays / (100 * daysInYear);
 
-            if (deposit.DepositWayOfAccumulation.Name == "Capitalization")
-            {
+            if (deposit.DepositWayOfAccumulation.Name.Contains("capitalization"))
+            {            
                 deposit.Balance += interestSum;
             }
             else
             {
                 deposit.Card.Balance += interestSum;
 
-                string cardHistoryDescription = String.Format("Interest payment in the amount of {0} ({1}).",
-                    interestSum, deposit.DepositTerm.Currency.Name);
+                string cardHistoryDescription = $"Interest payment in the amount of {Math.Round(interestSum, 2)} ({deposit.DepositTerm.Currency.Name}).";
                 CardHistoryData.AddRecordToDbContext(dbContext, deposit.Card, cardHistoryDescription);
             }
         }

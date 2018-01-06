@@ -6,7 +6,7 @@ namespace DepositDatabaseCore
 {
     public static class DepositStatesData
     {
-        public static DepositState GetById(byte id)
+        public static DepositState GetById(int id)
         {
             using (var dbContext = new DepositDbContext())
             {
@@ -14,7 +14,7 @@ namespace DepositDatabaseCore
             }
         }
 
-        public static DepositState GetById(DepositDbContext dbContext, byte id)
+        public static DepositState GetById(DepositDbContext dbContext, int id)
         {
             return dbContext.DepositStates.First(d => d.Id == id);
         }

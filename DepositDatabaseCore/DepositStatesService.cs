@@ -2,7 +2,7 @@
 {
     public class DepositStatesService : DomainLogic.IDepositStatesService
     {
-        public DomainLogic.Model.DepositState GetById(byte id)
+        public DomainLogic.Model.DepositState GetById(int id)
         {
             return DepositStatesData.GetById(id).ToDomainLogic();
         }
